@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Novu.NET.Models;
+namespace Novu.NET.DTO;
 
-public class UpdateCredentialRequest
+public class UpdateCredentialRequestDTO
 {
     [JsonProperty("webhookUrl")]
     public string WebhookUrl { get; set; }

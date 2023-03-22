@@ -12,11 +12,5 @@ public interface INovuClientConfiguration
     /// Api Key used for authentication. Found on the Settings
     /// page > API Keys > API Key.
     /// </summary>
-    public string ApiKey { get; set; }
-    
-    /// <summary>
-    /// Application Identifier. Found on the Settings page >
-    /// API Keys > Application Identifier
-    /// </summary>
-    public string ApplicationId { get; set; }
+    public string? ApiKey { get; set; }
 }

@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 
-namespace Novu.NET.Models;
+namespace Novu.NET.DTO;
 
-public partial class CreateSubscriberModel
+public class UpdateSubscriberRequestDTO
 {
-    [JsonProperty("_id")]
-    public string Id { get; set; }
     [JsonProperty("email")]
     public string? Email { get; set; }
     
@@ -26,9 +24,4 @@ public partial class CreateSubscriberModel
     
     [JsonProperty("data")]
     public Dictionary<string, string>? Data { get; set; }
-}
-
-public partial class CreateSubscriberModel
-{
-    public static string ToJson(CreateSubscriberModel self) => JsonConvert.SerializeObject(self, Converter.Settings); 
 }

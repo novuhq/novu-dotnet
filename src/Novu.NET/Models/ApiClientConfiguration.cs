@@ -1,6 +1,6 @@
 ﻿using Novu.NET.Interfaces;
 
-namespace Novu.NET.Models;
+namespace Novu.NET.DTO;
 
 public class ApiClientConfiguration : IApiConfiguration
 {

@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Novu.NET.Models;
+namespace Novu.NET.DTO;
 
-public class UpdateSubscriberOnlineStatusRequest
+public class UpdateSubscriberOnlineStatusRequestDTO
 {
     [JsonProperty("isOnline")]
     public bool IsOnline { get; set; }

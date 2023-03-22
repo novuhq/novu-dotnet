@@ -1,23 +1,23 @@
 ﻿using Novu.NET.Clients;
-using Novu.NET.Models;
+using Novu.NET.DTO;
 
 namespace Novu.NET.Interfaces;
 
 public interface ISubscriberClient
 {
-    public Task<SubscribersResponse> GetSubscribers();
+    public Task<SubscribersDTO> GetSubscribers();
 
-    public Task<SubscriberModel> GetSubscriber(string id);
+    public Task<SubscriberDTO> GetSubscriber(string id);
 
-    public Task<SubscriberModel> CreateSubscriber(CreateSubscriberModel model);
+    public Task<SubscriberDTO> CreateSubscriber(CreateSubscriberDTO dto);
     
-    public Task<SubscriberModel> UpdateSubscriber(UpdateSubscriberModel model);
+    public Task<SubscriberDTO> UpdateSubscriber(UpdateSubscriberRequestDTO requestDto);
     
-    public Task<DeleteResponseModel> DeleteSubscriber(string id);
+    public Task<DeleteResponseDTO> DeleteSubscriber(string id);
 
-    public Task<SubscriberModel> UpdateSubscriberCredentials(string subscriberId, UpdateSubscriberCredentialsRequest model);
+    public Task<SubscriberDTO> UpdateSubscriberCredentials(string subscriberId, UpdateSubscriberCredentialsRequestDTO model);
 
-    public Task<SubscriberModel> UpdateSubscriberOnlineStatus(string subscriberId, UpdateSubscriberOnlineStatusRequest model);
+    public Task<SubscriberDTO> UpdateSubscriberOnlineStatus(string subscriberId, UpdateSubscriberOnlineStatusRequestDTO model);
 
     public Task<dynamic> GetSubscriberNotificationFeed();
 

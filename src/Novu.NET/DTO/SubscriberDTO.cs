@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Novu.NET.Models;
+namespace Novu.NET.DTO;
 
-public partial class SubscriberModel
+public class SubscriberDTO
 {
     [JsonProperty("_id")]
     public string Id { get; set; }
@@ -36,10 +36,4 @@ public partial class SubscriberModel
 
     [JsonProperty("lastOnlineAt")]
     public DateTimeOffset LastOnlineAt { get; set; }
-}
-
-public partial class SubscriberModel
-{
-    public static SubscriberModel FromJson(string json) =>
-        JsonConvert.DeserializeObject<SubscriberModel>(json, Converter.Settings);
 }

@@ -1,7 +1,9 @@
 ﻿using System.Net;
+using Newtonsoft.Json;
 using Novu.NET.Exceptions;
 using Novu.NET.Interfaces;
-using Novu.NET.Models;
+using Novu.NET.DTO;
+using Novu.NET.Utilities;
 using RestSharp;
 
 namespace Novu.NET.Clients;
@@ -21,14 +23,14 @@ public class SubscriberClient : ApiClient, ISubscriberClient
     ///  Thrown when the status code does not equal 200.
     /// </exception>
     /// <exception cref="NovuClientException"></exception>
-    public async Task<SubscribersResponse> GetSubscribers()
+    public async Task<SubscribersDTO> GetSubscribers()
     {
         var request = new RestRequest("/subscribers");
         var restResponse = await Client.GetAsync(request);
         
         // TODO: Check restResponse
-        
-        var response = SubscribersResponse.FromJson(restResponse.Content);
+
+        var response = Serializer<SubscribersDTO>.FromJson(restResponse.Content);
 
         return response;
     }
@@ -38,12 +40,12 @@ public class SubscriberClient : ApiClient, ISubscriberClient
     /// </summary>
     /// <param name="id"><see cref="String"/> Subscriber ID</param>
     /// <returns></returns>
-    public async Task<SubscriberModel> GetSubscriber(string id)
+    public async Task<SubscriberDTO> GetSubscriber(string id)
     {
         var request = new RestRequest($"/subscribers/{id}");
         var restResponse = await Client.GetAsync(request);
 
-        var response = SubscriberModel.FromJson(restResponse.Content);
+        var response = Serializer<SubscriberDTO>.FromJson(restResponse.Content);
 
         return response;
     }
@@ -51,60 +53,58 @@ public class SubscriberClient : ApiClient, ISubscriberClient
     /// <summary>
     /// Create a new Subscriber
     /// </summary>
-    /// <param name="model">
-    /// <see cref="CreateSubscriberModel"/> Model to create a new Subscriber
+    /// <param name="dto">
+    /// <see cref="CreateSubscriberDTO"/> Model to create a new Subscriber
     /// </param>
     /// <returns>
-    /// <see cref="SubscriberModel"/> The newly created Subscriber
+    /// <see cref="SubscriberDTO"/> The newly created Subscriber
     /// </returns>
-    public async Task<SubscriberModel> CreateSubscriber(CreateSubscriberModel model)
+    public async Task<SubscriberDTO> CreateSubscriber(CreateSubscriberDTO dto)
     {
         var request = new RestRequest("/subscribers");
-        var json = CreateSubscriberModel.ToJson(model);
-        request.AddJsonBody(json);
-        
+        var json = Serializer<CreateSubscriberDTO>.ToJson(dto);
+        request.AddBody(json, ContentType.Json);
         var restResponse = await Client.PostAsync(request);
         
-        var subscriber = SubscriberModel.FromJson(restResponse.Content);
-        
-        return subscriber;
-    }
-
-    public async Task<SubscriberModel> UpdateSubscriber(UpdateSubscriberModel model)
-    {
-        var request = new RestRequest("/subscribers");
-        request.AddJsonBody(model);
-
-        var restResponse = await Client.PutAsync(request);
-        var subscriber = SubscriberModel.FromJson(restResponse.Content);
-        return subscriber;
-    }
-
-    public async Task<DeleteResponseModel> DeleteSubscriber(string id)
-    {
-        var request = new RestRequest($"/subscribers/{id}");
-        var restResponse = await Client.DeleteAsync(request);
-        var response = DeleteResponseModel.FromJson(restResponse.Content);
+        var response = Serializer<SubscriberDTO>.FromJson(restResponse.Content);
         return response;
     }
 
-    public async Task<SubscriberModel> UpdateSubscriberCredentials(string subscriberId, UpdateSubscriberCredentialsRequest model)
+    public async Task<SubscriberDTO> UpdateSubscriber(UpdateSubscriberRequestDTO requestDto)
+    {
+        var request = new RestRequest("/subscribers");
+        request.AddJsonBody(requestDto);
+
+        var restResponse = await Client.PutAsync(request);
+        var subscriber = Serializer<SubscriberDTO>.FromJson(restResponse.Content);
+        return subscriber;
+    }
+
+    public async Task<DeleteResponseDTO> DeleteSubscriber(string id)
+    {
+        var request = new RestRequest($"/subscribers/{id}");
+        var restResponse = await Client.DeleteAsync(request);
+        var response = Serializer<DeleteResponseDTO>.FromJson(restResponse.Content);
+        return response;
+    }
+
+    public async Task<SubscriberDTO> UpdateSubscriberCredentials(string subscriberId, UpdateSubscriberCredentialsRequestDTO model)
     {
         var request = new RestRequest($"/subscribers/{subscriberId}/credentials");
         request.AddJsonBody(model);
         var restResponse = await Client.PutAsync(request);
-        var response = SubscriberModel.FromJson(restResponse.Content);
-        
+        var response = Serializer<SubscriberDTO>.FromJson(restResponse.Content);
+
         return response;
     }
 
-    public async Task<SubscriberModel> UpdateSubscriberOnlineStatus(string subscriberId, UpdateSubscriberOnlineStatusRequest model)
+    public async Task<SubscriberDTO> UpdateSubscriberOnlineStatus(string subscriberId, UpdateSubscriberOnlineStatusRequestDTO model)
     {
         var request = new RestRequest($"/subscribers/{subscriberId}/online-status");
         request.AddJsonBody(model);
         var restResponse = await Client.PutAsync(request);
-        var response = SubscriberModel.FromJson(restResponse.Content);
-        
+        var response = Serializer<SubscriberDTO>.FromJson(restResponse.Content);
+
         return response;
     }
 

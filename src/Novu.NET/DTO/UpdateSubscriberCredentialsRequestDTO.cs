@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Novu.NET.Models;
+namespace Novu.NET.DTO;
 
-public class UpdateSubscriberCredentialsRequest
+public class UpdateSubscriberCredentialsRequestDTO
 {
     [JsonProperty("providerId")]
     public string ProviderId { get; set; }
