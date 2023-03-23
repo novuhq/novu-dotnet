@@ -5,21 +5,22 @@ namespace Novu.NET.Interfaces;
 
 public interface ISubscriberClient
 {
-    public Task<SubscribersDTO> GetSubscribers();
+    public Task<SubscribersDTO> GetSubscribers(int page = 0);
 
     public Task<SubscriberDTO> GetSubscriber(string id);
 
     public Task<SubscriberDTO> CreateSubscriber(CreateSubscriberDTO dto);
     
-    public Task<SubscriberDTO> UpdateSubscriber(UpdateSubscriberRequestDTO requestDto);
+    public Task<SubscriberDTO> UpdateSubscriber(SubscriberDTO requestDto);
     
     public Task<DeleteResponseDTO> DeleteSubscriber(string id);
 
     public Task<SubscriberDTO> UpdateSubscriberCredentials(string subscriberId, UpdateSubscriberCredentialsRequestDTO model);
 
-    public Task<SubscriberDTO> UpdateSubscriberOnlineStatus(string subscriberId, UpdateSubscriberOnlineStatusRequestDTO model);
+    public Task<SubscriberDTO> UpdateOnlineStatus(string subscriberId, SubscriberOnlineDTO model);
 
-    public Task<dynamic> GetSubscriberNotificationFeed();
+    public Task<PaginatedResponseDTO<dynamic>> GetSubscriberNotificationFeed(
+        SubscriberNotificationFeedRequestDTO requestDto);
 
     public Task<dynamic> GetSubscriberNotificationUnseen();
 

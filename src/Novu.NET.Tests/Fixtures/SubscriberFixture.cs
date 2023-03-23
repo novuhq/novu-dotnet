@@ -1,10 +1,11 @@
 ﻿using Novu.NET.DTO;
+using Novu.NET.Models;
 
 namespace Novu.NET.Tests.Fixtures;
 
-public class SubscriberFixture
+public class SubscriberFixture : IDisposable
 {
-    public SubscriberDTO Subscriber { get; private set; }
+    private List<SubscriberDTO> Subscribers { get; set; } = new List<SubscriberDTO>();
     public NovuClient NovuClient { get; }
 
     public SubscriberFixture()
@@ -48,8 +49,16 @@ public class SubscriberFixture
             Data = additionalData
         });
 
-        Subscriber = subscriber;
-
+        Subscribers.Add(subscriber);
+        
         return subscriber;
+    }
+
+    public async void Dispose()
+    {
+        foreach (var testSubscriber in Subscribers)
+        {
+            await NovuClient.Subscriber.DeleteSubscriber(testSubscriber.SubscriberId);
+        }
     }
 }

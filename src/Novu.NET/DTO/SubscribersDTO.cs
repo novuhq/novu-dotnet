@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Novu.NET.Models;
 
 namespace Novu.NET.DTO;
 
@@ -15,5 +14,5 @@ public class SubscribersDTO
     public int PageSize { get; set; }
     
     [JsonProperty("data")]
-    public PaginatedData<SubscriberDTO> Data { get; set; }
+    public SubscriberDTO[] Data { get; set; }
 }
