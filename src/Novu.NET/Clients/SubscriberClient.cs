@@ -23,13 +23,14 @@ public class SubscriberClient : ApiClient, ISubscriberClient
     ///  Thrown when the status code does not equal 200.
     /// </exception>
     /// <exception cref="NovuClientException"></exception>
-    public async Task<SubscribersDTO> GetSubscribers()
+    public async Task<SubscribersDTO> GetSubscribers(int page = 0)
     {
-        var request = new RestRequest("/subscribers");
+        var request = page > 0 
+            ? new RestRequest($"/subscribers?page={page}") 
+            : new RestRequest($"/subscribers");
+        
         var restResponse = await Client.GetAsync(request);
         
-        // TODO: Check restResponse
-
         var response = Serializer<SubscribersDTO>.FromJson(restResponse.Content);
 
         return response;
@@ -70,10 +71,15 @@ public class SubscriberClient : ApiClient, ISubscriberClient
         return response;
     }
 
-    public async Task<SubscriberDTO> UpdateSubscriber(UpdateSubscriberRequestDTO requestDto)
+    /// <summary>
+    /// Update a Subscriber
+    /// </summary>
+    /// <param name="requestDto"></param>
+    /// <returns></returns>
+    public async Task<SubscriberDTO> UpdateSubscriber(SubscriberDTO requestDto)
     {
-        var request = new RestRequest("/subscribers");
-        request.AddJsonBody(requestDto);
+        var request = new RestRequest($"/subscribers/{requestDto.SubscriberId}");
+        request.AddJsonBody(Serializer<SubscriberDTO>.ToJson(requestDto));
 
         var restResponse = await Client.PutAsync(request);
         var subscriber = Serializer<SubscriberDTO>.FromJson(restResponse.Content);
@@ -88,7 +94,8 @@ public class SubscriberClient : ApiClient, ISubscriberClient
         return response;
     }
 
-    public async Task<SubscriberDTO> UpdateSubscriberCredentials(string subscriberId, UpdateSubscriberCredentialsRequestDTO model)
+    public async Task<SubscriberDTO> 
+        UpdateSubscriberCredentials(string subscriberId, UpdateSubscriberCredentialsRequestDTO model)
     {
         var request = new RestRequest($"/subscribers/{subscriberId}/credentials");
         request.AddJsonBody(model);
@@ -98,17 +105,19 @@ public class SubscriberClient : ApiClient, ISubscriberClient
         return response;
     }
 
-    public async Task<SubscriberDTO> UpdateSubscriberOnlineStatus(string subscriberId, UpdateSubscriberOnlineStatusRequestDTO model)
+    public async Task<SubscriberDTO> UpdateOnlineStatus(string subscriberId, SubscriberOnlineDTO model)
     {
         var request = new RestRequest($"/subscribers/{subscriberId}/online-status");
         request.AddJsonBody(model);
-        var restResponse = await Client.PutAsync(request);
+        
+        var restResponse = await Client.PatchAsync(request);
         var response = Serializer<SubscriberDTO>.FromJson(restResponse.Content);
 
         return response;
     }
 
-    public async Task<dynamic> GetSubscriberNotificationFeed()
+    public async Task<PaginatedResponseDTO<dynamic>> 
+        GetSubscriberNotificationFeed(SubscriberNotificationFeedRequestDTO requestDto)
     {
         throw new NotImplementedException();
     }
