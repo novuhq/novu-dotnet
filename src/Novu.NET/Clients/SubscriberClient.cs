@@ -86,6 +86,15 @@ public class SubscriberClient : ApiClient, ISubscriberClient
         return subscriber;
     }
 
+    /// <summary>
+    /// Delete a Subscriber
+    /// </summary>
+    /// <param name="id">
+    /// <see cref="string"/> Subscriber ID to delete
+    /// </param>
+    /// <returns>
+    /// <see cref="DeleteResponseDTO"/>
+    /// </returns>
     public async Task<DeleteResponseDTO> DeleteSubscriber(string id)
     {
         var request = new RestRequest($"/subscribers/{id}");
@@ -94,6 +103,12 @@ public class SubscriberClient : ApiClient, ISubscriberClient
         return response;
     }
 
+    /// <summary>
+    /// Update a Subscriber
+    /// </summary>
+    /// <param name="subscriberId">Subscriber ID</param>
+    /// <param name="model"><see cref="SubscriberDTO"/> with changes.</param>
+    /// <returns><see cref="SubscriberDTO"/></returns>
     public async Task<SubscriberDTO> 
         UpdateSubscriberCredentials(string subscriberId, UpdateSubscriberCredentialsRequestDTO model)
     {
@@ -105,6 +120,12 @@ public class SubscriberClient : ApiClient, ISubscriberClient
         return response;
     }
 
+    /// <summary>
+    /// Update Subscribers online status
+    /// </summary>
+    /// <param name="subscriberId"><see cref="SubscriberDTO.SubscriberId"/> Subscribers ID</param>
+    /// <param name="model"><see cref="SubscriberOnlineDTO"/></param>
+    /// <returns></returns>
     public async Task<SubscriberDTO> UpdateOnlineStatus(string subscriberId, SubscriberOnlineDTO model)
     {
         var request = new RestRequest($"/subscribers/{subscriberId}/online-status");
@@ -116,17 +137,33 @@ public class SubscriberClient : ApiClient, ISubscriberClient
         return response;
     }
 
+    /// <summary>
+    /// Not Implemented Yet
+    /// </summary>
+    /// <param name="requestDto"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public async Task<PaginatedResponseDTO<dynamic>> 
         GetSubscriberNotificationFeed(SubscriberNotificationFeedRequestDTO requestDto)
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Not Implemented Yet
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public async Task<dynamic> GetSubscriberNotificationUnseen()
     {
         throw new NotImplementedException();
     }
 
+    /// <summary>
+    /// Not Implemented Yet
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
     public async Task<dynamic> UpdateSubscriberMessageAsSeen()
     {
         throw new NotImplementedException();
