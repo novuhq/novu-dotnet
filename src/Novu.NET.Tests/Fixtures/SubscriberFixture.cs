@@ -5,7 +5,7 @@ namespace Novu.NET.Tests.Fixtures;
 
 public class SubscriberFixture : IDisposable
 {
-    private List<SubscriberDTO> Subscribers { get; set; } = new List<SubscriberDTO>();
+    private List<SubscriberDto> Subscribers { get; set; } = new List<SubscriberDto>();
     public NovuClient NovuClient { get; }
 
     public SubscriberFixture()
@@ -21,23 +21,23 @@ public class SubscriberFixture : IDisposable
         GenerateTestSubscriber().Wait();
     }
 
-    public async Task<SubscriberDTO> GenerateTestSubscriber()
+    public async Task<SubscriberDto> GenerateTestSubscriber()
     {
-        var additionalData = new List<AdditionalDataDTO>
+        var additionalData = new List<AdditionalDataDto>
         {
-            new AdditionalDataDTO
+            new AdditionalDataDto
             {
                 Key = "FRAMEWORK",
                 Value = ".NET"
             },
-            new AdditionalDataDTO
+            new AdditionalDataDto
             {
                 Key = "SMS_PREFERENCE",
                 Value = "EMERGENT-ONLY"
             }
         };
         
-        var subscriber = await NovuClient.Subscriber.CreateSubscriber(new CreateSubscriberDTO
+        var subscriber = await NovuClient.Subscriber.CreateSubscriber(new CreateSubscriberDto
         {
             SubscriberId = Guid.NewGuid().ToString(),
             FirstName = "Novu",

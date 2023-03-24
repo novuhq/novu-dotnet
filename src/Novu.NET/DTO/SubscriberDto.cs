@@ -2,7 +2,7 @@
 
 namespace Novu.NET.DTO;
 
-public class SubscriberDTO
+public class SubscriberDto
 {
     [JsonProperty("_organizationId")]
     public string OrganizationId { get; set; }

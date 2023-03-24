@@ -2,15 +2,17 @@
 
 namespace Novu.NET.DTO;
 
-public class UpdateSubscriberRequestDTO
+public partial class CreateSubscriberDto
 {
+    [JsonProperty("subscriberId")]
+    public string SubscriberId { get; set; }
     [JsonProperty("email")]
     public string? Email { get; set; }
     
     [JsonProperty("firstName")]
     public string? FirstName { get; set; }
 
-    [JsonProperty("firstName")]
+    [JsonProperty("lastName")]
     public string? LastName { get; set; }
     
     [JsonProperty("phone")]
@@ -23,5 +25,5 @@ public class UpdateSubscriberRequestDTO
     public string? Locale { get; set; }
     
     [JsonProperty("data")]
-    public Dictionary<string, string>? Data { get; set; }
+    public List<AdditionalDataDto>? Data { get; set; }
 }

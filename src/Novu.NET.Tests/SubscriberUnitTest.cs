@@ -78,7 +78,7 @@ public class SubscriberUnitTest : IClassFixture<SubscriberFixture>
   public async void Should_Update_Online_Status()
   {
     var subscriber = await _fixture.GenerateTestSubscriber();
-    var updateResponse = await _fixture.NovuClient.Subscriber.UpdateOnlineStatus(subscriber.SubscriberId, new SubscriberOnlineDTO
+    var updateResponse = await _fixture.NovuClient.Subscriber.UpdateOnlineStatus(subscriber.SubscriberId, new SubscriberOnlineDto
     {
       IsOnline = true
     });

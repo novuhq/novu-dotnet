@@ -2,7 +2,7 @@
 
 namespace Novu.NET.DTO;
 
-public class PaginatedResponseDTO<T>
+public class PaginatedResponseDto<T>
 {
     [JsonProperty("page")]
     public int Page { get; set; }
