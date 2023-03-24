@@ -2,7 +2,7 @@
 
 namespace Novu.NET.DTO;
 
-public class AdditionalDataDTO
+public class AdditionalDataDto
 {
     [JsonProperty("key")]
     public string Key { get; set; }

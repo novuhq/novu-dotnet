@@ -2,13 +2,13 @@
 
 namespace Novu.NET.DTO;
 
-public class DeleteResponseDTO
+public class DeleteResponseDto
 {
     [JsonProperty("data")]
-    public DeleteResponseDataDTO Data { get; set; }
+    public DeleteResponseDataDto Data { get; set; }
 }
 
-public class DeleteResponseDataDTO
+public class DeleteResponseDataDto
 {
     [JsonProperty("acknowledged")] 
     public bool Acknowledged { get; set; }

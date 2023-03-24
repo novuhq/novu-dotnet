@@ -2,7 +2,7 @@
 
 namespace Novu.NET.DTO;
 
-public class SubscriberOnlineDTO
+public class SubscriberOnlineDto
 {
     [JsonProperty("isOnline")]
     public bool IsOnline { get; set; }
