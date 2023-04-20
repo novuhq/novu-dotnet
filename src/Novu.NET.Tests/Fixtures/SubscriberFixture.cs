@@ -17,8 +17,6 @@ public class SubscriberFixture : IDisposable
         var novu = new NovuClient(novuConfiguration);
 
         NovuClient = novu;
-
-        GenerateTestSubscriber().Wait();
     }
 
     public async Task<SubscriberDto> GenerateTestSubscriber()

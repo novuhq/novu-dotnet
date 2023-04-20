@@ -2,16 +2,18 @@ using Newtonsoft.Json;
 
 namespace Novu.NET.DTO;
 
-public record EventTriggerDataDto
+public class EventTriggerDataDto
 {
+    [JsonProperty("name")]
+    public string EventName { get; set; }
+    
     [JsonProperty("to")]
-    public EventToDto To { get; set; }
-    
+    public EventToDto To { get; set; } = new();
+
     [JsonProperty("payload")]
-    public List<KeyValuePair<string, string>> Payload { get; set; }
-    
-    [JsonProperty("override")]
-    public List<KeyValuePair<string, string>>? Overrides { get; set; }
+    public object Payload { get; set; } = new();
+
+    [JsonProperty("override")] public List<object>? Overrides { get; set; }
     
     /// <summary>
     /// A unique identifier for this transaction, will generated a UUID if not provided.
