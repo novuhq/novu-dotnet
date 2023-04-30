@@ -16,25 +16,35 @@ var subscribers = await novu.Subscribers.GetSubscribers();
 
 ```
 
-TODO: More documentation
+## Currently Implemented
 
-### Roadmap
+### Subscribers
 
-Just a basic roadmap for planning purposes
+- ✅ Get Subscribers
+- ✅ Get Subscriber
+- ✅ Create Subscriber
+- ✅ Update Subscriber
+- ✅ Delete Subscriber
+- ✅ Update Online Status
 
-#### v0.1.0 - Subscribers
+### Events
 
-- All Subscribers endpoints completed
-- Documentation generated via `docfx`
+- ✅ Trigger
+- ✅ Bulk Trigger
+- ✅ Broadcast Trigger
+- ✅ Cancel Trigger
 
-#### v0.2.0 - Topics
+## Repository Overview
 
-- All Topics endpoints completed
+All code is located under the `src` directory and this will service as the project root.
 
-#### v0.3.0 - Activity
+`Novu.NET` is the main SDK with `Novu.NET.Tests` housing all unit tests.
 
-- All Activity endpoints completed
+### Novu.NET
 
-#### v0.4.0 - Feeds
-
-- All Feed endpoints completed
+- `Clients` directory holds all clients that house the actual implementation of the various API calls.
+- `DTO` directory holds all Data Transfer Objects
+- `Exceptions` directory holds the custom exception creations
+- `Interfaces` directory holds all interfaces that are inteded to outline how a class should be structured.
+- `Models` directory holds various models
+- `Utilities` directory holds various utility functions used around the project.
