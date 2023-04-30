@@ -5,9 +5,9 @@
 ```csharp
  var novuConfiguration = new NovuClientConfiguration
 {
-    Url = "https://api.novu.co/v1",
+    // Defaults to https://api.novu.co/v1
+    Url = "https://novu-api.my-domain.com/v1",
     ApiKey = "12345",
-    ApplicationId = "abcde"
 };
 
 var novu = new NovuClient(novuConfiguration);
