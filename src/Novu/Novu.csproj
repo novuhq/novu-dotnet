@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- General Settings -->
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <NoWarn>CS8604,CS8618</NoWarn>
+        <RootNamespace>Novu</RootNamespace>
+    </PropertyGroup>
+    
+    <!-- Nuget Settings -->
+    <PropertyGroup>
+        <PackageId>Novu</PackageId>
+        <Version>0.1.0</Version>
+        <ProductName>Novu</ProductName>
+        <Description>Novu .NET SDK</Description>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/novuhq/novu-dotnet</RepositoryUrl>
+        <Authors>NovuHQ</Authors>
+    </PropertyGroup>
+
+    <!-- Required Nuget Packages -->
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="RestSharp" Version="109.0.1" />
+    </ItemGroup>
+
+</Project>
