@@ -3,9 +3,9 @@
 **Getting Started**
 
 ```csharp
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
  var novuConfiguration = new NovuClientConfiguration
@@ -27,9 +27,9 @@ var subscribers = await novu.Subscribers.GetSubscribers();
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var config = new NovuClientConfiguration
@@ -47,9 +47,9 @@ var client = new NovuClient(config);
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var subscribers = await client.Subscriber.GetSubscribers()
@@ -61,9 +61,9 @@ var subscribers = await client.Subscriber.GetSubscribers()
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var subscriber = await client.Subscriber.GetSubscriber("subscriberId");
@@ -74,9 +74,9 @@ var subscriber = await client.Subscriber.GetSubscriber("subscriberId");
 ### Create Subscriber
 
 ```csharp
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var additionalData = new List<AdditionalDataDto>
@@ -113,9 +113,9 @@ var subscriber = await client.Subcriber.CreateSubscriber()
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var subscriber = client.Subscriber.GetSubscriber("subscriberId");
@@ -132,9 +132,9 @@ var updatedSubscriber = await client.Subscriber.UpdateSubscriber(subscriber);
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var deleted = await client.Subscriber.DeleteSubscriber("subscriberId");
@@ -146,9 +146,9 @@ var deleted = await client.Subscriber.DeleteSubscriber("subscriberId");
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var onlineDto = new SubscriberOnlineDto
@@ -164,9 +164,9 @@ var online = await client.Subscriber.UpdateOnlineStatus("subscriberId", onlineDt
 
 ### Trigger
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 ```csharp
@@ -208,9 +208,9 @@ if (trigger.TriggerResponsePayloadDto.Acknowledged)
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var payload = new List<EventTriggerDataDto>()
@@ -237,9 +237,9 @@ var trigger = await client.Event.TriggerBulkAsync(payload);
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var testRecord = new TestRecord
@@ -265,9 +265,9 @@ var trigger = await client.Event.TriggerBroadcastAsync(dto);
 
 ```csharp
 
-using Novu.NET.DTO;
-using Novu.NET.Models;
-using Novu.NET;
+using Novu.DTO;
+using Novu.Models;
+using Novu;
 ...
 
 var cancelled = await client.Event.TriggerCancelAsync("triggerTransactionId");
