@@ -53,7 +53,7 @@ jobs:
 
       - name: Build Novu
         working-directory: ./src/Novu
-        run: dotnet build
+        run: dotnet build --configuration Release
 
       - name: Get version
         id: version
