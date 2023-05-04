@@ -84,11 +84,11 @@ public class EventClient : ApiClient, IEventClient
         var restResponse = await Client.DeleteAsync(request);
     }
 
-    public async Task<TriggerResponseDto> TriggerTopicAsync(EventTriggerDataDto dto)
+    public async Task<TriggerResponseDto> TriggerTopicAsync(EventTopicTriggerDto dto)
     {
         var request = new RestRequest("/events/trigger");
 
-        var json = Serializer<EventTriggerDataDto>.ToJson(dto);
+        var json = Serializer<EventTopicTriggerDto>.ToJson(dto);
 
         request.AddBody(json, ContentType.Json);
 

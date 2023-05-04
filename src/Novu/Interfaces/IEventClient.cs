@@ -19,5 +19,5 @@ public interface IEventClient
   /// <see cref="EventTriggerDataDto"/>
   /// </param>
   /// <returns></returns>
-  public Task<TriggerResponseDto> TriggerTopicAsync(EventTriggerDataDto dto);
+  public Task<TriggerResponseDto> TriggerTopicAsync(EventTopicTriggerDto dto);
 }
