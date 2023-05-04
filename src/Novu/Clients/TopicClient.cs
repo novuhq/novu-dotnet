@@ -1,5 +1,8 @@
+using Novu.Common;
 using Novu.DTO.Topics;
 using Novu.Interfaces;
+using Novu.Utilities;
+using RestSharp;
 
 namespace Novu.Clients;
 
@@ -10,9 +13,19 @@ public class TopicClient : ApiClient, ITopicClient
         
     }
 
-    public Task CreateTopicAsync(TopicCreateDto dto)
+    public async Task<TopicCreateResponseDto> CreateTopicAsync(TopicCreateDto dto)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(Endpoints.TOPIC_CREATE);
+
+        var json = Serializer<TopicCreateDto>.ToJson(dto);
+
+        request.AddBody(json, ContentType.Json);
+
+        var restResponse = await Client.PostAsync(request);
+
+        var response = Serializer<TopicCreateResponseDto>.FromJson(restResponse.Content);
+
+        return response;
     }
 
     public Task GetTopicsAsync(int page = 0)

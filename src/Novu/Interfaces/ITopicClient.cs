@@ -9,7 +9,7 @@ public interface ITopicClient
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public Task CreateTopicAsync(TopicCreateDto dto);
+    public Task<TopicCreateResponseDto> CreateTopicAsync(TopicCreateDto dto);
     
     /// <summary>
     /// Returns a list of topics that can be paginated using the `page` query parameter. Default page is 0.
