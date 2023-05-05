@@ -16,3 +16,5 @@ public class TopicCreateDto
     [JsonProperty("name")]
     public string Name { get; set; }
 }
+
+public record RenameTopicRequest(string Name);

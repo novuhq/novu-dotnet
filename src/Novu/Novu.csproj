@@ -24,8 +24,8 @@
 
     <!-- Required Nuget Packages -->
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-      <PackageReference Include="RestSharp" Version="109.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="Refit" Version="6.3.2" />
     </ItemGroup>
     
     <!-- Nuget Assets --> 

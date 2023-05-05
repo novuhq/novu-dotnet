@@ -54,7 +54,7 @@ public class SubscriberUnitTest : IClassFixture<SubscriberFixture>
     subToUpdate.FirstName = "Updated";
     subToUpdate.LastName = "Subscriber";
     
-    var updatedSub = await _fixture.NovuClient.Subscriber.UpdateSubscriber(subToUpdate);
+    var updatedSub = await _fixture.NovuClient.Subscriber.UpdateSubscriber(subToUpdate.SubscriberId!, subToUpdate);
     
     // Check to make sure fields changed
     Assert.Equal(updatedSub.FirstName, subToUpdate.FirstName);
@@ -68,7 +68,7 @@ public class SubscriberUnitTest : IClassFixture<SubscriberFixture>
   public async void Should_Delete_Subscriber()
   {
     var subscriber = await _fixture.GenerateTestSubscriber();
-    var deleteResponse = await _fixture.NovuClient.Subscriber.DeleteSubscriber(subscriber.SubscriberId);
+    var deleteResponse = await _fixture.NovuClient.Subscriber.DeleteSubscriber(subscriber.SubscriberId!);
     
     Assert.True(deleteResponse.Data.Acknowledged);
   }
@@ -77,13 +77,11 @@ public class SubscriberUnitTest : IClassFixture<SubscriberFixture>
   public async void Should_Update_Online_Status()
   {
     var subscriber = await _fixture.GenerateTestSubscriber();
-    var updateResponse = await _fixture.NovuClient.Subscriber.UpdateOnlineStatus(subscriber.SubscriberId, new SubscriberOnlineDto
+    var updateResponse = await _fixture.NovuClient.Subscriber.UpdateOnlineStatus(subscriber.SubscriberId!, new SubscriberOnlineDto
     {
       IsOnline = true
     });
     
     Assert.True(updateResponse.IsOnline);
   }
-  
-
 }

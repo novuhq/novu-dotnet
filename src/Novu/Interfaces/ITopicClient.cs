@@ -1,5 +1,6 @@
 using Novu.DTO;
 using Novu.DTO.Topics;
+using Refit;
 
 namespace Novu.Interfaces;
 
@@ -27,7 +28,8 @@ public interface ITopicClient
     /// <returns>
     /// <see cref="TopicCreateResponseDto"/>
     /// </returns>
-    public Task<TopicCreateResponseDto> CreateTopicAsync(TopicCreateDto dto);
+    [Post("/topics")]
+    public Task<TopicCreateResponseDto> CreateTopicAsync([Body]TopicCreateDto dto);
     
     /// <summary>
     ///     <para>
@@ -50,7 +52,8 @@ public interface ITopicClient
     /// <returns>
     /// Returns a <see cref="PaginatedResponseDto{T}"/> of type <see cref="TopicDto"/>
     /// </returns>
-    public Task<PaginatedResponseDto<TopicDto>> GetTopicsAsync(int page = 0);
+    [Get("/topics")]
+    public Task<PaginatedResponseDto<TopicDto>> GetTopicsAsync([Query]int page = 0);
     
     /// <summary>
     ///     <para>
@@ -66,6 +69,7 @@ public interface ITopicClient
     ///    Topic Key (<see cref="string"/>)
     /// </param>
     /// <returns></returns>
+    [Get("/topics/{topicKey}")]
     public Task<TopicResponseDto> GetTopicAsync(string topicKey);
     
     /// <summary>
@@ -94,8 +98,8 @@ public interface ITopicClient
     /// <returns>
     ///     <see cref="TopicSubscriberAdditionResponseDto"/>
     /// </returns>
-    public Task<TopicSubscriberAdditionResponseDto> 
-        AddSubscriberAsync(string topicKey, TopicSubscriberUpdateDto dto);
+    [Post("/topics/{topicKey}/subscribers")]
+    public Task<TopicSubscriberAdditionResponseDto> AddSubscriberAsync(string topicKey, TopicSubscriberUpdateDto dto);
     
     /// <summary>
     /// Check if a subscriber belongs to a certain topic
@@ -109,6 +113,7 @@ public interface ITopicClient
     /// <param name="topicKey">Topic Key</param>
     /// <param name="subscriberId">Subscriber ID</param>
     /// <returns></returns>
+    [Get("/topics/{topicKey}/subscribers/{subscriberId}")]
     public Task<TopicSubscriberDto> VerifySubscriberAsync(string topicKey, string subscriberId);
     
     /// <summary>
@@ -131,7 +136,8 @@ public interface ITopicClient
     /// <param name="topicKey"></param>
     /// <param name="subscriberKey"></param>
     /// <returns></returns>
-    public Task RemoveSubscriberAsync(string topicKey, TopicSubscriberUpdateDto subscriberKey);
+    [Post("/topics/{topicKey}/subscribers/removal")]
+    public Task RemoveSubscriberAsync(string topicKey, [Body]TopicSubscriberUpdateDto subscriberKey);
     
     /// <summary>
     /// Delete a topic by key
@@ -145,6 +151,7 @@ public interface ITopicClient
     /// Topic Key to delete (<see cref="string"/>)
     /// </param>
     /// <returns></returns>
+    [Delete("/topics/{topicKey}")]
     public Task DeleteTopicAsync(string topicKey);
     
     /// <summary>
@@ -164,5 +171,6 @@ public interface ITopicClient
     /// <returns>
     ///     <see cref="TopicResponseDto"/>
     /// </returns>
-    public Task<TopicResponseDto> RenameTopicAsync(string topicKey, string newTopicName);
+    [Patch("/topics/{topicKey}")]
+    public Task<TopicResponseDto> RenameTopicAsync(string topicKey, [Body]RenameTopicRequest request);
 }
