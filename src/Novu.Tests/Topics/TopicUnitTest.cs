@@ -161,7 +161,7 @@ public class TopicUnitTest : IClassFixture<Fixture>
         
         var newTopicName = $"test:topic-rename:{Guid.NewGuid().ToString()}";
         
-        var result = await client.Topic.RenameTopicAsync(topic.Data.Key, newTopicName);
+        var result = await client.Topic.RenameTopicAsync(topic.Data.Key, new RenameTopicRequest(newTopicName));
         
         Assert.Equal(newTopicName, result.Data.Name);
     }

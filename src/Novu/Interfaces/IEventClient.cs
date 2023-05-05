@@ -1,23 +1,22 @@
 using Novu.DTO;
+using Refit;
 
 namespace Novu.Interfaces;
 
 public interface IEventClient
 {
-  public Task<TriggerResponseDto> Trigger(EventTriggerDataDto dto);
+    [Post("/events/trigger")]
+    Task<TriggerResponseDto> Trigger([Body]EventTriggerDataDto dto);
 
-  public Task<TriggerBulkResponseDto> TriggerBulkAsync(List<EventTriggerDataDto> payload);
+    [Post("/events/trigger/bulk")]
+    Task<TriggerBulkResponseDto> TriggerBulkAsync([Body] List<EventTriggerDataDto> payload);
 
-  public Task<TriggerResponseDto> TriggerBroadcastAsync(EventTriggerDataDto dto);
+    [Post("/events/trigger/broadcast")]
+    Task<TriggerResponseDto> TriggerBroadcastAsync([Body]EventTriggerDataDto dto);
 
-  public Task TriggerCancelAsync(Guid transactionId);
+    [Delete("/events/trigger/{transactionId}")]
+    Task TriggerCancelAsync(Guid transactionId);
 
-  /// <summary>
-  /// Trigger a notification to a specific Topic of Subscribers.
-  /// </summary>
-  /// <param name="dto">
-  /// <see cref="EventTriggerDataDto"/>
-  /// </param>
-  /// <returns></returns>
-  public Task<TriggerResponseDto> TriggerTopicAsync(EventTopicTriggerDto dto);
+    [Post("/events/trigger")]
+    Task<TriggerResponseDto> TriggerTopicAsync(EventTopicTriggerDto dto);
 }
