@@ -1,6 +1,19 @@
-# Novu.NET
+<div align="center">
+  <a href="https://novu.co" target="_blank">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/2233092/213641039-220ac15f-f367-4d13-9eaf-56e79433b8c1.png">
+    <img src="https://user-images.githubusercontent.com/2233092/213641043-3bbb3f21-3c53-4e67-afe5-755aeb222159.png" width="280" alt="Logo"/>
+  </picture>
+  </a>
+</div>
 
-**Getting Started**
+# novu-dotnet
+
+## Installation
+
+```bash
+dotnet add package Novu
+```
 
 ```csharp
 using Novu.DTO;
@@ -21,9 +34,9 @@ var subscribers = await novu.Subscribers.GetSubscribers();
 
 ```
 
-# Examples
+## Examples
 
-## Novu Client
+### Novu Client
 
 ```csharp
 
@@ -274,13 +287,75 @@ var cancelled = await client.Event.TriggerCancelAsync("triggerTransactionId");
 
 ```
 
+## Topics
+
+```csharp
+
+// Get Topic
+
+var result = await client.Topic.GetTopicAsync("my-topic");
+
+// Get Topics
+
+var results = await client.Topic.GetTopicsAsync();
+
+// Create Topic
+var topicRequest = new TopicCreateDto
+{
+    Key = $"test:topic:{Guid.NewGuid().ToString()}",
+    Name = "Test Topic",
+    
+};
+
+var topic = await client.Topic.CreateTopicAsync(topicRequest);
+
+
+// Add Subscriber to Topic
+var subscriberList = new TopicSubscriberUpdateDto
+{
+    Keys = new List<string>
+    {
+        "test:subscriber:1",
+    }
+};
+
+var result = await client.Topic.AddSubscriberAsync(topic.Data.Key, subscriberList);
+
+// Remove Subscriber from Topic
+
+var subscriberList = new TopicSubscriberUpdateDto
+{
+    Keys = new List<string>
+    {
+        "test:subscriber:1",
+    }
+};
+
+var result = await client.Topic.RemoveSubscriberAsync(topic.Data.Key, subscriberList);
+
+// Delete Topic
+
+await client.Topic.DeleteTopicAsync("my-topic");
+
+// Rename Topic
+
+var topicRequest = new TopicRenameDto
+{
+    Name = "New Name"
+};
+
+var result = await client.Topic.RenameTopicAsync("my-topic", topicRequest);
+
+```
+
+
 ## Repository Overview
 
 All code is located under the `src` directory and this will service as the project root.
 
-`Novu.NET` is the main SDK with `Novu.NET.Tests` housing all unit tests.
+`Novu` is the main SDK with `Novu.Tests` housing all unit tests.
 
-### Novu.NET
+### novu-dotnet
 
 - `Clients` directory holds all clients that house the actual implementation of the various API calls.
 - `DTO` directory holds all Data Transfer Objects
