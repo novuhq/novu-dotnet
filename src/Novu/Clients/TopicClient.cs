@@ -14,11 +14,7 @@ public class TopicClient : ApiClient, ITopicClient
         
     }
 
-    /// <summary>
-    /// todo: add docs
-    /// </summary>
-    /// <param name="dto"></param>
-    /// <returns></returns>
+    /// <inheritdoc />
     public async Task<TopicCreateResponseDto> CreateTopicAsync(TopicCreateDto dto)
     {
         var request = new RestRequest(Endpoints.Topics);
@@ -34,10 +30,7 @@ public class TopicClient : ApiClient, ITopicClient
         return response;
     }
 
-    /// <summary>
-    /// todo: add docs
-    /// </summary>
-    /// <param name="page"></param>
+    /// <inheritdoc />
     public async Task<PaginatedResponseDto<TopicDto>> GetTopicsAsync(int page = 0)
     {
         var request = page > 0
@@ -51,30 +44,27 @@ public class TopicClient : ApiClient, ITopicClient
         return response;
     }
 
-    /// <summary>
-    /// todo: implement
-    /// </summary>
-    /// <param name="topicKey"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
-    public Task GetTopicAsync(string topicKey)
+    /// <inheritdoc />
+    public async Task<TopicResponseDto> GetTopicAsync(string topicKey)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(Endpoints.Topic(topicKey));
+
+        var restResponse = await Client.GetAsync(request);
+        
+        var response = Serializer<TopicResponseDto>.FromJson(restResponse.Content);
+        
+        // todo: check response
+
+        return response;
     }
 
-    /// <summary>
-    /// todo: add docs
-    /// </summary>
-    /// <param name="topicKey"></param>
-    /// <param name="subscriberKey"></param>
-    /// <returns></returns>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <inheritdoc />
     public async Task<TopicSubscriberAdditionResponseDto> 
-        AddSubscriberAsync(string topicKey, TopicSubscriberAdditionRequestDto subscriberAdditionRequests)
+        AddSubscriberAsync(string topicKey, TopicSubscriberUpdateDto dto)
     {
         var request = new RestRequest(Endpoints.TopicSubscribers(topicKey));
         
-        var json = Serializer<TopicSubscriberAdditionRequestDto>.ToJson(subscriberAdditionRequests);
+        var json = Serializer<TopicSubscriberUpdateDto>.ToJson(dto);
         
         request.AddBody(json, ContentType.Json);
         
@@ -85,23 +75,56 @@ public class TopicClient : ApiClient, ITopicClient
         return response;
     }
 
-    public Task VerifySubscriberAsync(string topicKey, string subscriberKey)
+    /// <inheritdoc />
+    public async Task<TopicSubscriberDto> VerifySubscriberAsync(string topicKey, string subscriberId)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(Endpoints.TopicSubscriber(topicKey, subscriberId));
+        
+        var restResponse = await Client.GetAsync(request);
+
+        var response = Serializer<TopicSubscriberDto>.FromJson(restResponse.Content);
+
+        return response;
     }
 
-    public Task RemoveSubscriberAsync(string topicKey, string subscriberKey)
+    /// <inheritdoc />
+    public async Task RemoveSubscriberAsync(string topicKey, TopicSubscriberUpdateDto subscriberKey)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(Endpoints.TopicRemoveSubscriber(topicKey));
+        
+        var json = Serializer<TopicSubscriberUpdateDto>.ToJson(subscriberKey);
+        
+        request.AddBody(json, ContentType.Json);
+
+        await Client.PostAsync(request);
     }
 
-    public Task DeleteTopicAsync(string topicKey)
+    /// <inheritdoc />
+    public async Task DeleteTopicAsync(string topicKey)
     {
-        throw new NotImplementedException();
+        var request = new RestRequest(Endpoints.Topic(topicKey));
+
+        await Client.DeleteAsync(request);
     }
 
-    public Task RenameTopicAsync(string topicKey, string newTopicName)
+    /// <inheritdoc />
+    public async Task<TopicResponseDto> RenameTopicAsync(string topicKey, string newTopicName)
     {
-        throw new NotImplementedException();
+        var dto = new TopicCreateDto
+        {
+            Name = newTopicName
+        };
+
+        var request = new RestRequest(Endpoints.Topic(topicKey));
+        
+        var json = Serializer<TopicCreateDto>.ToJson(dto);
+        
+        request.AddBody(json, ContentType.Json);
+        
+        var restResponse = await Client.PatchAsync(request);
+        
+        var response = Serializer<TopicResponseDto>.FromJson(restResponse.Content);
+        
+        return response;
     }
 }

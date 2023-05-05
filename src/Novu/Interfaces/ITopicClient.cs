@@ -24,24 +24,30 @@ public interface ITopicClient
     /// </summary>
     /// <param name="topicKey"></param>
     /// <returns></returns>
-    public Task GetTopicAsync(string topicKey);
+    public Task<TopicResponseDto> GetTopicAsync(string topicKey);
     
     /// <summary>
     /// Add subscribers to a topic by key
     /// </summary>
     /// <param name="topicKey"></param>
-    /// <param name="subscriberAdditionRequests"></param>
+    /// <param name="dto"></param>
     /// <returns></returns>
     public Task<TopicSubscriberAdditionResponseDto> 
-        AddSubscriberAsync(string topicKey, TopicSubscriberAdditionRequestDto subscriberAdditionRequests);
+        AddSubscriberAsync(string topicKey, TopicSubscriberUpdateDto dto);
     
     /// <summary>
     /// Check if a subscriber belongs to a certain topic
     /// </summary>
-    /// <param name="topicKey"></param>
-    /// <param name="subscriberKey"></param>
+    /// <example>
+    /// <code>
+    ///     var subscriber = await client.Topic.VerifySubscriberAsync("topic-key", "subscriber-key");
+    ///     Console.WriteLine(subscriber.SubscriberId);
+    /// </code>
+    /// </example>
+    /// <param name="topicKey">Topic Key</param>
+    /// <param name="subscriberId">Subscriber ID</param>
     /// <returns></returns>
-    public Task VerifySubscriberAsync(string topicKey, string subscriberKey);
+    public Task<TopicSubscriberDto> VerifySubscriberAsync(string topicKey, string subscriberId);
     
     /// <summary>
     /// Remove a subscriber from a topic
@@ -49,7 +55,7 @@ public interface ITopicClient
     /// <param name="topicKey"></param>
     /// <param name="subscriberKey"></param>
     /// <returns></returns>
-    public Task RemoveSubscriberAsync(string topicKey, string subscriberKey);
+    public Task RemoveSubscriberAsync(string topicKey, TopicSubscriberUpdateDto subscriberKey);
     
     /// <summary>
     /// Delete a topic by key
@@ -64,5 +70,5 @@ public interface ITopicClient
     /// <param name="topicKey">Topic to be renamed</param>
     /// <param name="newTopicName">New topic name</param>
     /// <returns></returns>
-    public Task RenameTopicAsync(string topicKey, string newTopicName);
+    public Task<TopicResponseDto> RenameTopicAsync(string topicKey, string newTopicName);
 }
