@@ -1,6 +1,8 @@
 namespace Novu.Common;
 
-public class Endpoints
+public static class Endpoints
 {
-    public static string TOPIC_CREATE = "/topics";
+    public const string Topics = "/topics";
+    
+    public static string TopicSubscribers(string topicKey) => $"/topics/{topicKey}/subscribers";
 }

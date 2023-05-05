@@ -1,3 +1,4 @@
+using Novu.DTO;
 using Novu.DTO.Topics;
 
 namespace Novu.Interfaces;
@@ -16,7 +17,7 @@ public interface ITopicClient
     /// </summary>
     /// <param name="page"></param>
     /// <returns></returns>
-    public Task GetTopicsAsync(int page = 0);
+    public Task<PaginatedResponseDto<TopicDto>> GetTopicsAsync(int page = 0);
     
     /// <summary>
     /// Get a topic by key
@@ -29,9 +30,10 @@ public interface ITopicClient
     /// Add subscribers to a topic by key
     /// </summary>
     /// <param name="topicKey"></param>
-    /// <param name="subscriberKey"></param>
+    /// <param name="subscriberAdditionRequests"></param>
     /// <returns></returns>
-    public Task AddSubscriberAsync(string topicKey, string subscriberKey);
+    public Task<TopicSubscriberAdditionResponseDto> 
+        AddSubscriberAsync(string topicKey, TopicSubscriberAdditionRequestDto subscriberAdditionRequests);
     
     /// <summary>
     /// Check if a subscriber belongs to a certain topic

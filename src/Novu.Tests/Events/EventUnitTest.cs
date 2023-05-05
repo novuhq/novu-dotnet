@@ -1,10 +1,9 @@
 using Newtonsoft.Json;
 using Novu.DTO;
 using Novu.DTO.Topics;
-using Novu.Models;
 using Novu.Tests.Fixtures;
 
-namespace Novu.Tests;
+namespace Novu.Tests.Events;
 
 public class EventUnitTest : IClassFixture<SubscriberFixture>
 {
