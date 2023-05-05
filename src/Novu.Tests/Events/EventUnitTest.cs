@@ -1,9 +1,9 @@
 using Newtonsoft.Json;
 using Novu.DTO;
-using Novu.Models;
+using Novu.DTO.Topics;
 using Novu.Tests.Fixtures;
 
-namespace Novu.Tests;
+namespace Novu.Tests.Events;
 
 public class EventUnitTest : IClassFixture<SubscriberFixture>
 {
@@ -148,6 +148,37 @@ public class EventUnitTest : IClassFixture<SubscriberFixture>
         }
 
         await client.Event.TriggerCancelAsync(trigger.TriggerResponsePayloadDto.TransactionId);
+    }
+
+    [Fact]
+    public async void Should_Trigger_Topic()
+    {
+        var client = _fixture.NovuClient;
+        
+        var testRecord = new TestRecord
+        {
+            Message = "This is a test message"
+        };
+
+        var topic = await client.Topic.CreateTopicAsync(new TopicCreateDto
+        {
+            Key = $"topic:test:{Guid.NewGuid().ToString()}",
+            Name = "Test Topic"
+        });
+
+        var dto = new EventTopicTriggerDto
+        {
+            EventName = "test",
+            Topic = new EventTopicDto
+            {
+                TopicKey = topic.Data.Key
+            },
+            Payload = testRecord
+        };
+
+        var topicTrigger = await client.Event.TriggerTopicAsync(dto);
+
+        Assert.True(topicTrigger.TriggerResponsePayloadDto.Acknowledged);
     }
 }
 

@@ -1,8 +1,7 @@
 using Novu.DTO;
-using Novu.Clients;
 using Novu.Tests.Fixtures;
 
-namespace Novu.Tests;
+namespace Novu.Tests.Subscribers;
 
 public class SubscriberUnitTest : IClassFixture<SubscriberFixture>
 {
