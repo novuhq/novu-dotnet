@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Novu.DTO;
 
-namespace Novu.Utilities;
-
-internal static class Serializer<T>
+namespace Novu.Utilities {
+    internal static class Serializer<T>
 {
     /// <summary>
     /// Convert object type <see cref="T"/> to Json string.
@@ -31,3 +30,5 @@ internal static class Serializer<T>
         => JsonConvert.DeserializeObject<T>(json, Converter.Settings) 
            ?? throw new NullReferenceException("Incoming Json string cannot be null");
 }
+}
+

@@ -2,11 +2,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Novu.Utilities;
+namespace Novu.Utilities {
 
 internal static class Converter
 {
-    public static readonly JsonSerializerSettings Settings = new()
+    public static readonly JsonSerializerSettings Settings = new JsonSerializerSettings()
     {
         MetadataPropertyHandling = MetadataPropertyHandling.Ignore,
         DateParseHandling = DateParseHandling.None,
@@ -15,4 +15,6 @@ internal static class Converter
             new IsoDateTimeConverter { DateTimeStyles = DateTimeStyles.AssumeUniversal }
         },
     };
+}
+
 }
