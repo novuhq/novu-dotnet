@@ -1,20 +1,21 @@
 ﻿using Novu.Clients;
 using Novu.Interfaces;
 
-namespace Novu;
-
-public class NovuClient : INovuClient
+namespace Novu
 {
-    public NovuClient(INovuClientConfiguration configuration)
+    public class NovuClient : INovuClient
     {
-        Subscriber = new SubscriberClient(configuration);
-        Event = new EventClient(configuration);
-        Topic = new TopicClient(configuration);
-    }
+        public NovuClient(INovuClientConfiguration configuration)
+        {
+            Subscriber = new SubscriberClient(configuration);
+            Event = new EventClient(configuration);
+            Topic = new TopicClient(configuration);
+        }
 
-    public ISubscriberClient Subscriber { get; }
+        public ISubscriberClient Subscriber { get; }
     
-    public IEventClient Event { get; }
+        public IEventClient Event { get; }
     
-    public ITopicClient Topic { get; }
+        public ITopicClient Topic { get; }
+    }   
 }

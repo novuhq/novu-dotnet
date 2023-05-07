@@ -1,12 +1,15 @@
-namespace Novu.Interfaces;
+using System.Threading.Tasks;
 
-public interface INotificationsClient
+namespace Novu.Interfaces
 {
-    public Task GetNotificationsAsync();
+    public interface INotificationsClient
+    {
+        Task GetNotificationsAsync();
 
-    public Task GetNotificationStatisticsAsync();
+        Task GetNotificationStatisticsAsync();
 
-    public Task GetNotificationGraphStatisticsAsync();
-    
-    public Task GetNotificationAsync(string notificationId);
+        Task GetNotificationGraphStatisticsAsync();
+
+        Task GetNotificationAsync(string notificationId);
+    }
 }

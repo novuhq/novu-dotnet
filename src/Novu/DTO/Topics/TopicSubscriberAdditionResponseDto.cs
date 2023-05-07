@@ -1,15 +1,16 @@
 using Newtonsoft.Json;
 
-namespace Novu.DTO.Topics;
-
-public class TopicSubscriberAdditionResponseDto
+namespace Novu.DTO.Topics
 {
-    [JsonProperty("data")]
-    public TopicSubscriberAdditionResponseData Data { get; set; }
-}
+    public class TopicSubscriberAdditionResponseDto
+    {
+        [JsonProperty("data")]
+        public TopicSubscriberAdditionResponseData Data { get; set; }
+    }
 
-public class TopicSubscriberAdditionResponseData
-{
-    [JsonProperty("succeeded")]
-    public string[] Succeeded { get; set; }
+    public class TopicSubscriberAdditionResponseData
+    {
+        [JsonProperty("succeeded")]
+        public string[] Succeeded { get; set; }
+    }
 }

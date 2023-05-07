@@ -1,12 +1,13 @@
 using Newtonsoft.Json;
 
-namespace Novu.DTO.Topics;
-
-public class TopicRenameRequestDto
+namespace Novu.DTO.Topics
 {
-    /// <summary>
-    /// New name of the Topic.
-    /// </summary>
-    [JsonProperty("name")]
-    public string Name { get; set; }
+    public class TopicRenameRequestDto
+    {
+        /// <summary>
+        /// New name of the Topic.
+        /// </summary>
+        [JsonProperty("name")]
+        public string Name { get; set; }
+    }
 }

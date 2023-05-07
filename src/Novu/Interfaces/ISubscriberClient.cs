@@ -1,18 +1,20 @@
-﻿using Novu.DTO;
+﻿using System.Threading.Tasks;
+using Novu.DTO;
 
-namespace Novu.Interfaces;
-
-public interface ISubscriberClient
+namespace Novu.Interfaces
 {
-    public Task<SubscribersDto> GetSubscribers(int page = 0);
+    public interface ISubscriberClient
+    {
+        Task<SubscribersDto> GetSubscribers(int page = 0);
 
-    public Task<SubscriberDto> GetSubscriber(string id);
+        Task<SubscriberDto> GetSubscriber(string id);
 
-    public Task<SubscriberDto> CreateSubscriber(CreateSubscriberDto dto);
-    
-    public Task<SubscriberDto> UpdateSubscriber(SubscriberDto requestDto);
-    
-    public Task<DeleteResponseDto> DeleteSubscriber(string id);
-    
-    public Task<SubscriberDto> UpdateOnlineStatus(string subscriberId, SubscriberOnlineDto model);
+        Task<SubscriberDto> CreateSubscriber(CreateSubscriberDto dto);
+
+        Task<SubscriberDto> UpdateSubscriber(SubscriberDto requestDto);
+
+        Task<DeleteResponseDto> DeleteSubscriber(string id);
+
+        Task<SubscriberDto> UpdateOnlineStatus(string subscriberId, SubscriberOnlineDto model);
+    }
 }

@@ -1,10 +1,11 @@
 ﻿using Novu.Interfaces;
 
-namespace Novu.Models;
-
-public class NovuClientConfiguration : INovuClientConfiguration
+namespace Novu.Models
 {
-    public string Url { get; set; } = "https://api.novu.co/v1";
+    public class NovuClientConfiguration : INovuClientConfiguration
+    {
+        public string Url { get; set; } = "https://api.novu.co/v1";
     
-    public string ApiKey { get; set; }
+        public string ApiKey { get; set; }
+    }
 }

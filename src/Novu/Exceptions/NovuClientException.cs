@@ -1,19 +1,22 @@
-﻿namespace Novu.Exceptions;
+﻿using System;
 
-public class NovuClientException : Exception
+namespace Novu.Exceptions
 {
-    public NovuClientException()
+    public class NovuClientException : Exception
     {
+        public NovuClientException()
+        {
         
-    }
+        }
 
-    public NovuClientException(string message) : base(message)
-    {
+        public NovuClientException(string message) : base(message)
+        {
         
-    }
+        }
 
-    public NovuClientException(string message, Exception inner): base(message,  inner)
-    {
+        public NovuClientException(string message, Exception inner): base(message,  inner)
+        {
         
-    }
+        }
+    }   
 }

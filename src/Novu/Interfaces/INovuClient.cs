@@ -1,10 +1,11 @@
-﻿namespace Novu.Interfaces;
-
-public interface INovuClient
+﻿namespace Novu.Interfaces
 {
-    public ISubscriberClient Subscriber { get; }
-    
-    public IEventClient Event { get; }
-    
-    public ITopicClient Topic { get; }
+    public interface INovuClient
+    {
+        ISubscriberClient Subscriber { get; }
+
+        IEventClient Event { get; }
+
+        ITopicClient Topic { get; }
+    }   
 }

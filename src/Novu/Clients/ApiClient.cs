@@ -1,24 +1,26 @@
-﻿using Novu.Interfaces;
+﻿using System;
+using Novu.Interfaces;
 using RestSharp;
 using RestSharp.Authenticators.OAuth2;
 
-namespace Novu.Clients;
-
-/// <summary>
-/// Base class for an API client.
-/// </summary>
-public abstract class ApiClient
+namespace Novu.Clients
 {
-    protected readonly RestClient Client;
-    
-    protected ApiClient(INovuClientConfiguration apiConfiguration)
+    /// <summary>
+    /// Base class for an API client.
+    /// </summary>
+    public abstract class ApiClient
     {
-        Client = new RestClient(new RestClientOptions
+        protected readonly RestClient Client;
+    
+        protected ApiClient(INovuClientConfiguration apiConfiguration)
         {
-            Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(
-                apiConfiguration.ApiKey, 
-                "ApiKey"),
-            BaseUrl = new Uri(apiConfiguration.Url)
-        });
+            Client = new RestClient(new RestClientOptions
+            {
+                Authenticator = new OAuth2AuthorizationRequestHeaderAuthenticator(
+                    apiConfiguration.ApiKey, 
+                    "ApiKey"),
+                BaseUrl = new Uri(apiConfiguration.Url)
+            });
+        }
     }
 }

@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Novu.DTO;
-
-public class TriggerBulkDto
+namespace Novu.DTO
 {
-    [JsonProperty("events")]
-    public List<EventTriggerDataDto> Events { get; set; }
+    public class TriggerBulkDto
+    {
+        [JsonProperty("events")]
+        public List<EventTriggerDataDto> Events { get; set; }
+    }
 }

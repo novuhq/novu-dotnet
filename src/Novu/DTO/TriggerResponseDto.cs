@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 
-namespace Novu.DTO;
-
-public class TriggerResponseDto
+namespace Novu.DTO
 {
-    [JsonProperty("data")]
-    public TriggerResponsePayloadDto TriggerResponsePayloadDto { get; set; }
+    public class TriggerResponseDto
+    {
+        [JsonProperty("data")]
+        public TriggerResponsePayloadDto TriggerResponsePayloadDto { get; set; }
+    }
 }

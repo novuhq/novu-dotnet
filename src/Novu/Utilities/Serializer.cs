@@ -25,10 +25,8 @@ namespace Novu.Utilities {
     /// <returns>
     /// <see cref="T"/>
     /// </returns>
-    /// <exception cref="NullReferenceException"></exception>
-    public static T FromJson(string json) 
-        => JsonConvert.DeserializeObject<T>(json, Converter.Settings) 
-           ?? throw new NullReferenceException("Incoming Json string cannot be null");
+    public static T FromJson(string json)
+        => JsonConvert.DeserializeObject<T>(json, Converter.Settings);
 }
 }
 

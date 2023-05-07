@@ -1,18 +1,19 @@
 ﻿using Newtonsoft.Json;
 
-namespace Novu.DTO;
-
-public class DeleteResponseDto
+namespace Novu.DTO
 {
-    [JsonProperty("data")]
-    public DeleteResponseDataDto Data { get; set; }
-}
+    public class DeleteResponseDto
+    {
+        [JsonProperty("data")]
+        public DeleteResponseDataDto Data { get; set; }
+    }
 
-public class DeleteResponseDataDto
-{
-    [JsonProperty("acknowledged")] 
-    public bool Acknowledged { get; set; }
+    public class DeleteResponseDataDto
+    {
+        [JsonProperty("acknowledged")] 
+        public bool Acknowledged { get; set; }
 
-    [JsonProperty("status")] 
-    public string Status { get; set; }
+        [JsonProperty("status")] 
+        public string Status { get; set; }
+    }
 }

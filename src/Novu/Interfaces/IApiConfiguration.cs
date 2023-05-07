@@ -1,6 +1,7 @@
-﻿namespace Novu.Interfaces;
-
-public interface IApiConfiguration
+﻿namespace Novu.Interfaces
 {
-    public INovuClientConfiguration NovuClientConfiguration { get; set; }
+    public interface IApiConfiguration
+    {
+        INovuClientConfiguration NovuClientConfiguration { get; set; }
+    }
 }

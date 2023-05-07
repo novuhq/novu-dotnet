@@ -1,9 +1,10 @@
 using Newtonsoft.Json;
 
-namespace Novu.DTO.Topics;
-
-public class TopicResponseDto
+namespace Novu.DTO.Topics
 {
-    [JsonProperty("data")]
-    public TopicDto Data { get; set; }
+    public class TopicResponseDto
+    {
+        [JsonProperty("data")]
+        public TopicDto Data { get; set; }
+    }
 }

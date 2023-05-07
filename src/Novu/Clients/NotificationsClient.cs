@@ -1,30 +1,33 @@
+using System;
+using System.Threading.Tasks;
 using Novu.Interfaces;
 
-namespace Novu.Clients;
-
-public class NotificationsClient : ApiClient, INotificationsClient
+namespace Novu.Clients
 {
-    public NotificationsClient(INovuClientConfiguration apiConfiguration) : base(apiConfiguration)
+    public class NotificationsClient : ApiClient, INotificationsClient
     {
-    }
+        public NotificationsClient(INovuClientConfiguration apiConfiguration) : base(apiConfiguration)
+        {
+        }
 
-    public Task GetNotificationsAsync()
-    {
-        throw new NotImplementedException();
-    }
+        public Task GetNotificationsAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task GetNotificationStatisticsAsync()
-    {
-        throw new NotImplementedException();
-    }
+        public Task GetNotificationStatisticsAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task GetNotificationGraphStatisticsAsync()
-    {
-        throw new NotImplementedException();
-    }
+        public Task GetNotificationGraphStatisticsAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-    public Task GetNotificationAsync(string notificationId)
-    {
-        throw new NotImplementedException();
+        public Task GetNotificationAsync(string notificationId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

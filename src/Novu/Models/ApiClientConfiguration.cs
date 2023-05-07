@@ -1,8 +1,9 @@
 ﻿using Novu.Interfaces;
 
-namespace Novu.Models;
-
-public class ApiClientConfiguration : IApiConfiguration
+namespace Novu.Models
 {
-    public INovuClientConfiguration NovuClientConfiguration { get; set; }
+    public class ApiClientConfiguration : IApiConfiguration
+    {
+        public INovuClientConfiguration NovuClientConfiguration { get; set; }
+    }
 }

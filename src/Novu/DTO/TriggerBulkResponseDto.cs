@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Novu.DTO;
-
-public class TriggerBulkResponseDto
+namespace Novu.DTO
 {
-    [JsonProperty("data")]
-    public List<TriggerResponsePayloadDto> PayloadDtos { get; set; }
+    public class TriggerBulkResponseDto
+    {
+        [JsonProperty("data")]
+        public List<TriggerResponsePayloadDto> PayloadDtos { get; set; }
+    }
 }
