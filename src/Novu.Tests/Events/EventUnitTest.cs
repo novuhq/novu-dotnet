@@ -70,7 +70,7 @@ public class EventUnitTest : IClassFixture<SubscriberFixture>
             },
         };
 
-        var trigger = await client.Event.TriggerBulkAsync(payload);
+        var trigger = await client.Event.TriggerBulkAsync(new SendBulkRequest(payload));
 
         if (trigger.PayloadDtos.Count != 2)
         {
@@ -97,16 +97,8 @@ public class EventUnitTest : IClassFixture<SubscriberFixture>
         };
 
         if (subscriber.SubscriberId == null) throw new Exception("Subscriber Id is null");
-        
-        var dto = new EventTriggerDataDto()
-        {
-            EventName = "test",
-            To =
-            {
-                SubscriberId = subscriber.SubscriberId
-            },
-            Payload = testRecord
-        };
+
+        var dto = new BroadcastMessageRequest("test", testRecord, default);
 
         var trigger = await client.Event.TriggerBroadcastAsync(dto);
 
@@ -129,16 +121,8 @@ public class EventUnitTest : IClassFixture<SubscriberFixture>
         };
 
         if (subscriber.SubscriberId == null) throw new Exception("Subscriber Id is null");
-        
-        var dto = new EventTriggerDataDto()
-        {
-            EventName = "test",
-            To =
-            {
-                SubscriberId = subscriber.SubscriberId
-            },
-            Payload = testRecord
-        };
+
+        var dto = new BroadcastMessageRequest("test", testRecord, default);
 
         var trigger = await client.Event.TriggerBroadcastAsync(dto);
 
