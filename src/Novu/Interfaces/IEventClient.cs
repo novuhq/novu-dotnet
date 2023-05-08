@@ -9,10 +9,10 @@ public interface IEventClient
     Task<TriggerResponseDto> Trigger([Body]EventTriggerDataDto dto);
 
     [Post("/events/trigger/bulk")]
-    Task<TriggerBulkResponseDto> TriggerBulkAsync([Body] List<EventTriggerDataDto> payload);
+    Task<TriggerBulkResponseDto> TriggerBulkAsync([Body] SendBulkRequest payload);
 
     [Post("/events/trigger/broadcast")]
-    Task<TriggerResponseDto> TriggerBroadcastAsync([Body]EventTriggerDataDto dto);
+    Task<TriggerResponseDto> TriggerBroadcastAsync([Body]BroadcastMessageRequest dto);
 
     [Delete("/events/trigger/{transactionId}")]
     Task TriggerCancelAsync(Guid transactionId);

@@ -5,8 +5,4 @@ namespace Novu.DTO.Topics;
 /// <summary>
 /// todo add docs
 /// </summary>
-public class TopicSubscriberUpdateDto
-{
-    [JsonProperty("subscribers")]
-    public List<string> Keys { get; set; }
-}
+public record TopicSubscriberUpdateDto(List<string> Subscribers);
