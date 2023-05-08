@@ -2,6 +2,9 @@ using Newtonsoft.Json;
 
 namespace Novu.DTO;
 
+public record BroadcastMessageRequest(string Name ,object Payload, string? TransactionId);
+
+public record SendBulkRequest(List<EventTriggerDataDto> Events);
 public class EventTriggerDataDto
 {
     [JsonProperty("name")]

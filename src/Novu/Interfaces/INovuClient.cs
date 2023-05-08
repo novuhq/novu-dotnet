@@ -1,4 +1,6 @@
-﻿namespace Novu.Interfaces;
+﻿using Novu.Clients;
+
+namespace Novu.Interfaces;
 
 public interface INovuClient
 {
