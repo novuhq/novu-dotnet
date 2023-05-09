@@ -17,4 +17,8 @@ public class TopicCreateDto
     public string Name { get; set; }
 }
 
+/// <summary>
+/// Rename Topic Request
+/// </summary>
+/// <param name="Name">New name</param>
 public record RenameTopicRequest(string Name);
