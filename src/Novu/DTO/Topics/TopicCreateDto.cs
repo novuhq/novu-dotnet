@@ -17,7 +17,4 @@ public class TopicCreateDto
     public string Name { get; set; }
 }
 
-public record RenameTopicRequest(string Name)
-{
-    public string Name { get; } = Name;
-}
+public record RenameTopicRequest(string Name);
