@@ -13,7 +13,7 @@
     <!-- Nuget Settings -->
     <PropertyGroup>
         <PackageId>Novu</PackageId>
-        <Version>0.1.3</Version>
+        <Version>0.2.0</Version>
         <ProductName>Novu</ProductName>
         <Description>Novu .NET SDK</Description>
         <RepositoryType>git</RepositoryType>
