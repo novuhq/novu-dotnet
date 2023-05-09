@@ -28,6 +28,9 @@ public class EventTriggerDataDto
 
 public record EventToDto
 {
+    /// <summary>
+    /// Subscriber ID to send the event to.
+    /// </summary>
     [JsonProperty("subscriberId")]
     public string SubscriberId { get; set; }
 }
