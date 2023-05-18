@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using Novu.Clients;
 using Novu.Interfaces;
+using Novu.NotificationTemplates;
 using Refit;
 
 namespace Novu;

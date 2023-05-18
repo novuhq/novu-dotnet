@@ -11,7 +11,7 @@ public class NotificationTemplatesTests
     {
         _client = new NovuClient(new NovuClientConfiguration
         {
-            ApiKey = "e59bd17abbed6c194f188f9987331864"
+            ApiKey = Environment.GetEnvironmentVariable("NOVU_API_KEY") ?? throw new InvalidOperationException("NOVU_API_KEY is not set.")
         });
     }
     [Fact]

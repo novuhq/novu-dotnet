@@ -1,4 +1,5 @@
 ﻿using Novu.Clients;
+using Novu.NotificationTemplates;
 
 namespace Novu.Interfaces;
 
