@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Novu.DTO;
-using Refit;
 
-namespace Novu.Interfaces;
+namespace Novu.NotificationTemplates;
 
 public record PreferenceSettings(
     bool Email,
@@ -11,6 +9,7 @@ public record PreferenceSettings(
     bool Chat,
     bool Push,
     [property: JsonProperty("in_app")] bool InApp);
+
 public record Child(string Field,
     string Value,
     string Operator,
@@ -23,6 +22,7 @@ public record Filter(
     Child[] Children);
 
 public record Variable(string Name);
+
 public record Trigger(
     string Type,
     string Identifier,
@@ -35,6 +35,7 @@ public record NotificationGroup(
     [property: JsonProperty("_environmentId")] string EnvironmentId,
     [property: JsonProperty("_parentId")] string ParentId,
     string Name);
+
 public record Step(
     [property: JsonProperty("_id")]string Id,
     string Name,
@@ -46,6 +47,7 @@ public record Step(
     [property: JsonProperty("_parentId")]JObject ParentId,
     JObject Metadata,
     JObject ReplyCallback); // TODO: Metadata is a JObject, but it can be anything. Need to figure out how to handle this.
+
 public record NotificationTemplate(
     [property: JsonProperty("_id")]string Id,
     [property: JsonProperty("_organizationId")]string OrganizationId,
@@ -68,17 +70,3 @@ public record NotificationTemplate(
     NotificationGroup NotificationGroup);
 
 public record UpdateTemplateStatusRequest(bool Active);
-public record NovuResponse<T>(T Data);
-public interface INotificationTemplatesClient
-{
-    [Get("/notification-templates")]
-    public Task<PaginatedResponseDto<NotificationTemplate>> GetTemplates([Query] int page = 0, [Query] int limit = 10);
-
-    [Delete("/notification-templates/{templateId}")]
-    public Task DeleteTemplate(string templateId);
-    [Get("/notification-templates/{templateId}")]
-    public Task<NovuResponse<NotificationTemplate>> GetTemplate(string templateId);
-
-    [Put("/notification-templates/{templateId}/status")]
-    public Task<NovuResponse<NotificationTemplate>> UpdateStatus(string templateId, [Body]UpdateTemplateStatusRequest request);
-}
