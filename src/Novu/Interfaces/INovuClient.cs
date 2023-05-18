@@ -9,4 +9,5 @@ public interface INovuClient
     public IEventClient Event { get; }
     
     public ITopicClient Topic { get; }
+    public INotificationTemplatesClient NotificationTemplates { get; }
 }

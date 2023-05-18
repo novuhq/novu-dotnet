@@ -36,6 +36,10 @@ public class NovuClient : INovuClient
         {
             ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
         });
+        NotificationTemplates = RestService.For<INotificationTemplatesClient>(httpClient, new RefitSettings
+        {
+            ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
+        });
     }
 
     public ISubscriberClient Subscriber { get; }
@@ -43,4 +47,5 @@ public class NovuClient : INovuClient
     public IEventClient Event { get; }
     
     public ITopicClient Topic { get; }
+    public INotificationTemplatesClient NotificationTemplates { get; }
 }
