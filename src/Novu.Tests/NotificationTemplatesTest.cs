@@ -1,13 +1,14 @@
 ﻿using FluentAssertions;
 using Novu.Models;
+using Novu.NotificationTemplates;
 
 namespace Novu.Tests;
 
-public class NotificationTemplatesTests
+public class NotificationTemplatesTest
 {
     private readonly NovuClient _client;
 
-    public NotificationTemplatesTests()
+    public NotificationTemplatesTest()
     {
         _client = new NovuClient(new NovuClientConfiguration
         {
@@ -44,7 +45,10 @@ public class NotificationTemplatesTests
     {
         var templates = await _client.NotificationTemplates.GetTemplates();
         var template = templates.Data.First();
-        var result = await _client.NotificationTemplates.UpdateStatus(template.Id, new(!template.Active));
+        var result = await _client.NotificationTemplates.UpdateStatus(template.Id, new UpdateTemplateStatusRequest
+        {
+            Active = !template.Active
+        });
         result.Data.Should().NotBeNull();
         result.Data.Active.Should().Be(!template.Active);
     }
