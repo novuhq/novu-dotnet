@@ -17,6 +17,7 @@ public class EventTriggerDataDto
     [JsonProperty("payload")]
     public object Payload { get; set; } = new();
 
+
     [JsonProperty("override")] public List<object>? Overrides { get; set; }
     
     /// <summary>
@@ -24,6 +25,9 @@ public class EventTriggerDataDto
     /// </summary>
     [JsonProperty("transactionId")]
     public string? TransactionId { get; set; }
+
+    [JsonProperty("actor")]
+    public string Actor { get; set; } = new();
 }
 
 public record EventToDto
