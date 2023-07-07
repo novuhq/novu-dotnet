@@ -27,7 +27,7 @@ public class EventTriggerDataDto
     public string? TransactionId { get; set; }
 
     [JsonProperty("actor")]
-    public string Actor { get; set; } = new();
+    public string Actor { get; set; }
 }
 
 public record EventToDto
