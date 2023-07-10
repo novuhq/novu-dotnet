@@ -39,10 +39,19 @@ public class TopicUnitTest : IClassFixture<Fixture>
             Key = $"test:topic:{Guid.NewGuid().ToString()}",
             Name = "Test Topic"
         };
+        
         var subscriber = await client.Subscriber.CreateSubscriber(new CreateSubscriberDto()
         {
             SubscriberId = "test:subscriber:1",
-            Email = "noreply@novu.com"
+            Email = "noreply@novu.com",
+            Data = new List<AdditionalDataDto>()
+            {
+                new()
+                {
+                    Key = "test",
+                    Value = "test"
+                }
+            }
         });
         var topic = await client.Topic.CreateTopicAsync(topicRequest);
 
@@ -80,6 +89,14 @@ public class TopicUnitTest : IClassFixture<Fixture>
         var subscriber = await client.Subscriber.CreateSubscriber(new CreateSubscriberDto()
         {
             SubscriberId = "test:subscriber:1",
+            Data = new List<AdditionalDataDto>()
+            {
+                new()
+                {
+                    Key = "test",
+                    Value = "test"
+                }
+            }
         });
         var subscriberList = new TopicSubscriberUpdateDto(new() { "test:subscriber:1" });
 
@@ -96,7 +113,15 @@ public class TopicUnitTest : IClassFixture<Fixture>
         var subscriber = await client.Subscriber.CreateSubscriber(new CreateSubscriberDto()
         {
             SubscriberId = "test:subscriber:1",
-            Email = "noreply@novu.com"
+            Email = "noreply@novu.com",
+            Data = new List<AdditionalDataDto>()
+            {
+                new()
+                {
+                    Key = "test",
+                    Value = "test"
+                }
+            }
         });
         var topic = await client.Topic.CreateTopicAsync(new TopicCreateDto
         {
