@@ -33,8 +33,7 @@ public class SubscriberDto
     
     [JsonProperty("data")]
     public List<AdditionalDataDto>? Data { get; set; }
-
-
+    
     [JsonProperty("channels")]
     public object[] Channels { get; set; }
 
