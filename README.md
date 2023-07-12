@@ -35,9 +35,9 @@ using Novu;
     ApiKey = "12345",
 };
 
-var novu = new NovuClient(novuConfiguration);
+var client = new NovuClient(novuConfiguration);
 
-var subscribers = await novu.Subscribers.GetSubscribers();
+var subscribers = await client.Subscriber.GetSubscribers();
 
 ```
 
@@ -106,6 +106,7 @@ var additionalData = new List<AdditionalDataDto>
     Key = "External ID",
     Value = "1122334455"
   },
+  new AdditionalDataDto
   {
     Key = "SMS_PREFERENCE",
     Value = "EMERGENT_ONLY"
@@ -124,7 +125,7 @@ var newSubscriberDto = new CreateSubscriberDto
   Data = additionalData
 };
 
-var subscriber = await client.Subcriber.CreateSubscriber()
+var subscriber = await client.Subscriber.CreateSubscriber(newSubscriberDto)
 
 
 ```
@@ -138,12 +139,12 @@ using Novu.Models;
 using Novu;
 ...
 
-var subscriber = client.Subscriber.GetSubscriber("subscriberId");
+var subscriber = await client.Subscriber.GetSubscriber("subscriberId");
 
 subscriber.FirstName = "Updated";
 subscriber.LastName = "Subscriber";
 
-var updatedSubscriber = await client.Subscriber.UpdateSubscriber(subscriber);
+var updatedSubscriber = await client.Subscriber.UpdateSubscriber("subscriberId",subscriber);
 
 
 ```
