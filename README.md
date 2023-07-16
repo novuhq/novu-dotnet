@@ -355,6 +355,24 @@ var result = await client.Topic.RenameTopicAsync("my-topic", topicRequest);
 
 ```
 
+## WorkflowGroups
+
+```csharp
+...
+Using Novu.DTO.WorkflowGroup
+
+// Create a new Workflow group
+var request = new WorkflowGroupDto
+{
+    WorkflowGroupName = "<name of workflow group to be created>"
+}
+
+var response = await client.WorkflowGroup.CreateWorkflowGroup(request);
+
+
+// Get All Workflow groups
+var response = await client.WorkflowGroup.GetWorkflowGroups();
+```
 
 ## Repository Overview
 
