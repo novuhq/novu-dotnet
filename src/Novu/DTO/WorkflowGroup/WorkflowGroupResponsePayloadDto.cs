@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Novu.DTO
+namespace Novu.DTO.WorkflowGroup
 {
     public class WorkflowGroupResponsePayloadDto
     {
