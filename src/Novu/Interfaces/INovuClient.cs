@@ -11,4 +11,5 @@ public interface INovuClient
     
     public ITopicClient Topic { get; }
     public INotificationTemplatesClient NotificationTemplates { get; }
+    public IWorkflowGroupClient WorkflowGroup { get; }
 }
