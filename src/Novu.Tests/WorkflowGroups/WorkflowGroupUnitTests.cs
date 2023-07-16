@@ -1,4 +1,4 @@
-﻿using Novu.DTO;
+﻿using Novu.DTO.WorkflowGroup;
 
 namespace Novu.Tests.WorkflowGroups
 {
