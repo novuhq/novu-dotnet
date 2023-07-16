@@ -41,6 +41,10 @@ public class NovuClient : INovuClient
         {
             ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
         });
+        WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, new RefitSettings
+        {   
+            ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
+        });
     }
 
     public ISubscriberClient Subscriber { get; }
@@ -49,4 +53,5 @@ public class NovuClient : INovuClient
     
     public ITopicClient Topic { get; }
     public INotificationTemplatesClient NotificationTemplates { get; }
+    public IWorkflowGroupClient WorkflowGroup { get; }
 }
