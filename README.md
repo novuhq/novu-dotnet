@@ -37,7 +37,7 @@ using Novu;
 
 var novu = new NovuClient(novuConfiguration);
 
-var subscribers = await novu.Subscribers.GetSubscribers();
+var subscribers = await novu.Subscriber.GetSubscribers();
 
 ```
 
@@ -57,7 +57,7 @@ var config = new NovuClientConfiguration
   ApiKey = "my-key",
 };
 
-var client = new NovuClient(config);
+var novu = new NovuClient(config);
 
 ```
 
@@ -72,7 +72,7 @@ using Novu.Models;
 using Novu;
 ...
 
-var subscribers = await client.Subscriber.GetSubscribers()
+var subscribers = await novu.Subscriber.GetSubscribers()
 
 
 ```
@@ -86,7 +86,7 @@ using Novu.Models;
 using Novu;
 ...
 
-var subscriber = await client.Subscriber.GetSubscriber("subscriberId");
+var subscriber = await novu.Subscriber.GetSubscriber("subscriberId");
 
 
 ```
@@ -106,6 +106,7 @@ var additionalData = new List<AdditionalDataDto>
     Key = "External ID",
     Value = "1122334455"
   },
+  new AdditionalDataDto
   {
     Key = "SMS_PREFERENCE",
     Value = "EMERGENT_ONLY"
@@ -124,7 +125,7 @@ var newSubscriberDto = new CreateSubscriberDto
   Data = additionalData
 };
 
-var subscriber = await client.Subcriber.CreateSubscriber()
+var subscriber = await novu.Subscriber.CreateSubscriber(newSubscriberDto)
 
 
 ```
@@ -138,12 +139,12 @@ using Novu.Models;
 using Novu;
 ...
 
-var subscriber = client.Subscriber.GetSubscriber("subscriberId");
+var subscriber = await novu.Subscriber.GetSubscriber("subscriberId");
 
 subscriber.FirstName = "Updated";
 subscriber.LastName = "Subscriber";
 
-var updatedSubscriber = await client.Subscriber.UpdateSubscriber(subscriber);
+var updatedSubscriber = await novu.Subscriber.UpdateSubscriber("subscriberId",subscriber);
 
 
 ```
@@ -157,7 +158,7 @@ using Novu.Models;
 using Novu;
 ...
 
-var deleted = await client.Subscriber.DeleteSubscriber("subscriberId");
+var deleted = await novu.Subscriber.DeleteSubscriber("subscriberId");
 
 
 ```
@@ -176,7 +177,7 @@ var onlineDto = new SubscriberOnlineDto
   IsOnline = true
 };
 
-var online = await client.Subscriber.UpdateOnlineStatus("subscriberId", onlineDto);
+var online = await novu.Subscriber.UpdateOnlineStatus("subscriberId", onlineDto);
 
 ```
 
@@ -215,7 +216,7 @@ var payload = new EventTriggerDataDto()
   Payload = onboardingMessage
 };
 
-var trigger = await client.Event.Trigger(payload);
+var trigger = await novu.Event.Trigger(payload);
 
 if (trigger.TriggerResponsePayloadDto.Acknowledged)
 {
@@ -249,7 +250,7 @@ var payload = new List<EventTriggerDataDto>()
     },
 };
 
-var trigger = await client.Event.TriggerBulkAsync(payload);
+var trigger = await novu.Event.TriggerBulkAsync(payload);
 
 ```
 
@@ -277,7 +278,7 @@ var dto = new EventTriggerDataDto()
     Payload = testRecord
 };
 
-var trigger = await client.Event.TriggerBroadcastAsync(dto);
+var trigger = await novu.Event.TriggerBroadcastAsync(dto);
 
 ```
 
@@ -290,7 +291,7 @@ using Novu.Models;
 using Novu;
 ...
 
-var cancelled = await client.Event.TriggerCancelAsync("triggerTransactionId");
+var cancelled = await novu.Event.TriggerCancelAsync("triggerTransactionId");
 
 ```
 
@@ -300,11 +301,11 @@ var cancelled = await client.Event.TriggerCancelAsync("triggerTransactionId");
 
 // Get Topic
 
-var result = await client.Topic.GetTopicAsync("my-topic");
+var result = await novu.Topic.GetTopicAsync("my-topic");
 
 // Get Topics
 
-var results = await client.Topic.GetTopicsAsync();
+var results = await novu.Topic.GetTopicsAsync();
 
 // Create Topic
 var topicRequest = new TopicCreateDto
@@ -314,7 +315,7 @@ var topicRequest = new TopicCreateDto
     
 };
 
-var topic = await client.Topic.CreateTopicAsync(topicRequest);
+var topic = await novu.Topic.CreateTopicAsync(topicRequest);
 
 
 // Add Subscriber to Topic
@@ -326,7 +327,7 @@ var subscriberList = new TopicSubscriberUpdateDto
     }
 };
 
-var result = await client.Topic.AddSubscriberAsync(topic.Data.Key, subscriberList);
+var result = await novu.Topic.AddSubscriberAsync(topic.Data.Key, subscriberList);
 
 // Remove Subscriber from Topic
 
@@ -338,11 +339,11 @@ var subscriberList = new TopicSubscriberUpdateDto
     }
 };
 
-var result = await client.Topic.RemoveSubscriberAsync(topic.Data.Key, subscriberList);
+var result = await novu.Topic.RemoveSubscriberAsync(topic.Data.Key, subscriberList);
 
 // Delete Topic
 
-await client.Topic.DeleteTopicAsync("my-topic");
+var result =  await novu.Topic.DeleteTopicAsync("my-topic");
 
 // Rename Topic
 
@@ -351,7 +352,7 @@ var topicRequest = new TopicRenameDto
     Name = "New Name"
 };
 
-var result = await client.Topic.RenameTopicAsync("my-topic", topicRequest);
+var result = await novu.Topic.RenameTopicAsync("my-topic", topicRequest);
 
 ```
 
@@ -370,3 +371,4 @@ All code is located under the `src` directory and this will service as the proje
 - `Interfaces` directory holds all interfaces that are inteded to outline how a class should be structured.
 - `Models` directory holds various models
 - `Utilities` directory holds various utility functions used around the project.
+
