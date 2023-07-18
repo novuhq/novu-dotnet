@@ -4,7 +4,7 @@ Releases are triggered via a GitHub Action. In order for this Action to be trigg
 
 ## Current Process
 
-Once it has been deteremed that a new release is ready, create a new branch called `release/<version>`. This branch will serve as a place where you can do 
+Once it has been determined that a new release is ready, create a new branch called `release/<version>`. This branch will serve as a place where you can do 
 version bumps prior to triggering a release in the UI.
 
 For the sake of documentation, we will be releasing `1.0.0`.
