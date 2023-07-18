@@ -27,3 +27,8 @@ For the sake of documentation, we will be releasing `1.0.0`.
 
 From here, GitHub Actions will trigger and publish the new release to Nuget. It generally takes around 5-10 minutes for the release to run and be available 
 on Nuget.
+
+## How to release a new Feature branch
+
+All deployments should take place from the `main` branch. To release a new feature branch, you will need to create a PR to the main branch, have it reviewed and merged. Once merged into the
+main branch, you will follow the `Current Process` section to release a new version.
