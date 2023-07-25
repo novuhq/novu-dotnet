@@ -1,39 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-    <!-- General Settings -->
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <LangVersion>11.0</LangVersion>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <NoWarn>CS8604,CS8618</NoWarn>
-        <RootNamespace>Novu</RootNamespace>
-    </PropertyGroup>
-    
-    <!-- Nuget Settings -->
-    <PropertyGroup>
-        <PackageId>Novu</PackageId>
-        <Version>0.2.2</Version>
-        <ProductName>Novu</ProductName>
-        <Description>Novu .NET SDK</Description>
-        <RepositoryType>git</RepositoryType>
-        <RepositoryUrl>https://github.com/novuhq/novu-dotnet</RepositoryUrl>
-        <Authors>NovuHQ</Authors>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    </PropertyGroup>
-
-    <!-- Required Nuget Packages -->
-    <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Refit" Version="6.3.2" />
-        <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
-    </ItemGroup>
-    
-    <!-- Nuget Assets --> 
-    <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
-    </ItemGroup>
-
+  <!-- General Settings -->
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>11.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoWarn>CS8604,CS8618</NoWarn>
+    <RootNamespace>Novu</RootNamespace>
+  </PropertyGroup>
+  <!-- Nuget Settings -->
+  <PropertyGroup>
+    <PackageId>Novu</PackageId>
+    <Version>0.2.2</Version>
+    <ProductName>Novu</ProductName>
+    <Description>Novu .NET SDK</Description>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/novuhq/novu-dotnet</RepositoryUrl>
+    <Authors>NovuHQ</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+  <!-- Required Nuget Packages -->
+  <ItemGroup>
+    <PackageReference Include="Refit" Version="7.0.0" />
+    <PackageReference Include="Refit.Newtonsoft.Json" Version="7.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <!-- Nuget Assets -->
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
+  </ItemGroup>
 </Project>

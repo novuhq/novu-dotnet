@@ -1,6 +1,6 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novu", "Novu\Novu.csproj", "{429D7FF8-C779-4CC4-B394-4A7AD175EE74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Novu", "Novu\Novu.csproj", "{429D7FF8-C779-4CC4-B394-4A7AD175EE74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novu.Tests", "Novu.Tests\Novu.Tests.csproj", "{1FC4ABA4-4D5F-4DFB-938F-72093511B869}"
 EndProject
