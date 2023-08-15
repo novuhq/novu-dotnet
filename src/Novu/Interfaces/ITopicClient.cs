@@ -7,54 +7,54 @@ namespace Novu.Interfaces;
 public interface ITopicClient
 {
     /// <summary>
-    /// Create a topic
+    ///     Create a topic
     /// </summary>
     /// <example>
-    /// <para>
-    /// <code>
+    ///     <para>
+    ///         <code>
     /// var topicRequest = new TopicCreateDto
     /// {
     ///     Key = $"test:topic:{Guid.NewGuid().ToString()}",
     ///     Name = "Test Topic",
     /// };
-    ///
+    /// 
     /// var topic = await client.Topic.CreateTopicAsync(topicRequest);
     /// </code>
-    /// </para>
-    /// </example> 
+    ///     </para>
+    /// </example>
     /// <param name="dto">
-    /// <see cref="TopicCreateDto"/>
+    ///     <see cref="TopicCreateDto" />
     /// </param>
     /// <returns>
-    /// <see cref="TopicCreateResponseDto"/>
+    ///     <see cref="TopicCreateResponseDto" />
     /// </returns>
     [Post("/topics")]
-    public Task<TopicCreateResponseDto> CreateTopicAsync([Body]TopicCreateDto dto);
-    
+    public Task<TopicCreateResponseDto> CreateTopicAsync([Body] TopicCreateDto dto);
+
     /// <summary>
     ///     <para>
     ///         Returns a list of topics that can be paginated using the `page` query parameter.
     ///         Default page is 0 and counts on zero-based indexing.
     ///     </para>
     ///     <example>
-    ///     <code>
+    ///         <code>
     ///         // Specify page in request
     ///         var topics = await client.Topic.GetTopicsAsync(1);
-    ///
+    /// 
     ///         // Get the first page
     ///         var topics = await client.Topic.GetTopicsAsync();
     ///     </code>
     ///     </example>
     /// </summary>
     /// <param name="page">
-    ///  Page number - zero-based indexing (<see cref="int"/>)
+    ///     Page number - zero-based indexing (<see cref="int" />)
     /// </param>
     /// <returns>
-    /// Returns a <see cref="PaginatedResponseDto{T}"/> of type <see cref="TopicDto"/>
+    ///     Returns a <see cref="PaginatedResponseDto{T}" /> of type <see cref="TopicDto" />
     /// </returns>
     [Get("/topics")]
-    public Task<PaginatedResponseDto<TopicDto>> GetTopicsAsync([Query]int page = 0);
-    
+    public Task<PaginatedResponseDto<TopicDto>> GetTopicsAsync([Query] int page = 0);
+
     /// <summary>
     ///     <para>
     ///         Get a topic by passing in a specified key.
@@ -66,25 +66,25 @@ public interface ITopicClient
     ///     </example>
     /// </summary>
     /// <param name="topicKey">
-    ///    Topic Key (<see cref="string"/>)
+    ///     Topic Key (<see cref="string" />)
     /// </param>
     /// <returns></returns>
     [Get("/topics/{topicKey}")]
     public Task<TopicResponseDto> GetTopicAsync(string topicKey);
-    
+
     /// <summary>
-    /// Add an array of subscribers to a topic.
+    ///     Add an array of subscribers to a topic.
     /// </summary>
     /// <example>
-    /// <code>
+    ///     <code>
     ///     var subscriberList = new TopicSubscriberUpdateDto
     ///     {
-    ///         Keys = new <see cref="List{String}"/>
+    ///         Keys = new <see cref="List{String}" />
     ///         {
     ///             "test:subscriber:1",
     ///         }
     ///     };
-    ///
+    /// 
     ///     var result = await client.Topic.AddSubscriberAsync("topic-key", subscriberList);
     /// 
     /// </code>
@@ -93,19 +93,19 @@ public interface ITopicClient
     ///     Topic key that the subscribers will be added to
     /// </param>
     /// <param name="dto">
-    ///     <see cref="TopicSubscriberUpdateDto"/> - Array of subscriber IDs
+    ///     <see cref="TopicSubscriberUpdateDto" /> - Array of subscriber IDs
     /// </param>
     /// <returns>
-    ///     <see cref="TopicSubscriberAdditionResponseDto"/>
+    ///     <see cref="TopicSubscriberAdditionResponseDto" />
     /// </returns>
     [Post("/topics/{topicKey}/subscribers")]
     public Task<TopicSubscriberAdditionResponseDto> AddSubscriberAsync(string topicKey, TopicSubscriberUpdateDto dto);
-    
+
     /// <summary>
-    /// Check if a subscriber belongs to a certain topic
+    ///     Check if a subscriber belongs to a certain topic
     /// </summary>
     /// <example>
-    /// <code>
+    ///     <code>
     ///     var subscriber = await client.Topic.VerifySubscriberAsync("topic-key", "subscriber-key");
     ///     Console.WriteLine(subscriber.SubscriberId);
     /// </code>
@@ -115,20 +115,20 @@ public interface ITopicClient
     /// <returns></returns>
     [Get("/topics/{topicKey}/subscribers/{subscriberId}")]
     public Task<TopicSubscriberDto> VerifySubscriberAsync(string topicKey, string subscriberId);
-    
+
     /// <summary>
-    /// Remove a subscriber from a topic
+    ///     Remove a subscriber from a topic
     /// </summary>
     /// <example>
-    /// <code>
+    ///     <code>
     ///     var subscriberList = new TopicSubscriberUpdateDto
     ///     {
-    ///         Keys = new <see cref="List{String}"/>
+    ///         Keys = new <see cref="List{String}" />
     ///         {
     ///             "test:subscriber:1",
     ///         }
     ///     };
-    ///
+    /// 
     ///     var result = await client.Topic.RemoveSubscriberAsync("topic-key", subscriberList);
     /// 
     /// </code>
@@ -137,10 +137,10 @@ public interface ITopicClient
     /// <param name="subscriberKey"></param>
     /// <returns></returns>
     [Post("/topics/{topicKey}/subscribers/removal")]
-    public Task RemoveSubscriberAsync(string topicKey, [Body]TopicSubscriberUpdateDto subscriberKey);
-    
+    public Task RemoveSubscriberAsync(string topicKey, [Body] TopicSubscriberUpdateDto subscriberKey);
+
     /// <summary>
-    /// Delete a topic by key
+    ///     Delete a topic by key
     /// </summary>
     /// <example>
     ///     <code>
@@ -148,12 +148,12 @@ public interface ITopicClient
     ///     </code>
     /// </example>
     /// <param name="topicKey">
-    /// Topic Key to delete (<see cref="string"/>)
+    ///     Topic Key to delete (<see cref="string" />)
     /// </param>
     /// <returns></returns>
     [Delete("/topics/{topicKey}")]
     public Task DeleteTopicAsync(string topicKey);
-    
+
     /// <summary>
     ///     Rename a topic
     /// </summary>
@@ -169,8 +169,8 @@ public interface ITopicClient
     ///     New topic name
     /// </param>
     /// <returns>
-    ///     <see cref="TopicResponseDto"/>
+    ///     <see cref="TopicResponseDto" />
     /// </returns>
     [Patch("/topics/{topicKey}")]
-    public Task<TopicResponseDto> RenameTopicAsync(string topicKey, [Body]RenameTopicRequest request);
+    public Task<TopicResponseDto> RenameTopicAsync(string topicKey, [Body] RenameTopicRequest request);
 }

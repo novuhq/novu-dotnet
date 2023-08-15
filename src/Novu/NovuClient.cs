@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using Novu.Clients;
 using Novu.Interfaces;
 using Novu.NotificationTemplates;
 using Refit;
@@ -9,49 +9,70 @@ namespace Novu;
 
 public class NovuClient : INovuClient
 {
-    private static readonly JsonSerializerSettings SerializerSettings = new()
+    public static readonly JsonSerializerSettings DefaultSerializerSettings = new()
     {
         MissingMemberHandling = MissingMemberHandling.Ignore,
         NullValueHandling = NullValueHandling.Ignore,
         ContractResolver = new DefaultContractResolver
         {
-            NamingStrategy = new CamelCaseNamingStrategy()
-        }
+            NamingStrategy = new CamelCaseNamingStrategy(),
+        },
+        // General enum conversions are required to the in-place strings
+        Converters = new List<JsonConverter>
+        {
+            new StringEnumConverter(),
+        },
     };
-    public NovuClient(INovuClientConfiguration configuration): this(configuration, default) {}
 
-    public NovuClient(INovuClientConfiguration configuration,HttpClient? client = default)
+    public NovuClient(INovuClientConfiguration configuration) : this(configuration, default)
+    {
+    }
+
+    public NovuClient(
+        ISubscriberClient subscriber,
+        IEventClient @event,
+        ITopicClient topic,
+        INotificationTemplatesClient notificationTemplates,
+        IWorkflowClient workflow,
+        IWorkflowGroupClient workflowGroup)
+    {
+        Subscriber = subscriber;
+        Event = @event;
+        Topic = topic;
+        NotificationTemplates = notificationTemplates;
+        Workflow = workflow;
+        WorkflowGroup = workflowGroup;
+    }
+
+    public NovuClient(
+        INovuClientConfiguration configuration,
+        HttpClient? client = default,
+        RefitSettings? refitSettings = default)
     {
         var httpClient = client ?? new HttpClient();
         httpClient.BaseAddress = new Uri(configuration.Url);
         httpClient.DefaultRequestHeaders.Add("Authorization", $"ApiKey {configuration.ApiKey}");
-        Subscriber = RestService.For<ISubscriberClient>(httpClient, new RefitSettings
+
+        refitSettings ??= new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
-        });
-        Event = RestService.For<IEventClient>(httpClient, new RefitSettings
-        {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
-        });
-        Topic = RestService.For<ITopicClient>(httpClient,  new RefitSettings
-        {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
-        });
-        NotificationTemplates = RestService.For<INotificationTemplatesClient>(httpClient, new RefitSettings
-        {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
-        });
-        WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, new RefitSettings
-        {   
-            ContentSerializer = new NewtonsoftJsonContentSerializer(SerializerSettings)
-        });
+            ContentSerializer = new NewtonsoftJsonContentSerializer(DefaultSerializerSettings),
+        };
+
+        Subscriber = RestService.For<ISubscriberClient>(httpClient, refitSettings);
+        Event = RestService.For<IEventClient>(httpClient, refitSettings);
+        Topic = RestService.For<ITopicClient>(httpClient, refitSettings);
+        NotificationTemplates = RestService.For<INotificationTemplatesClient>(httpClient, refitSettings);
+        WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, refitSettings);
+        Workflow = RestService.For<IWorkflowClient>(httpClient, refitSettings);
     }
 
-    public ISubscriberClient Subscriber { get; }
-    
-    public IEventClient Event { get; }
-    
-    public ITopicClient Topic { get; }
-    public INotificationTemplatesClient NotificationTemplates { get; }
-    public IWorkflowGroupClient WorkflowGroup { get; }
+    public IWorkflowClient Workflow { get; }
+
+    public ISubscriberClient Subscriber { get; set; }
+
+    public IEventClient Event { get; set; }
+
+    public ITopicClient Topic { get; set; }
+    public INotificationTemplatesClient NotificationTemplates { get; set; }
+    public IWorkflowGroupClient WorkflowGroup { get; set; }
 }

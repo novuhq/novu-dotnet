@@ -2,65 +2,72 @@
 using Novu.Exceptions;
 using Refit;
 
-namespace Novu.Clients;
+namespace Novu.Interfaces;
 
 public interface ISubscriberClient
 {
     /// <summary>
-    /// Get a paginated response of current Subscribers
+    ///     Get a paginated response of current Subscribers
     /// </summary>
     /// <returns></returns>
     /// <exception cref="HttpRequestException">
-    ///  Thrown when the status code does not equal 200.
+    ///     Thrown when the status code does not equal 200.
     /// </exception>
     /// <exception cref="NovuClientException"></exception>
     [Get("/subscribers")]
-    Task<SubscribersDto> GetSubscribers([Query] int page = 0);
+    Task<PaginatedResponseDto<SubscriberDto>> GetSubscribers([Query] int page = 0, int limit = 100);
 
     /// <summary>
-    /// Get a single Subscriber
+    ///     Get a single Subscriber
     /// </summary>
-    /// <param name="id"><see cref="String"/> Subscriber ID</param>
+    /// <param name="id"><see cref="String" /> Subscriber ID</param>
     /// <returns></returns>
     [Get("/subscribers/{id}")]
     Task<SubscriberDto> GetSubscriber(string id);
-    /// <summary>
-    /// Create a new Subscriber
-    /// </summary>
-    /// <param name="dto">
-    /// <see cref="CreateSubscriberDto"/> Model to create a new Subscriber
-    /// </param>
-    /// <returns>
-    /// <see cref="SubscriberDto"/> The newly created Subscriber
-    /// </returns>
-    [Post("/subscribers")]
-    Task<SubscriberDto> CreateSubscriber([Body]CreateSubscriberDto dto);
 
     /// <summary>
-    /// Update a Subscriber
+    ///     Create a new Subscriber
     /// </summary>
+    /// <param name="dto">
+    ///     <see cref="CreateSubscriberDto" /> Model to create a new Subscriber
+    /// </param>
+    /// <returns>
+    ///     <see cref="SubscriberDto" /> The newly created Subscriber
+    /// </returns>
+    [Post("/subscribers")]
+    Task<SubscriberDto> CreateSubscriber([Body] CreateSubscriberDto dto);
+
+    /// <summary>
+    ///     Update a Subscriber
+    /// </summary>
+    /// <param name="id">
+    ///     <see cref="string" /> Subscriber ID to update
+    /// </param>
     /// <param name="requestDto"></param>
     /// <returns></returns>
     [Put("/subscribers/{id}")]
-    Task<SubscriberDto> UpdateSubscriber(string id, [Body]SubscriberDto requestDto);
+    Task<SubscriberDto> UpdateSubscriber(string id, [Body] SubscriberDto requestDto);
 
     /// <summary>
-    /// Delete a Subscriber
+    ///     Delete a Subscriber
     /// </summary>
     /// <param name="id">
-    /// <see cref="string"/> Subscriber ID to delete
+    ///     <see cref="string" /> Subscriber ID to delete
     /// </param>
     /// <returns>
-    /// <see cref="DeleteResponseDto"/>
+    ///     <see cref="DeleteResponseDto" />
     /// </returns>
     [Delete("/subscribers/{id}")]
     Task<DeleteResponseDto> DeleteSubscriber(string id);
+
     /// <summary>
-    /// Update Subscribers online status
+    ///     Update Subscribers online status
     /// </summary>
-    /// <param name="subscriberId"><see cref="SubscriberDto.SubscriberId"/> Subscribers ID</param>
-    /// <param name="model"><see cref="SubscriberOnlineDto"/></param>
+    /// <param name="id"><see cref="SubscriberDto.SubscriberId" /> Subscribers ID</param>
+    /// <param name="model">
+    ///     <see cref="SubscriberOnlineDto" />
+    /// </param>
     /// <returns></returns>
-    [Patch("/subscribers/{subscriberId}/online-status")]
-    Task<SubscriberDto> UpdateOnlineStatus(string subscriberId, [Body]SubscriberOnlineDto model);
+    [Patch("/subscribers/{id}/online-status")]
+    Task<SubscriberDto> UpdateOnlineStatus(string id, [Body] SubscriberOnlineDto model);
 }

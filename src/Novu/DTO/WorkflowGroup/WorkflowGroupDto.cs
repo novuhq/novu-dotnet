@@ -1,10 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Novu.DTO.WorkflowGroup
+namespace Novu.DTO.WorkflowGroup;
+
+public class WorkflowGroupDto
 {
-    public class WorkflowGroupDto
-    {
-        [JsonProperty("name")]
-        public string WorkflowGroupName { get; set; }
-    }
+    [JsonProperty("name")] public string WorkflowGroupName { get; set; }
 }

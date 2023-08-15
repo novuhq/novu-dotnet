@@ -4,6 +4,5 @@ namespace Novu.DTO.Topics;
 
 public class TopicResponseDto
 {
-    [JsonProperty("data")]
-    public TopicDto Data { get; set; }
+    [JsonProperty("data")] public TopicDto Data { get; set; }
 }

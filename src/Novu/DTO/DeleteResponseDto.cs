@@ -4,15 +4,12 @@ namespace Novu.DTO;
 
 public class DeleteResponseDto
 {
-    [JsonProperty("data")]
-    public DeleteResponseDataDto Data { get; set; }
+    [JsonProperty("data")] public DeleteResponseDataDto Data { get; set; }
 }
 
 public class DeleteResponseDataDto
 {
-    [JsonProperty("acknowledged")] 
-    public bool Acknowledged { get; set; }
+    [JsonProperty("acknowledged")] public bool Acknowledged { get; set; }
 
-    [JsonProperty("status")] 
-    public string Status { get; set; }
+    [JsonProperty("status")] public string Status { get; set; }
 }
