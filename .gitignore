@@ -1,4 +1,4 @@
-﻿.idea
+.idea
 src/.idea
 src/Novu.NET.sln.DotSettings
 src/Novu.NET.sln.DotSettings.user
@@ -7,3 +7,4 @@ obj
 .DS_STORE
 src/Novu.sln.DotSettings.user
 **/.vs
+appsettings.todd.json

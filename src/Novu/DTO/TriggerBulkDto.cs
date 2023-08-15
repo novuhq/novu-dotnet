@@ -4,6 +4,5 @@ namespace Novu.DTO;
 
 public class TriggerBulkDto
 {
-    [JsonProperty("events")]
-    public List<EventTriggerDataDto> Events { get; set; }
+    [JsonProperty("events")] public List<EventTriggerDataDto> Events { get; set; }
 }

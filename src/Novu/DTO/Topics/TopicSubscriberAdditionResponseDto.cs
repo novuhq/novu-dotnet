@@ -4,12 +4,10 @@ namespace Novu.DTO.Topics;
 
 public class TopicSubscriberAdditionResponseDto
 {
-    [JsonProperty("data")]
-    public TopicSubscriberAdditionResponseData Data { get; set; }
+    [JsonProperty("data")] public TopicSubscriberAdditionResponseData Data { get; set; }
 }
 
 public class TopicSubscriberAdditionResponseData
 {
-    [JsonProperty("succeeded")]
-    public string[] Succeeded { get; set; }
+    [JsonProperty("succeeded")] public string[] Succeeded { get; set; }
 }

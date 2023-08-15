@@ -9,7 +9,7 @@
         <NoWarn>CS8604,CS8618</NoWarn>
         <RootNamespace>Novu</RootNamespace>
     </PropertyGroup>
-    
+
     <!-- Nuget Settings -->
     <PropertyGroup>
         <PackageId>Novu</PackageId>
@@ -25,15 +25,16 @@
 
     <!-- Required Nuget Packages -->
     <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Refit" Version="6.3.2" />
-        <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="Refit" Version="6.3.2"/>
+        <PackageReference Include="Refit.Newtonsoft.Json" Version="6.3.2"/>
+        <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0"/>
     </ItemGroup>
-    
-    <!-- Nuget Assets --> 
+
+    <!-- Nuget Assets -->
     <ItemGroup>
-        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
-        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
+        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="..\..\LICENSE.txt" Pack="true" PackagePath=""/>
     </ItemGroup>
 
 </Project>
