@@ -14,7 +14,7 @@ using Xunit.Abstractions;
 namespace Novu.Tests.IntegrationTests;
 
 public class WorkflowTests : BaseIntegrationTest
-{
+ {
     public WorkflowTests(ITestOutputHelper output) : base(output)
     {
     }
