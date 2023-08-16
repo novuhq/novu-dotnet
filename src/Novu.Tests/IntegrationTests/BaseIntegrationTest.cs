@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Novu.DTO;
+using Novu.DTO.Integrations;
 using Novu.DTO.Layouts;
 using Novu.DTO.Topics;
 using Novu.DTO.WorkflowGroup;
@@ -15,12 +16,12 @@ using Novu.Extensions;
 using Novu.Interfaces;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step.Message;
-using Step = Novu.Models.Workflows.Step;
 using Novu.NotificationTemplates;
 using ParkSquare.Testing.Generators;
 using Refit;
 using Xunit;
 using Xunit.Abstractions;
+using Step = Novu.Models.Workflows.Step.Step;
 
 namespace Novu.Tests.IntegrationTests;
 
@@ -50,6 +51,7 @@ public abstract class BaseIntegrationTest : IDisposable
     private List<WorkflowGroupSingleResponseDto> WorkflowGroups { get; } = new();
     private List<Workflow> Workflows { get; } = new();
     private List<Layout> Layouts { get; } = new();
+    private List<Integration> Integrations { get; } = new();
 
     protected INovuClient Client => Get<INovuClient>();
     protected ISubscriberClient Subscriber => Get<ISubscriberClient>();
@@ -59,6 +61,7 @@ public abstract class BaseIntegrationTest : IDisposable
     protected INotificationTemplatesClient NotificationTemplates => Get<INotificationTemplatesClient>();
     protected IWorkflowClient Workflow => Get<IWorkflowClient>();
     protected ILayoutClient Layout => Get<ILayoutClient>();
+    protected IIntegrationClient Integration => Get<IIntegrationClient>();
 
     public async void Dispose()
     {
@@ -68,6 +71,7 @@ public abstract class BaseIntegrationTest : IDisposable
         await TeardownTopics();
         await TeardownSubscribers();
         await TeardownLayouts();
+        await TeardownIntegrations();
     }
 
     protected void DeRegisterExceptionHandler()
@@ -156,6 +160,14 @@ public abstract class BaseIntegrationTest : IDisposable
         foreach (var layout in Layouts)
         {
             await Layout.Delete(layout.Id);
+        }
+    }
+
+    private async Task TeardownIntegrations()
+    {
+        foreach (var integration in Integrations)
+        {
+            await Integration.Delete(integration.Id);
         }
     }
 
@@ -272,7 +284,22 @@ public abstract class BaseIntegrationTest : IDisposable
         return layout.Data as T;
     }
 
-    protected async Task<T> Make<T>(WorkflowCreateData data = null, Step.Step[] steps = null, bool active = false)
+    protected async Task<T> Make<T>(IntegrationCreateData data = null, string providerId = null, string channel = null)
+        where T : Integration
+    {
+        var createData = data ?? new IntegrationCreateData
+        {
+            Name = StringGenerator.LoremIpsum(4),
+            ProviderId = providerId ?? "novu",
+            Channel = channel ?? "in_app",
+        };
+
+        var layout = await Integration.Create(createData);
+        Integrations.Add(layout.Data);
+        return layout.Data as T;
+    }
+
+    protected async Task<T> Make<T>(WorkflowCreateData data = null, Step[] steps = null, bool active = false)
         where T : Workflow
     {
         // the simplest workflow is empty without steps and this returns a workflow with a trigger
@@ -281,7 +308,7 @@ public abstract class BaseIntegrationTest : IDisposable
             Name = StringGenerator.SequenceOfAlphaNumerics(10),
             Description = StringGenerator.LoremIpsum(5),
             PreferenceSettings = new PreferenceChannels(),
-            Steps = steps ?? Array.Empty<Step.Step>(),
+            Steps = steps ?? Array.Empty<Step>(),
             Active = active,
         };
 

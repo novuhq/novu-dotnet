@@ -150,7 +150,7 @@ public class LayoutTests : BaseIntegrationTest
     {
         var layouts = await Layout.Get();
         var originalDefault = layouts.Data.Single(x => x.IsDefault);
-        
+
         var layout = layouts.Data.First(x => !x.IsDefault);
         await Layout.SetAsDefault(layout.Id);
         var result = await Layout.Get(layout.Id);

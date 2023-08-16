@@ -16,7 +16,7 @@ public abstract class JsonCreationConverter<T> : JsonConverter
     {
         return typeof(T).IsAssignableFrom(objectType);
     }
-    
+
     public override object ReadJson(
         JsonReader reader,
         Type objectType,

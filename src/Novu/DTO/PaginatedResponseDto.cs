@@ -21,7 +21,8 @@ public class PaginatedResponseDto<T>
     public int PageSize { get; set; }
 
     /// <summary>
-    ///     Does the list have more items to fetch? Another set based on <see cref="Page"/> and greater than zero <see cref="PageSize"/>
+    ///     Does the list have more items to fetch? Another set based on <see cref="Page" /> and greater than zero
+    ///     <see cref="PageSize" />
     ///     can be requested
     /// </summary>
     [JsonProperty("hasMore")]

@@ -8,8 +8,9 @@ namespace Novu.Tests.IntegrationTests;
 /// </summary>
 public static class StepFactory
 {
-    public static Step DigestScheduleEachMonth() =>
-        new()
+    public static Step DigestScheduleEachMonth()
+    {
+        return new Step
         {
             Name = $"Digest Schedule each month 18:05 ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.DigestMessageTemplate(),
@@ -26,33 +27,41 @@ public static class StepFactory
                 Unit = UnitEnum.Weeks,
             },
         };
+    }
 
-    public static Step InApp(bool active = false) =>
-        new()
+    public static Step InApp(bool active = false)
+    {
+        return new Step
         {
             Name = $"In-App ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.InAppMessageTemplate(),
             Active = active,
         };
+    }
 
-    public static Step Email(bool active = false) =>
-        new()
+    public static Step Email(bool active = false)
+    {
+        return new Step
         {
             Name = $"Email ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.EmailMessageTemplate(),
             Active = active,
         };
+    }
 
-    public static Step Sms(bool active = false) =>
-        new()
+    public static Step Sms(bool active = false)
+    {
+        return new Step
         {
             Name = $"Sms ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.SmsMessageTemplate(),
             Active = active,
         };
+    }
 
-    public static Step DigestRegular(bool active = false) =>
-        new()
+    public static Step DigestRegular(bool active = false)
+    {
+        return new Step
         {
             Name = $"Digest Event ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.DigestMessageTemplate(),
@@ -67,9 +76,11 @@ public static class StepFactory
             },
             Active = active,
         };
+    }
 
-    public static Step DigestScheduleAtTime() =>
-        new()
+    public static Step DigestScheduleAtTime()
+    {
+        return new Step
         {
             Name = $"Digest Schedule 18:05 ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.DigestMessageTemplate(),
@@ -83,9 +94,11 @@ public static class StepFactory
                 Unit = UnitEnum.Days,
             },
         };
+    }
 
-    public static Step DigestScheduleEveryWeekdayAtTime() =>
-        new()
+    public static Step DigestScheduleEveryWeekdayAtTime()
+    {
+        return new Step
         {
             Name = $"Digest Schedule every week day 18:05 ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.DigestMessageTemplate(),
@@ -100,17 +113,21 @@ public static class StepFactory
                 Unit = UnitEnum.Weeks,
             },
         };
+    }
 
-    public static Step Push(bool active = false) =>
-        new()
+    public static Step Push(bool active = false)
+    {
+        return new Step
         {
             Name = $"Push ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.PushMessageTemplate(),
             Active = active,
         };
+    }
 
-    public static Step DelayFromVariable() =>
-        new()
+    public static Step DelayFromVariable()
+    {
+        return new Step
         {
             Name = $"Delay 5 minutes from variable ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.DelayMessageTemplate(),
@@ -119,9 +136,11 @@ public static class StepFactory
                 DelayPath = "sendAt",
             },
         };
+    }
 
-    public static Step Delay() =>
-        new()
+    public static Step Delay()
+    {
+        return new Step
         {
             Name = $"Delay 5 minutes Regular ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.DelayMessageTemplate(),
@@ -131,17 +150,21 @@ public static class StepFactory
                 Unit = UnitEnum.Minutes,
             },
         };
+    }
 
-    public static Step Chat(bool active = false) =>
-        new()
+    public static Step Chat(bool active = false)
+    {
+        return new Step
         {
             Name = $"Chat ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.ChatMessageTemplate(),
             Active = active,
         };
+    }
 
-    public static Step DigestScheduleSecondWeekday() =>
-        new()
+    public static Step DigestScheduleSecondWeekday()
+    {
+        return new Step
         {
             Name = $"Digest Schedule on second weekday 18:05 ({StringGenerator.LoremIpsum(2)})",
             Template = MessageTemplateFactory.DigestMessageTemplate(),
@@ -158,4 +181,5 @@ public static class StepFactory
                 Unit = UnitEnum.Weeks,
             },
         };
+    }
 }

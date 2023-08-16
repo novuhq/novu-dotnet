@@ -35,6 +35,7 @@ public class NovuClient : INovuClient
         INotificationTemplatesClient notificationTemplates,
         IWorkflowClient workflow,
         IWorkflowGroupClient workflowGroup,
+        IIntegrationClient integration,
         ILayoutClient layout)
     {
         Subscriber = subscriber;
@@ -43,6 +44,7 @@ public class NovuClient : INovuClient
         NotificationTemplates = notificationTemplates;
         Workflow = workflow;
         WorkflowGroup = workflowGroup;
+        Integration = integration;
         Layout = layout;
     }
 
@@ -67,14 +69,16 @@ public class NovuClient : INovuClient
         WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, refitSettings);
         Workflow = RestService.For<IWorkflowClient>(httpClient, refitSettings);
         Layout = RestService.For<ILayoutClient>(httpClient, refitSettings);
+        Integration = RestService.For<IIntegrationClient>(httpClient, refitSettings);
     }
 
 
     public IWorkflowClient Workflow { get; }
     public ILayoutClient Layout { get; }
-    public ISubscriberClient Subscriber { get; set; }
-    public IEventClient Event { get; set; }
-    public ITopicClient Topic { get; set; }
-    public INotificationTemplatesClient NotificationTemplates { get; set; }
-    public IWorkflowGroupClient WorkflowGroup { get; set; }
+    public IIntegrationClient Integration { get; }
+    public ISubscriberClient Subscriber { get; }
+    public IEventClient Event { get; }
+    public ITopicClient Topic { get; }
+    public INotificationTemplatesClient NotificationTemplates { get; }
+    public IWorkflowGroupClient WorkflowGroup { get; }
 }
