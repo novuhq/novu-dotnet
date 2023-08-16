@@ -14,7 +14,7 @@ using Xunit.Abstractions;
 namespace Novu.Tests.IntegrationTests;
 
 public class WorkflowTests : BaseIntegrationTest
- {
+{
     public WorkflowTests(ITestOutputHelper output) : base(output)
     {
     }
@@ -38,7 +38,7 @@ public class WorkflowTests : BaseIntegrationTest
             {
                 "Digest Schedule on second weekday 18:05",
                 new[] { StepFactory.DigestScheduleSecondWeekday() },
-                1
+                1,
             },
             new object[] { "Chat", new[] { StepFactory.Chat() }, 1 },
             new object[] { "Delay", new[] { StepFactory.Delay() }, 1 },

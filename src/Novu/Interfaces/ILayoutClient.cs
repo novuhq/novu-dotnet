@@ -12,7 +12,6 @@ public interface ILayoutClient
     /// <summary>
     ///     Returns a list of layouts that can be paginated using the `page` query parameter and filtered by the
     ///     environment where it is executed from the organization the user belongs to.
-    /// 
     ///     see https://docs.novu.co/api/filter-layouts/
     /// </summary>
     /// <param name="page">Number of page for the pagination</param>
@@ -29,7 +28,6 @@ public interface ILayoutClient
 
     /// <summary>
     ///     Get a layout by its ID
-    /// 
     ///     see https://docs.novu.co/api/get-layout/
     /// </summary>
     [Get("/layouts/{id}")]
@@ -37,7 +35,6 @@ public interface ILayoutClient
 
     /// <summary>
     ///     Create a layout
-    /// 
     ///     https://docs.novu.co/api/layout-creation/
     /// </summary>
     [Post("/layouts")]
@@ -45,7 +42,6 @@ public interface ILayoutClient
 
     /// <summary>
     ///     Update the name, content and variables of a layout. Also change it to be default or no.
-    /// 
     ///     see https://docs.novu.co/api/update-layout/
     /// </summary>
     [Patch("/layouts/{id}")]
@@ -55,7 +51,6 @@ public interface ILayoutClient
 
     /// <summary>
     ///     Execute a soft delete of a layout given a certain ID.
-    /// 
     ///     see https://docs.novu.co/api/delete-layout/
     /// </summary>
     [Delete("/layouts/{id}")]

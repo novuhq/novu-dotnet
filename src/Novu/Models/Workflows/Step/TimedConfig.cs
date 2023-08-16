@@ -6,10 +6,11 @@ public class TimedConfig
 {
     /// <summary>
     ///     24 Hour clock 18:00
-    ///
-    /// TODO: need validator attribute
+    ///     TODO: need validator attribute
     /// </summary>
-    [JsonProperty("atTime")] public string AtTime { get; set; }
+    [JsonProperty("atTime")]
+    public string AtTime { get; set; }
+
     [JsonProperty("weekDays")] public DaysEnum[] WeekDays { get; set; }
     [JsonProperty("monthDays")] public int[] MonthDays { get; set; }
     [JsonProperty("ordinal")] public OrdinalEnum Ordinal { get; set; }

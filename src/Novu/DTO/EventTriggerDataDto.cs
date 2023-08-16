@@ -9,15 +9,15 @@ namespace Novu.DTO;
 public class BroadcastMessageRequest
 {
     /// <summary>
-    ///     The trigger identifier associated for the workflow you wish to send. <see cref="Workflow.Id"/>
+    ///     The trigger identifier associated for the workflow you wish to send. <see cref="Workflow.Id" />
     /// </summary>
     [JsonProperty("name")]
     public string Name { get; set; }
 
     /// <summary>
     ///     The payload object is used to pass additional custom information that could be used to render the template,
-    /// or perform routing rules based on it. This data will also be available when fetching the notifications
-    /// feed from the API to display certain parts of the UI.
+    ///     or perform routing rules based on it. This data will also be available when fetching the notifications
+    ///     feed from the API to display certain parts of the UI.
     /// </summary>
     [JsonProperty("payload")]
     public object Payload { get; set; }
@@ -31,8 +31,9 @@ public class BroadcastMessageRequest
     /// <summary>
     ///     A unique identifier for this transaction, we will generated a UUID if not provided.
     /// </summary>
-    [JsonProperty("transactionId")] public string? TransactionId { get; set; }
-    
+    [JsonProperty("transactionId")]
+    public string? TransactionId { get; set; }
+
     // TODO: actor
 }
 
@@ -44,7 +45,7 @@ public class SendBulkRequest
 
     public SendBulkRequest(List<EventTriggerDataDto> events)
     {
-        this.Events = events;
+        Events = events;
     }
 
     [JsonProperty("events")] public List<EventTriggerDataDto> Events { get; set; }

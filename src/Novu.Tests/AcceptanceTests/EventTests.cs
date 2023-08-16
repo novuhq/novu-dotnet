@@ -134,7 +134,7 @@ public class EventTests : BaseIntegrationTest
 
 
     /// <summary>
-    ///    WARN: Make an active workflow with one step otherwise servers return 500 error (rather than say 404 or 409)
+    ///     WARN: Make an active workflow with one step otherwise servers return 500 error (rather than say 404 or 409)
     /// </summary>
     private async Task<string> GetActiveEvent()
     {
