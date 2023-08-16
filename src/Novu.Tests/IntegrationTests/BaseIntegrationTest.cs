@@ -7,12 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Novu.DTO;
+using Novu.DTO.Layouts;
 using Novu.DTO.Topics;
 using Novu.DTO.WorkflowGroup;
 using Novu.DTO.Workflows;
 using Novu.Extensions;
 using Novu.Interfaces;
 using Novu.Models.Workflows;
+using Novu.Models.Workflows.Step.Message;
 using Step = Novu.Models.Workflows.Step;
 using Novu.NotificationTemplates;
 using ParkSquare.Testing.Generators;
@@ -47,6 +49,7 @@ public abstract class BaseIntegrationTest : IDisposable
     private List<TopicData> Topics { get; } = new();
     private List<WorkflowGroupSingleResponseDto> WorkflowGroups { get; } = new();
     private List<Workflow> Workflows { get; } = new();
+    private List<Layout> Layouts { get; } = new();
 
     protected INovuClient Client => Get<INovuClient>();
     protected ISubscriberClient Subscriber => Get<ISubscriberClient>();
@@ -55,6 +58,7 @@ public abstract class BaseIntegrationTest : IDisposable
     protected IWorkflowGroupClient WorkflowGroup => Get<IWorkflowGroupClient>();
     protected INotificationTemplatesClient NotificationTemplates => Get<INotificationTemplatesClient>();
     protected IWorkflowClient Workflow => Get<IWorkflowClient>();
+    protected ILayoutClient Layout => Get<ILayoutClient>();
 
     public async void Dispose()
     {
@@ -63,6 +67,7 @@ public abstract class BaseIntegrationTest : IDisposable
         await TeardownWorkflowGroups();
         await TeardownTopics();
         await TeardownSubscribers();
+        await TeardownLayouts();
     }
 
     protected void DeRegisterExceptionHandler()
@@ -143,6 +148,14 @@ public abstract class BaseIntegrationTest : IDisposable
         foreach (var workflow in Workflows)
         {
             await Workflow.Delete(workflow.Id);
+        }
+    }
+
+    private async Task TeardownLayouts()
+    {
+        foreach (var layout in Layouts)
+        {
+            await Layout.Delete(layout.Id);
         }
     }
 
@@ -238,6 +251,25 @@ public abstract class BaseIntegrationTest : IDisposable
         var workflowGroup = await WorkflowGroup.CreateWorkflowGroup(createData);
         WorkflowGroups.Add(workflowGroup);
         return workflowGroup as T;
+    }
+
+    protected async Task<T> Make<T>(
+        LayoutCreateData data = null,
+        string content = null,
+        TemplateVariable[] variables = null)
+        where T : Layout
+    {
+        var createData = data ?? new LayoutCreateData
+        {
+            Name = StringGenerator.LoremIpsum(4),
+            Description = StringGenerator.LoremIpsum(10),
+            Content = content ?? "Test " + LayoutCreateData.BodyExpression + " expression",
+            Variables = variables ?? Array.Empty<TemplateVariable>(),
+        };
+
+        var layout = await Layout.Create(createData);
+        Layouts.Add(layout.Data);
+        return layout.Data as T;
     }
 
     protected async Task<T> Make<T>(WorkflowCreateData data = null, Step.Step[] steps = null, bool active = false)
