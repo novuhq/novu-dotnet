@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Novu.Interfaces;
 
 namespace Novu.DTO;
 
@@ -28,13 +29,14 @@ public class PaginatedResponseDto<T>
     [JsonProperty("hasMore")]
     public bool HasMore { get; set; }
 
-    [Obsolete("No longer returned—removed in later versions")]
+    /// <summary>
+    ///     Many paginated responses DO NOT return this value
+    /// </summary>
+    /// <remarks>
+    ///     <see cref="ISubscriberClient.GetInApp" />
+    /// </remarks>
     [JsonProperty("totalCount")]
-    public int TotalCount
-    {
-        get => throw new NotImplementedException("No longer returned");
-        set { }
-    }
+    public int? TotalCount { get; set; }
 
     /// <summary>
     ///     The list of items matching the query

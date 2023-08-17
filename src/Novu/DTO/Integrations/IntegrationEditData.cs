@@ -16,4 +16,5 @@ public class IntegrationEditData
     [JsonProperty("active")] public bool Active { get; set; }
 
     [JsonProperty("check")] public bool Check { get; set; }
+    [JsonProperty("channel")] public string Channel { get; set; }
 }

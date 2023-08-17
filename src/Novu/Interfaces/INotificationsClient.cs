@@ -1,3 +1,5 @@
+using Novu.DTO;
+using Novu.DTO.Notifications;
 using Refit;
 
 namespace Novu.Interfaces;
@@ -5,11 +7,14 @@ namespace Novu.Interfaces;
 public interface INotificationsClient
 {
     [Get("/notifications")]
-    public Task GetNotificationsAsync();
+    public Task<PaginatedResponseDto<Notification>> Get([Query] NotificationQueryParams? queryParam = null);
 
-    public Task GetNotificationStatisticsAsync();
+    [Get("/notifications/stats")]
+    public Task<NovuResponse<NotificationStats>> GetStats();
 
-    public Task GetNotificationGraphStatisticsAsync();
+    [Get("/notifications/graph/stats")]
+    public Task<NovuResponse<NotificationGraphStats[]>> GetGraphStats([Query] int days = 7);
 
-    public Task GetNotificationAsync(string notificationId);
+    [Get("/notifications/{id}")]
+    public Task Get(string id);
 }

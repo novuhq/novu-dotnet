@@ -27,7 +27,7 @@ public class Credentials
     [JsonProperty("baseUrl")] public string BaseUrl { get; set; }
     [JsonProperty("webhookUrl")] public string WebhookUrl { get; set; }
     [JsonProperty("redirectUrl")] public string RedirectUrl { get; set; }
-    [JsonProperty("hmac")] public string Hmac { get; set; }
+    [JsonProperty("hmac")] public bool Hmac { get; set; }
     [JsonProperty("serviceAccount")] public string ServiceAccount { get; set; }
     [JsonProperty("ipPoolName")] public string IpPoolName { get; set; }
 }

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace Novu.Models.Workflows.Trigger;
@@ -20,9 +19,4 @@ public class Trigger
     [Required] [JsonProperty("variables")] public TriggerVariable[] Variables { get; set; }
 
     [JsonProperty("subscriberVariables")] public TriggerVariable[] SubscriberVariables { get; set; }
-}
-
-public enum TriggerTypeEnum
-{
-    [EnumMember(Value = "event")] Event = 10,
 }
