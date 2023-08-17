@@ -1,4 +1,7 @@
 ﻿using Novu.DTO;
+using Novu.DTO.Notifications;
+using Novu.DTO.Subscriber;
+using Novu.DTO.Subscriber.Preferences;
 using Novu.Exceptions;
 using Refit;
 
@@ -70,4 +73,19 @@ public interface ISubscriberClient
     /// <returns></returns>
     [Patch("/subscribers/{id}/online-status")]
     Task<SubscriberDto> UpdateOnlineStatus(string id, [Body] SubscriberOnlineDto model);
+
+    [Get("/subscribers/{id}/preferences")]
+    Task<NovuResponse<IEnumerable<SubscriberPreference>>> GetPreferences(string id);
+
+    [Patch("/subscribers/{id}/preferences/{templateId}")]
+    Task<NovuResponse<SubscriberPreference>> UpdatePreference(
+        string id,
+        string templateId,
+        [Body] SubscriberPreferenceEditData model);
+
+    [Get("/subscribers/{id}/notifications/feed")]
+    Task<PaginatedResponseDto<Notification>> GetInApp(string id, [Query] InAppFeedQueryParams? queryParams = default);
+
+    [Get("/subscribers/{id}/notifications/unseen")]
+    Task<NovuResponse<NotificationCount>> GetInAppUnseen(string id);
 }

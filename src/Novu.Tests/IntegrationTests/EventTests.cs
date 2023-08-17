@@ -5,13 +5,12 @@ using Newtonsoft.Json;
 using Novu.DTO;
 using Novu.DTO.Topics;
 using Novu.DTO.Workflows;
-using Novu.Tests.IntegrationTests;
 using ParkSquare.Testing.Generators;
 using Refit;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Novu.Tests.AcceptanceTests;
+namespace Novu.Tests.IntegrationTests;
 
 public class EventTests : BaseIntegrationTest
 {
@@ -132,7 +131,6 @@ public class EventTests : BaseIntegrationTest
         // TODO: how to detect success for a subscriber
     }
 
-
     /// <summary>
     ///     WARN: Make an active workflow with one step otherwise servers return 500 error (rather than say 404 or 409)
     /// </summary>
@@ -143,7 +141,6 @@ public class EventTests : BaseIntegrationTest
         eventName.Should().NotBeNull();
         return eventName;
     }
-
 
     public record TestPayload
     {

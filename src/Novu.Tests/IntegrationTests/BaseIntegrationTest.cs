@@ -51,7 +51,6 @@ public abstract class BaseIntegrationTest : IDisposable
     private List<WorkflowGroupSingleResponseDto> WorkflowGroups { get; } = new();
     private List<Workflow> Workflows { get; } = new();
     private List<Layout> Layouts { get; } = new();
-    private List<Integration> Integrations { get; } = new();
 
     protected INovuClient Client => Get<INovuClient>();
     protected ISubscriberClient Subscriber => Get<ISubscriberClient>();
@@ -62,6 +61,7 @@ public abstract class BaseIntegrationTest : IDisposable
     protected IWorkflowClient Workflow => Get<IWorkflowClient>();
     protected ILayoutClient Layout => Get<ILayoutClient>();
     protected IIntegrationClient Integration => Get<IIntegrationClient>();
+    protected INotificationsClient Notifications => Get<INotificationsClient>();
 
     public async void Dispose()
     {
@@ -71,7 +71,6 @@ public abstract class BaseIntegrationTest : IDisposable
         await TeardownTopics();
         await TeardownSubscribers();
         await TeardownLayouts();
-        await TeardownIntegrations();
     }
 
     protected void DeRegisterExceptionHandler()
@@ -160,14 +159,6 @@ public abstract class BaseIntegrationTest : IDisposable
         foreach (var layout in Layouts)
         {
             await Layout.Delete(layout.Id);
-        }
-    }
-
-    private async Task TeardownIntegrations()
-    {
-        foreach (var integration in Integrations)
-        {
-            await Integration.Delete(integration.Id);
         }
     }
 
@@ -292,14 +283,21 @@ public abstract class BaseIntegrationTest : IDisposable
             Name = StringGenerator.LoremIpsum(4),
             ProviderId = providerId ?? "novu",
             Channel = channel ?? "in_app",
+            Active = true,
         };
 
         var layout = await Integration.Create(createData);
-        Integrations.Add(layout.Data);
+
+        // do not manage integrations as other types. 
+
         return layout.Data as T;
     }
 
-    protected async Task<T> Make<T>(WorkflowCreateData data = null, Step[] steps = null, bool active = false)
+    protected async Task<T> Make<T>(
+        WorkflowCreateData data = null,
+        Step[] steps = null,
+        bool active = false,
+        PreferenceChannels preferenceChannels = null)
         where T : Workflow
     {
         // the simplest workflow is empty without steps and this returns a workflow with a trigger
