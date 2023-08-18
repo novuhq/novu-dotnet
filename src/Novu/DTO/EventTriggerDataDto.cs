@@ -1,4 +1,6 @@
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Novu.DTO.Topics;
 using Novu.DTO.Workflows;
 
 namespace Novu.DTO;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -47,7 +48,7 @@ public abstract class BaseIntegrationTest : IDisposable
     public ITestOutputHelper Output { get; set; }
 
     private List<SubscriberDto> Subscribers { get; } = new();
-    private List<TopicData> Topics { get; } = new();
+    private List<Topic> Topics { get; } = new();
     private List<WorkflowGroupSingleResponseDto> WorkflowGroups { get; } = new();
     private List<Workflow> Workflows { get; } = new();
     private List<Layout> Layouts { get; } = new();
@@ -72,6 +73,7 @@ public abstract class BaseIntegrationTest : IDisposable
         await TeardownTopics();
         await TeardownSubscribers();
         await TeardownLayouts();
+        await TeardownTopics();
     }
 
     protected void DeRegisterExceptionHandler()
@@ -220,7 +222,10 @@ public abstract class BaseIntegrationTest : IDisposable
         return subscriber as T;
     }
 
-    protected async Task<T> Make<T>(TopicCreateDto data = null, SubscriberDto subscriber = null)
+    protected async Task<T> Make<T>(
+        TopicCreateDto data = null,
+        SubscriberDto subscriber = null,
+        List<SubscriberDto> additionalSubscribers = null)
         where T : TopicCreateResponseDto
     {
         var createData = data ?? new TopicCreateDto
@@ -233,7 +238,7 @@ public abstract class BaseIntegrationTest : IDisposable
 
         if (subscriber is not null)
         {
-            await Add<TopicSubscriberAdditionResponseDto>(subscriber, topic);
+            await Add<TopicSubscriberAdditionResponseDto>(subscriber, topic, additionalSubscribers);
         }
 
         if (topic is not null)
@@ -322,10 +327,19 @@ public abstract class BaseIntegrationTest : IDisposable
         return workflow.Data as T;
     }
 
-    protected async Task<T> Add<T>(SubscriberDto subscriber, TopicCreateResponseDto topic)
+    protected async Task<T> Add<T>(
+        SubscriberDto subscriber,
+        TopicCreateResponseDto topic,
+        List<SubscriberDto> additionalSubscribers = null)
         where T : TopicSubscriberAdditionResponseDto
     {
-        var subscriberList = new TopicSubscriberUpdateDto(new List<string> { subscriber.SubscriberId });
-        return await Topic.AddSubscriberAsync(topic.Data.Key, subscriberList) as T;
+        var subscribers = additionalSubscribers is not null
+            ? additionalSubscribers.Select(x => x.SubscriberId).Prepend(subscriber.SubscriberId).ToList()
+            : new List<string> { subscriber.SubscriberId };
+
+        var subscriberList = new TopicSubscriberUpdateDto(subscribers);
+        var topicSubscriberAdditionResponseDto = await Topic.AddSubscriberAsync(topic.Data.Key, subscriberList) as T;
+        Topics.Add(topic.Data);
+        return topicSubscriberAdditionResponseDto;
     }
 }
