@@ -17,7 +17,7 @@ public class TopicTrigger
 
     [JsonConverter(typeof(StringEnumConverter))]
     [JsonProperty("type")]
-    public TriggerTypeEnum Type { get; } = TriggerTypeEnum.Topic;
+    public TriggerRecipientsTypeEnum Type { get; } = TriggerRecipientsTypeEnum.Topic;
 
     [JsonProperty("topicKey")] public string TopicKey { get; set; }
 }
