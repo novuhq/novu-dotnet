@@ -62,6 +62,7 @@ public abstract class BaseIntegrationTest : IDisposable
     protected ILayoutClient Layout => Get<ILayoutClient>();
     protected IIntegrationClient Integration => Get<IIntegrationClient>();
     protected INotificationsClient Notifications => Get<INotificationsClient>();
+    protected IMessageClient Messages => Get<IMessageClient>();
 
     public async void Dispose()
     {

@@ -37,6 +37,7 @@ public class NovuClient : INovuClient
         IWorkflowGroupClient workflowGroup,
         IIntegrationClient integration,
         INotificationsClient notifications,
+        IMessageClient message,
         ILayoutClient layout)
     {
         Subscriber = subscriber;
@@ -47,6 +48,7 @@ public class NovuClient : INovuClient
         WorkflowGroup = workflowGroup;
         Integration = integration;
         Notifications = notifications;
+        Message = message;
         Layout = layout;
     }
 
@@ -73,6 +75,7 @@ public class NovuClient : INovuClient
         Layout = RestService.For<ILayoutClient>(httpClient, refitSettings);
         Integration = RestService.For<IIntegrationClient>(httpClient, refitSettings);
         Notifications = RestService.For<INotificationsClient>(httpClient, refitSettings);
+        Message = RestService.For<IMessageClient>(httpClient, refitSettings);
     }
 
 
@@ -80,6 +83,7 @@ public class NovuClient : INovuClient
     public ILayoutClient Layout { get; }
     public IIntegrationClient Integration { get; }
     public INotificationsClient Notifications { get; }
+    public IMessageClient Message { get; }
     public ISubscriberClient Subscriber { get; }
     public IEventClient Event { get; }
     public ITopicClient Topic { get; }
