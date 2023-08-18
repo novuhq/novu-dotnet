@@ -1,4 +1,5 @@
 using Novu.DTO;
+using Novu.DTO.Triggers;
 using Refit;
 
 namespace Novu.Interfaces;
@@ -7,6 +8,15 @@ public interface IEventClient
 {
     [Post("/events/trigger")]
     Task<TriggerResponseDto> Trigger([Body] EventTriggerDataDto dto);
+
+    /// <summary>
+    ///     Trigger a notification to all the subscribers assigned to a topic, which helps to have
+    ///     to avoid to list all the subscriber identifiers in the to field of the notification trigger
+    /// 
+    ///     see https://docs.novu.co/platform/topics#sending-a-notification-to-a-topic
+    /// </summary>
+    [Post("/events/trigger")]
+    Task<TriggerResponseDto> Trigger([Body] TopicTriggerDataDto dto);
 
     [Post("/events/trigger/bulk")]
     Task<TriggerBulkResponseDto> TriggerBulkAsync([Body] SendBulkRequest payload);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -7,10 +8,13 @@ using Novu.DTO;
 using Novu.DTO.Integrations;
 using Novu.DTO.Notifications;
 using Novu.DTO.Subscriber.Preferences;
+using Novu.DTO.Topics;
+using Novu.DTO.Triggers;
 using Novu.DTO.WorkflowGroup;
 using Novu.DTO.Workflows;
 using Novu.Interfaces;
 using Novu.Models.Subscriber.Preferences;
+using Novu.Models.Triggers;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
 using Novu.Models.Workflows.Step.Message;
@@ -30,105 +34,54 @@ public class NotificationTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async Task E2E_InApp_Test()
+    public async Task E2E_InApp_Event_Test()
     {
-        var workflowGroup = await Make<WorkflowGroupSingleResponseDto>(new WorkflowGroupDto
-        {
-            WorkflowGroupName = $"End2EndGroup ({StringGenerator.SequenceOfAlphaNumerics(5)})",
-        });
-        var workflow = await Make<Workflow>(new WorkflowCreateData
-        {
-            Name = $"In-App [End2end {StringGenerator.SequenceOfAlphaNumerics(10)}]",
-            Description = StringGenerator.LoremIpsum(5),
-            WorkflowGroupId = workflowGroup.PayloadDto.Id,
-            PreferenceSettings = new PreferenceChannels
-            {
-                InApp = true,
-            },
-            Steps = new Step[]
-            {
-                new()
-                {
-                    Name = $"In-App [End2end ({StringGenerator.SequenceOfAlphaNumerics(5)})]",
-                    Template = new InAppMessageTemplate
-                    {
-                        Content = "Fantastic move! {{message}}",
-                        Variables = new[]
-                        {
-                            new TemplateVariable
-                            {
-                                Name = "message",
-                                Type = TemplateVariableTypeEnum.String,
-                                Required = true,
-                            },
-                        },
-                    },
-                    Active = true,
-                },
-            },
-            Active = true,
-        });
-
-        var subscriber = await Make<SubscriberDto>();
-
-        // update subscriber preferences
-        var preferences = await Subscriber.GetPreferences(subscriber.SubscriberId!);
-
-        // enable notification
-        var templateId = preferences.Data.Single(x => x.Template.Name == workflow.Name).Template.Id;
-
-        await Subscriber.UpdatePreference(
-            subscriber.SubscriberId!,
-            templateId,
-            new SubscriberPreferenceEditData
-            {
-                Channel = new Channel
-                {
-                    Type = ChannelTypeEnum.InApp,
-                    Enabled = true,
-                },
-            });
-
-        var eventName = workflow.Triggers.FirstOrDefault()?.Identifier;
-
-        // Now, ensure that the integration is active. Otherwise, the trigger will not deliver
-        // but reports that the subscriber has no active integrations where they problem is that
-        // the system has none to offer even though the subscriber has registered
-        var existingIntegration = (await Integration.Get())
-            .Data
-            .SingleOrDefault(x => x.ProviderId == "novu");
-        if (existingIntegration is not null && !existingIntegration.Active)
-        {
-            await Integration.Update(
-                existingIntegration.Id,
-                new IntegrationEditData
-                {
-                    Active = true,
-                    Identifier = existingIntegration.Identifier,
-                    Name = existingIntegration.Name,
-                    Credentials = existingIntegration.Credentials,
-                    Channel = existingIntegration.Channel,
-                    EnvironmentId = existingIntegration.EnvironmentId,
-                });
-        }
-        else if (existingIntegration is null)
-        {
-            await Make<Integration>(providerId: "novu");
-        }
-
+        var (workflow, eventName) = await MakeInAppWorkflow();
+        var subscriber = await MakeSubscriberOnWorkflow(workflow);
 
         var trigger = await Event.Trigger(
             new EventTriggerDataDto
             {
-                EventName = eventName!,
-                To = { SubscriberId = subscriber.SubscriberId },
+                EventName = eventName,
+                To = { SubscriberId = subscriber.SubscriberId! },
                 Payload = new TestMessage(),
             });
 
         trigger.TriggerResponsePayloadDto.Acknowledged.Should().BeTrue();
 
-        // PAUSE for system to catch up given it is async
-        var maxRetryAttempts = 2;
+        await VerifyNotifications(subscriber);
+    }
+    
+    [Fact]
+    public async Task E2E_InApp_Topic_Test()
+    {
+        var (workflow, eventName) = await MakeInAppWorkflow();
+        var subscriber = await MakeSubscriberOnWorkflow(workflow);
+        var subscriber2 = await MakeSubscriberOnWorkflow(workflow);
+
+        var topic = await Make<TopicCreateResponseDto>(
+            subscriber: subscriber,
+            additionalSubscribers: new List<SubscriberDto> { subscriber2 });
+
+        var trigger = await Event.Trigger(
+            new TopicTriggerDataDto
+            {
+                EventName = eventName,
+                To = new[] { new TopicTrigger(topic.Data.Key) },
+                Payload = new TestMessage(),
+            });
+
+        trigger.TriggerResponsePayloadDto.Acknowledged.Should().BeTrue();
+
+        await VerifyNotifications(subscriber);
+        await VerifyNotifications(subscriber2);
+    }
+
+
+    private async Task VerifyNotifications(SubscriberDto subscriber)
+    {
+        // WAIT for system to catch up given it is async
+        const int maxRetryAttempts = 3;
         var retryPolicy = Policy
             .Handle<XunitException>()
             .WaitAndRetryAsync(maxRetryAttempts, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
@@ -170,7 +123,7 @@ public class NotificationTests : BaseIntegrationTest
 
         await retryPolicy.ExecuteAsync(async () =>
         {
-            var dataCount = (await Subscriber.GetInAppUnseen(subscriber.SubscriberId))
+            var dataCount = (await Subscriber.GetInAppUnseen(subscriber.SubscriberId!))
                 .Data
                 .Count;
             var inAppMessages = await Subscriber.GetInApp(subscriber.SubscriberId);
@@ -180,8 +133,101 @@ public class NotificationTests : BaseIntegrationTest
 
             inAppMessages.Data.Should().NotBeEmpty();
 
-            var z = inAppMessages.Data.Where(x => x.Channels.Contains(ChannelTypeEnum.InApp));
+            // var z = inAppMessages.Data.Where(x => x.Channels.Contains(ChannelTypeEnum.InApp));
         });
+    }
+
+    private async Task<(Workflow, string)> MakeInAppWorkflow()
+    {
+        var workflowGroup = await Make<WorkflowGroupSingleResponseDto>(new WorkflowGroupDto
+        {
+            WorkflowGroupName = $"End2EndGroup ({StringGenerator.SequenceOfAlphaNumerics(5)})",
+        });
+        var workflow = await Make<Workflow>(new WorkflowCreateData
+        {
+            Name = $"In-App [End2end {StringGenerator.SequenceOfAlphaNumerics(10)}]",
+            Description = StringGenerator.LoremIpsum(5),
+            WorkflowGroupId = workflowGroup.PayloadDto.Id,
+            PreferenceSettings = new PreferenceChannels
+            {
+                InApp = true,
+            },
+            Steps = new Step[]
+            {
+                new()
+                {
+                    Name = $"In-App [End2end ({StringGenerator.SequenceOfAlphaNumerics(5)})]",
+                    Template = new InAppMessageTemplate
+                    {
+                        Content = "Fantastic move! {{message}}",
+                        Variables = new[]
+                        {
+                            new TemplateVariable
+                            {
+                                Name = "message",
+                                Type = TemplateVariableTypeEnum.String,
+                                Required = true,
+                            },
+                        },
+                    },
+                    Active = true,
+                },
+            },
+            Active = true,
+        });
+
+
+        // Now, ensure that the integration is active. Otherwise, the trigger will not deliver
+        // but reports that the subscriber has no active integrations where they problem is that
+        // the system has none to offer even though the subscriber has registered
+        var existingIntegration = (await Integration.Get())
+            .Data
+            .SingleOrDefault(x => x.ProviderId == "novu");
+        if (existingIntegration is not null && !existingIntegration.Active)
+        {
+            await Integration.Update(
+                existingIntegration.Id,
+                new IntegrationEditData
+                {
+                    Active = true,
+                    Identifier = existingIntegration.Identifier,
+                    Name = existingIntegration.Name,
+                    Credentials = existingIntegration.Credentials,
+                    Channel = existingIntegration.Channel,
+                    EnvironmentId = existingIntegration.EnvironmentId,
+                });
+        }
+        else if (existingIntegration is null)
+        {
+            await Make<Integration>(providerId: "novu");
+        }
+
+        var eventName = workflow.Triggers.FirstOrDefault()?.Identifier;
+        return (workflow, eventName);
+    }
+
+    private async Task<SubscriberDto> MakeSubscriberOnWorkflow(Workflow workflow)
+    {
+        var subscriber = await Make<SubscriberDto>();
+
+        // update subscriber preferences
+        var preferences = await Subscriber.GetPreferences(subscriber.SubscriberId!);
+
+        // enable notification
+        var templateId = preferences.Data.Single(x => x.Template.Name == workflow.Name).Template.Id;
+
+        await Subscriber.UpdatePreference(
+            subscriber.SubscriberId!,
+            templateId,
+            new SubscriberPreferenceEditData
+            {
+                Channel = new Channel
+                {
+                    Type = ChannelTypeEnum.InApp,
+                    Enabled = true,
+                },
+            });
+        return subscriber;
     }
 }
 
