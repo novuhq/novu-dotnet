@@ -76,6 +76,7 @@ public class NovuClient : INovuClient
         Integration = RestService.For<IIntegrationClient>(httpClient, refitSettings);
         Notifications = RestService.For<INotificationsClient>(httpClient, refitSettings);
         Message = RestService.For<IMessageClient>(httpClient, refitSettings);
+        ExecutionDetails = RestService.For<IExecutionDetailsClient>(httpClient, refitSettings);
     }
 
 
@@ -84,6 +85,7 @@ public class NovuClient : INovuClient
     public IIntegrationClient Integration { get; }
     public INotificationsClient Notifications { get; }
     public IMessageClient Message { get; }
+    public IExecutionDetailsClient ExecutionDetails { get; }
     public ISubscriberClient Subscriber { get; }
     public IEventClient Event { get; }
     public ITopicClient Topic { get; }
