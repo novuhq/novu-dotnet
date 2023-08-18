@@ -16,4 +16,5 @@ public interface INovuClient
     IIntegrationClient Integration { get; }
     INotificationsClient Notifications { get; }
     IMessageClient Message { get; }
+    IExecutionDetailsClient ExecutionDetails { get; }
 }

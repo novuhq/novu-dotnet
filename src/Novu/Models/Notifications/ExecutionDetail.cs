@@ -8,10 +8,16 @@ public class ExecutionDetail
 
     [JsonProperty("_jobId")] public string JobId { get; set; }
 
-    /// <summary>
-    ///     TODO: ProviderEnum
-    /// </summary>
-    /// [JsonProperty("providerId")] public string ProviderId { get; set; }
+    [JsonProperty("_notificationTemplateId")]
+    public string NotificationTemplateId { get; set; }
+
+    [JsonProperty("_notificationId")] public string NotificationId { get; set; }
+    [JsonProperty("_subscriberId")] public string SubscriberId { get; set; }
+    [JsonProperty("_messageId")] public string MessageId { get; set; }
+
+    [JsonProperty("providerId")] public string ProviderId { get; set; }
+    [JsonProperty("transactionId")] public string TransactionId { get; set; }
+
     /// <summary>
     ///     TODO: ExecutionDetailsStatusEnum
     /// </summary>
@@ -19,6 +25,7 @@ public class ExecutionDetail
     public string Status { get; set; }
 
     [JsonProperty("detail")] public string Detail { get; set; }
+    [JsonProperty("channel")] public string Channel { get; set; }
 
     [JsonProperty("source")] public string Source { get; set; }
 
