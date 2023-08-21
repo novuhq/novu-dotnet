@@ -1,20 +1,25 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Novu.DTO.Layouts;
+using Novu.Models.Workflows.Step.Message;
+using Novu.Tests.IntegrationTests;
+using Refit;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Novu.Tests.IntegrationTests;
+namespace Novu.Tests.AcceptanceTests;
 
 public class LayoutTests : BaseIntegrationTest
 {
     public LayoutTests(ITestOutputHelper output) : base(output)
     {
     }
-
+    
     /// <summary>
-    ///     This is a flaky test because 'default' layout operates globally to the application and can
-    ///     conflict with other tests when running in parallel.
+    ///     This is a flakey test because 'default' operates globally to the applic
     /// </summary>
     [Fact]
     public async Task Should_SetStatus()
