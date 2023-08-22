@@ -22,8 +22,8 @@ public class SubscriberDto
 
     [JsonProperty("locale")] public string? Locale { get; set; }
 
-    [JsonProperty("data")] public List<AdditionalDataDto>? Data { get; set; }
-
+    [JsonProperty("data")] public List<AdditionalDataDto> Data { get; set; }
+    
     [JsonProperty("channels")] public object[] Channels { get; set; }
 
     [JsonProperty("deleted")] public bool? Deleted { get; set; }

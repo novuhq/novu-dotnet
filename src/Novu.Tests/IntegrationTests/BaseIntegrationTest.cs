@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Novu.DTO;
 using Novu.DTO.Integrations;
 using Novu.DTO.Layouts;
@@ -83,9 +84,17 @@ public abstract class BaseIntegrationTest : IDisposable
 
     protected void RegisterExceptionHandler()
     {
+        var defaultSerializerSettings = NovuClient.DefaultSerializerSettings;
+
+        // setup in-memory logging for
+        // see https://www.newtonsoft.com/json/help/html/SerializationTracing.htm
+        // TODO: make this more injectable/configurable for ad hoc diagnosis
+        TraceWriter = new MemoryTraceWriter();
+        defaultSerializerSettings.TraceWriter = TraceWriter;
+
         var refitSettings = new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(NovuClient.DefaultSerializerSettings),
+            ContentSerializer = new NewtonsoftJsonContentSerializer(defaultSerializerSettings),
             ExceptionFactory = TestExceptionFactory,
         };
 
@@ -109,11 +118,17 @@ public abstract class BaseIntegrationTest : IDisposable
                     var error = JsonConvert.DeserializeObject<ErrorResponseDto>(content);
                     if (error is not null)
                     {
+                        Output.WriteLine("=================================");
+                        Output.WriteLine(TraceWriter.ToString());
+                        Output.WriteLine("=================================");
                         Assert.Fail($"[{error.Code}: '{error.Status}'] '{string.Join("; ", error.Message)}'");
                     }
                 }
                 catch (JsonReaderException e)
                 {
+                    Output.WriteLine("=================================");
+                    Output.WriteLine(TraceWriter.ToString());
+                    Output.WriteLine("=================================");
                     Assert.Fail($"Cannot convert error message '{e.GetType()}' {content}");
                 }
             }
@@ -121,6 +136,8 @@ public abstract class BaseIntegrationTest : IDisposable
             return default;
         }
     }
+
+    protected ITraceWriter TraceWriter { get; set; }
 
     private async Task TeardownSubscribers()
     {
@@ -217,9 +234,9 @@ public abstract class BaseIntegrationTest : IDisposable
 
         var subscriber = await Subscriber.CreateSubscriber(createData);
 
-        Subscribers.Add(subscriber);
+        Subscribers.Add(subscriber.Data);
 
-        return subscriber as T;
+        return subscriber.Data as T;
     }
 
     protected async Task<T> Make<T>(
@@ -230,7 +247,7 @@ public abstract class BaseIntegrationTest : IDisposable
     {
         var createData = data ?? new TopicCreateDto
         {
-            Key = $"test:{NumberGenerator.RandomNumberBetween(6000, 10000)}",
+            Key = $"test:{NumberGenerator.RandomNumberBetween(600, 100000)}",
             Name = StringGenerator.LoremIpsum(10),
         };
 
