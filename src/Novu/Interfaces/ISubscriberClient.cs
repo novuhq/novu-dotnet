@@ -26,7 +26,7 @@ public interface ISubscriberClient
     /// <param name="id"><see cref="String" /> Subscriber ID</param>
     /// <returns></returns>
     [Get("/subscribers/{id}")]
-    Task<SubscriberDto> GetSubscriber(string id);
+    Task<NovuResponse<SubscriberDto>> GetSubscriber(string id);
 
     /// <summary>
     ///     Create a new Subscriber
@@ -38,7 +38,7 @@ public interface ISubscriberClient
     ///     <see cref="SubscriberDto" /> The newly created Subscriber
     /// </returns>
     [Post("/subscribers")]
-    Task<SubscriberDto> CreateSubscriber([Body] CreateSubscriberDto dto);
+    Task<NovuResponse<SubscriberDto>> CreateSubscriber([Body] CreateSubscriberDto dto);
 
     /// <summary>
     ///     Update a Subscriber
@@ -49,7 +49,7 @@ public interface ISubscriberClient
     /// <param name="requestDto"></param>
     /// <returns></returns>
     [Put("/subscribers/{id}")]
-    Task<SubscriberDto> UpdateSubscriber(string id, [Body] SubscriberDto requestDto);
+    Task<NovuResponse<SubscriberDto>> UpdateSubscriber(string id, [Body] SubscriberDto requestDto);
 
     /// <summary>
     ///     Delete a Subscriber
@@ -72,7 +72,7 @@ public interface ISubscriberClient
     /// </param>
     /// <returns></returns>
     [Patch("/subscribers/{id}/online-status")]
-    Task<SubscriberDto> UpdateOnlineStatus(string id, [Body] SubscriberOnlineDto model);
+    Task<NovuResponse<SubscriberDto>> UpdateOnlineStatus(string id, [Body] SubscriberOnlineDto model);
 
     [Get("/subscribers/{id}/preferences")]
     Task<NovuResponse<IEnumerable<SubscriberPreference>>> GetPreferences(string id);

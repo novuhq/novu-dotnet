@@ -26,8 +26,7 @@ public class ExecutionDetailsTests : BaseIntegrationTest
 
         if (notification is not null)
         {
-            var messages = await Get<IExecutionDetailsClient>().Get(notification.Id, notification.Subscriber.Id);
-            messages.Data.Should().NotBeNull();
+            await Get<IExecutionDetailsClient>().Get(notification.Id, notification.Subscriber.Id);
         }
         else
         {

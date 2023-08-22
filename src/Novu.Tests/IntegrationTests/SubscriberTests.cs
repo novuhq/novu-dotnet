@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -27,7 +28,7 @@ public class SubscriberTests : BaseIntegrationTest
         var testSub = await Make<SubscriberDto>();
         var subscriber = await Subscriber.GetSubscriber(testSub.SubscriberId!);
 
-        Assert.Equal(subscriber.SubscriberId, testSub.SubscriberId);
+        Assert.Equal(subscriber.Data.SubscriberId, testSub.SubscriberId);
     }
 
     [Fact]
@@ -70,12 +71,17 @@ public class SubscriberTests : BaseIntegrationTest
 
         var updatedSub = await Subscriber.UpdateSubscriber(subToUpdate.SubscriberId!, subToUpdate);
 
-        // Check to make sure fields changed
-        Assert.Equal(updatedSub.FirstName, subToUpdate.FirstName);
-        Assert.Equal(updatedSub.LastName, subToUpdate.LastName);
+        updatedSub.Data.Should().NotBeNull();
 
-        // Check to make sure field didn't change when it shouldn't have
-        Assert.Equal(updatedSub.SubscriberId, subToUpdate.SubscriberId);
+        if (updatedSub.Data is not null)
+        {
+            // Check to make sure fields changed
+            Assert.Equal(updatedSub.Data.FirstName, subToUpdate.FirstName);
+            Assert.Equal(updatedSub.Data.LastName, subToUpdate.LastName);
+
+            // Check to make sure field didn't change when it shouldn't have
+            Assert.Equal(updatedSub.Data.SubscriberId, subToUpdate.SubscriberId);
+        }
     }
 
     [Fact]
@@ -92,9 +98,9 @@ public class SubscriberTests : BaseIntegrationTest
         var subscriber = await Make<SubscriberDto>();
         subscriber.SubscriberId.Should().NotBeNull();
         await Subscriber.DeleteSubscriber(subscriber.SubscriberId!);
-        subscriber = await Subscriber.GetSubscriber(subscriber.SubscriberId);
+        var response = await Subscriber.GetSubscriber(subscriber.SubscriberId);
         // note: return subscriber with null values
-        subscriber.SubscriberId.Should().BeNull();
+        response.Data.Should().BeNull();
     }
 
     [Fact]
@@ -115,13 +121,14 @@ public class SubscriberTests : BaseIntegrationTest
     public async void Should_Update_Online_Status()
     {
         var subscriber = await Make<SubscriberDto>();
-        var updateResponse = await Subscriber.UpdateOnlineStatus(
+        var response = await Subscriber.UpdateOnlineStatus(
             subscriber.SubscriberId!,
             new SubscriberOnlineDto
             {
                 IsOnline = true,
             });
 
-        updateResponse.IsOnline.Should().BeTrue();
+        response.Data.Should().NotBeNull();
+        response.Data.IsOnline.Should().BeTrue();
     }
 }
