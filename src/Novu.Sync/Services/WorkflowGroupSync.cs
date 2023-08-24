@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Novu.DTO.WorkflowGroups;
-using Novu.DTO.Workflows;
 using Novu.Interfaces;
 using Novu.Sync.Comparers;
 using Novu.Sync.Models;
+using Novu.Sync.Utils;
 
-namespace Novu.Sync;
+namespace Novu.Sync.Services;
 
-public class WorkflowGroupSync
+public class WorkflowGroupSync :  INovuSync<TemplateWorkflowGroup>
 {
     private readonly IWorkflowGroupClient _workflowGroupClient;
 
@@ -19,19 +19,19 @@ public class WorkflowGroupSync
         _workflowGroupClient = workflowGroupClient;
     }
 
-    public async Task WorkflowGroups(TemplateWorkflowGroup templateTemplateWorkflowGroup)
+    public async Task Sync(TemplateWorkflowGroup templateTemplateWorkflowGroup)
     {
-        await WorkflowGroups(new[] { templateTemplateWorkflowGroup });
+        await Sync(new[] { templateTemplateWorkflowGroup });
     }
 
     /// <summary>
-    ///     Take list of template WorkflowGroups and look through the WorkflowGroups found on an organisation and synchronise.
+    ///     Take list of template Sync and look through the Sync found on an organisation and synchronise.
     ///     Note: this current implementation takes control of an environment and deletes anything unknown to the templates
     /// </summary>
     /// <exception cref="AggregateException">
     ///     The <see cref="AggregateException.InnerExceptions" /> will return list of <see cref="Refit.ApiException" />
     /// </exception>
-    public async Task WorkflowGroups(IEnumerable<TemplateWorkflowGroup> templateWorkflowGroups)
+    public async Task Sync(IEnumerable<TemplateWorkflowGroup> templateWorkflowGroups)
     {
         var src = templateWorkflowGroups
             .Select(template =>

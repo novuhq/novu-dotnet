@@ -6,8 +6,8 @@ using Moq;
 using Novu.DTO;
 using Novu.DTO.WorkflowGroups;
 using Novu.Interfaces;
-using Novu.Sync;
 using Novu.Sync.Models;
+using Novu.Sync.Services;
 using Novu.Tests.IntegrationTests;
 using ParkSquare.Testing.Generators;
 using Xunit;
@@ -133,9 +133,9 @@ public class SyncWorkflowGroupTests : BaseIntegrationTest
             .Setup(x => x.Get())
             .ReturnsAsync(new NovuResponse<IEnumerable<WorkflowGroup>>(currentSetAtDestination.ToList()));
 
-        var syncClient = Get<WorkflowGroupSync>();
+        var syncClient = Get<INovuSync<TemplateWorkflowGroup>>();
 
-        await syncClient.WorkflowGroups(templateWorkflowGroups);
+        await syncClient.Sync(templateWorkflowGroups);
 
         _workflowGroupClient.Verify(x => x.Get(), getCalls);
         _workflowGroupClient.Verify(x => x.Create(It.IsAny<WorkflowGroupCreateData>()), createCalls);

@@ -7,10 +7,11 @@ using Novu.DTO.Layouts;
 using Novu.Interfaces;
 using Novu.Sync.Comparers;
 using Novu.Sync.Models;
+using Novu.Sync.Utils;
 
-namespace Novu.Sync;
+namespace Novu.Sync.Services;
 
-public class LayoutSync
+public class LayoutSync :  INovuSync<TemplateLayout>
 {
     private readonly ILayoutClient _layoutClient;
 
@@ -19,19 +20,19 @@ public class LayoutSync
         _layoutClient = layoutClient;
     }
 
-    public async Task Layouts(TemplateLayout templateTemplateLayout)
+    public async Task Sync(TemplateLayout templateTemplateLayout)
     {
-        await Layouts(new[] { templateTemplateLayout });
+        await Sync(new[] { templateTemplateLayout });
     }
 
     /// <summary>
-    ///     Take list of template layouts and look through the Layouts found on an organisation and synchronise.
+    ///     Take list of template layouts and look through the Sync found on an organisation and synchronise.
     ///     Note: this current implementation takes control of an environment and deletes anything unknown to the templates
     /// </summary>
     /// <exception cref="AggregateException">
     ///     The <see cref="AggregateException.InnerExceptions" /> will return list of <see cref="Refit.ApiException" />
     /// </exception>
-    public async Task Layouts(IEnumerable<TemplateLayout> templateLayouts)
+    public async Task Sync(IEnumerable<TemplateLayout> templateLayouts)
     {
         var src = templateLayouts
             .Select(template =>

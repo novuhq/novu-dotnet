@@ -8,6 +8,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novu.Extensions", "Novu.Ext
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novu.Sync", "Novu.Sync\Novu.Sync.csproj", "{03F3C972-3416-49E3-8C24-1F926C3C04D1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionFolder", "{8D05A7BF-973B-4D7D-AC4C-8CC4AD73EA4C}"
+	ProjectSection(SolutionItems) = preProject
+		..\SECURITY.md = ..\SECURITY.md
+		..\RELEASE.md = ..\RELEASE.md
+		..\LICENSE.txt = ..\LICENSE.txt
+		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
+		..\CODE_OF_CONDUCT.md = ..\CODE_OF_CONDUCT.md
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
