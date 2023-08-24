@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.DTO;
+using Novu.DTO.Subscribers;
 using Refit;
 using Xunit;
 using Xunit.Abstractions;
@@ -18,15 +17,15 @@ public class SubscriberTests : BaseIntegrationTest
     [Fact]
     public async void Should_Create_Subscriber()
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         Assert.NotNull(subscriber);
     }
 
     [Fact]
     public async void Should_Get_One_Subscriber()
     {
-        var testSub = await Make<SubscriberDto>();
-        var subscriber = await Subscriber.GetSubscriber(testSub.SubscriberId!);
+        var testSub = await Make<Subscriber>();
+        var subscriber = await Subscriber.Get(testSub.SubscriberId!);
 
         Assert.Equal(subscriber.Data.SubscriberId, testSub.SubscriberId);
     }
@@ -34,13 +33,13 @@ public class SubscriberTests : BaseIntegrationTest
     [Fact]
     public async void Should_Get_All_Subscribers()
     {
-        async Task<IList<SubscriberDto>> GetAllSubscribers(
+        async Task<IList<Subscriber>> GetAllSubscribers(
             int page = 0,
             int limit = 30 /* Max 100 */,
-            IList<SubscriberDto> subscribers = null)
+            IList<Subscriber> subscribers = null)
         {
-            subscribers ??= new List<SubscriberDto>();
-            var next = await Subscriber.GetSubscribers(page, limit);
+            subscribers ??= new List<Subscriber>();
+            var next = await Subscriber.Get(page, limit);
 
             foreach (var dto in next.Data)
             {
@@ -64,12 +63,30 @@ public class SubscriberTests : BaseIntegrationTest
     [Fact]
     public async void Should_Update_Subscriber()
     {
-        var subToUpdate = await Make<SubscriberDto>();
+        var subToUpdate = await Make<Subscriber>();
 
         subToUpdate.FirstName += " Updated";
         subToUpdate.LastName += " Update";
 
-        var updatedSub = await Subscriber.UpdateSubscriber(subToUpdate.SubscriberId!, subToUpdate);
+        var updatedSub = await Subscriber.Update(subToUpdate.SubscriberId!, new SubscriberEditData
+        {
+            Data = subToUpdate.Data,
+            FirstName = subToUpdate.FirstName,
+            LastName = subToUpdate.LastName,
+            Locale = subToUpdate.Locale,
+            Avatar = subToUpdate.Avatar,
+            EnvironmentId = subToUpdate.EnvironmentId,
+            Channels = subToUpdate.Channels,
+            Deleted = subToUpdate.Deleted,
+            Email = subToUpdate.Email,
+            Phone = subToUpdate.Phone,
+            IsOnline = subToUpdate.IsOnline,
+            SubscriberId = subToUpdate.SubscriberId,
+            CreatedAt = subToUpdate.CreatedAt,
+            OrganizationId = subToUpdate.OrganizationId,
+            UpdatedAt = subToUpdate.UpdatedAt,
+            LastOnlineAt = subToUpdate.LastOnlineAt,
+        });
 
         updatedSub.Data.Should().NotBeNull();
 
@@ -87,7 +104,7 @@ public class SubscriberTests : BaseIntegrationTest
     [Fact]
     public async void Should_Delete_Subscriber()
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         var deleteResponse = await Subscriber.DeleteSubscriber(subscriber.SubscriberId!);
         deleteResponse.Data.Acknowledged.Should().BeTrue();
     }
@@ -95,10 +112,10 @@ public class SubscriberTests : BaseIntegrationTest
     [Fact]
     public async void Should_Delete_Subscriber_DoesNotThrowOnGet()
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         subscriber.SubscriberId.Should().NotBeNull();
         await Subscriber.DeleteSubscriber(subscriber.SubscriberId!);
-        var response = await Subscriber.GetSubscriber(subscriber.SubscriberId);
+        var response = await Subscriber.Get(subscriber.SubscriberId);
         // note: return subscriber with null values
         response.Data.Should().BeNull();
     }
@@ -109,7 +126,7 @@ public class SubscriberTests : BaseIntegrationTest
         // override the base exception trap to expose 404
         DeRegisterExceptionHandler();
 
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         var deleteResponse = await Subscriber.DeleteSubscriber(subscriber.SubscriberId!);
         deleteResponse.Data.Acknowledged.Should().BeTrue();
 
@@ -120,10 +137,10 @@ public class SubscriberTests : BaseIntegrationTest
     [Fact]
     public async void Should_Update_Online_Status()
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         var response = await Subscriber.UpdateOnlineStatus(
             subscriber.SubscriberId!,
-            new SubscriberOnlineDto
+            new SubscriberOnlineEditData
             {
                 IsOnline = true,
             });

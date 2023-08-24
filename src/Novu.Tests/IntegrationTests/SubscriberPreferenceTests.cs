@@ -1,9 +1,10 @@
 using System.Linq;
 using FluentAssertions;
 using Novu.DTO;
-using Novu.DTO.Subscriber.Preferences;
+using Novu.DTO.Subscribers;
+using Novu.DTO.Subscribers.Preferences;
 using Novu.DTO.Workflows;
-using Novu.Models.Subscriber.Preferences;
+using Novu.Models.Subscribers.Preferences;
 using Novu.Models.Workflows;
 using Xunit;
 using Xunit.Abstractions;
@@ -22,7 +23,7 @@ public class SubscriberPreferencesTests : BaseIntegrationTest
         // a preference requires a workflow (so if the system was clean no preferences would be returned)
         await Make<Workflow>(steps: new[] { StepFactory.InApp() });
 
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         subscriber.SubscriberId.Should().NotBeNull();
         var preferences = await Subscriber.GetPreferences(subscriber.SubscriberId!);
 
@@ -45,7 +46,7 @@ public class SubscriberPreferencesTests : BaseIntegrationTest
                 InApp = true,
             });
 
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         subscriber.SubscriberId.Should().NotBeNull();
         var preferences = await Subscriber.GetPreferences(subscriber.SubscriberId!);
 
@@ -83,7 +84,7 @@ public class SubscriberPreferencesTests : BaseIntegrationTest
     [Fact]
     public async void Should_Get_InApp_Unseen()
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         subscriber.SubscriberId.Should().NotBeNull();
         var messagesCount = await Subscriber.GetInAppUnseen(subscriber.SubscriberId!);
 
@@ -94,7 +95,7 @@ public class SubscriberPreferencesTests : BaseIntegrationTest
     [Fact]
     public async void Should_Get_InApp()
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         subscriber.SubscriberId.Should().NotBeNull();
         var messages = await Subscriber.GetInApp(subscriber.SubscriberId!);
 

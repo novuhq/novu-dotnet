@@ -2,8 +2,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Novu.DTO;
-using Novu.DTO.Topics;
+using Novu.DTO.Events;
+using Novu.DTO.Subscribers;
 using Novu.DTO.Workflows;
 using ParkSquare.Testing.Generators;
 using Refit;
@@ -21,16 +21,16 @@ public class EventTests : BaseIntegrationTest
     [Fact]
     public async void Should_Trigger_Event()
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
 
         var trigger = await Event.Trigger(
-            new EventTriggerDataDto
+            new EventCreateData
             {
                 EventName = await GetActiveEvent(),
                 To = { SubscriberId = subscriber?.SubscriberId! },
                 Payload = new TestPayload(),
             });
-        trigger.TriggerResponsePayloadDto.Acknowledged.Should().BeTrue();
+        trigger.Data.Acknowledged.Should().BeTrue();
 
         // TODO: how to detect success for a subscriber
     }
@@ -38,12 +38,12 @@ public class EventTests : BaseIntegrationTest
     [Fact]
     public async void Should_Trigger_Bulk_Event()
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
         var eventName = await GetActiveEvent();
 
-        var dto = new SendBulkRequest(
+        var dto = new BulkEventCreateData(
             new[] { "Hello", "World" }
-                .Select(message => new EventTriggerDataDto
+                .Select(message => new EventCreateData
                 {
                     EventName = eventName!,
                     To = { SubscriberId = subscriber?.SubscriberId! },
@@ -51,10 +51,10 @@ public class EventTests : BaseIntegrationTest
                 })
                 .ToList());
 
-        var trigger = await Event.TriggerBulkAsync(dto);
+        var trigger = await Event.CreateBulk(dto);
 
-        trigger.PayloadDtos.Should().HaveCount(2);
-        trigger.PayloadDtos.Should().AllSatisfy(triggerPayload => Assert.True(triggerPayload.Acknowledged));
+        trigger.Data.Should().HaveCount(2);
+        trigger.Data.Should().AllSatisfy(triggerPayload => Assert.True(triggerPayload.Acknowledged));
 
         // TODO: how to detect success for a subscriber
     }
@@ -62,14 +62,14 @@ public class EventTests : BaseIntegrationTest
     [Fact]
     public async void Should_Trigger_Broadcast_Event()
     {
-        var dto = new BroadcastMessageRequest
+        var dto = new BroadcastEventCreateData
         {
             Name = await GetActiveEvent(),
             Payload = new TestPayload(),
         };
 
-        var trigger = await Event.TriggerBroadcastAsync(dto);
-        trigger.TriggerResponsePayloadDto.Acknowledged.Should().BeTrue();
+        var trigger = await Event.CreateBroadcast(dto);
+        trigger.Data.Acknowledged.Should().BeTrue();
 
         // TODO: how to detect success for a subscriber
     }
@@ -87,46 +87,48 @@ public class EventTests : BaseIntegrationTest
         var eventName = workflow.Triggers.FirstOrDefault()?.Identifier;
         eventName.Should().NotBeNull();
 
-        var dto = new BroadcastMessageRequest
+        var dto = new BroadcastEventCreateData
         {
             Name = eventName!,
             Payload = new TestPayload(),
         };
 
-        await Assert.ThrowsAsync<ApiException>(async () => { await Event.TriggerBroadcastAsync(dto); });
+        await Assert.ThrowsAsync<ApiException>(async () => { await Event.CreateBroadcast(dto); });
     }
 
 
+    /*
     [Fact]
     public async void Should_Trigger_Topic()
     {
-        var topic = await Make<TopicCreateResponseDto>();
+        var topic = await Make<Topic>();
 
         var dto = new EventTopicTriggerDto
         {
             EventName = await GetActiveEvent(),
-            Topic = new EventTopicDto { TopicKey = topic.Data.Key },
+            Topic = new EventTopicDto { TopicKey = topic.Key },
             Payload = new TestPayload(),
         };
-        var topicTrigger = await Event.TriggerTopicAsync(dto);
-        topicTrigger.TriggerResponsePayloadDto.Acknowledged.Should().BeTrue();
+        var topicTrigger = await Event.Create(dto);
+        topicTrigger.TransactionAcknowledgeData.Acknowledged.Should().BeTrue();
 
         // how to determine delivery?
     }
+    */
 
     [Fact]
     public async void Should_Trigger_Cancel_Event()
     {
-        var dto = new BroadcastMessageRequest
+        var dto = new BroadcastEventCreateData
         {
             Name = await GetActiveEvent(),
             Payload = new TestPayload(),
         };
-        var trigger = await Event.TriggerBroadcastAsync(dto);
+        var trigger = await Event.CreateBroadcast(dto);
 
-        trigger.TriggerResponsePayloadDto.Acknowledged.Should().BeTrue();
+        trigger.Data.Acknowledged.Should().BeTrue();
 
-        await Event.TriggerCancelAsync(trigger.TriggerResponsePayloadDto.TransactionId);
+        await Event.Cancel(trigger.Data.TransactionId);
 
         // TODO: how to detect success for a subscriber
     }

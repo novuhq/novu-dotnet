@@ -10,7 +10,7 @@ namespace Novu.NotificationTemplates;
 public interface INotificationTemplatesClient
 {
     [Get("/notification-templates")]
-    public Task<PaginatedResponseDto<NotificationTemplate>> GetTemplates([Query] int page = 0, [Query] int limit = 10);
+    public Task<NovuPaginatedResponse<NotificationTemplate>> GetTemplates([Query] int page = 0, [Query] int limit = 10);
 
     [Delete("/notification-templates/{templateId}")]
     public Task DeleteTemplate(string templateId);

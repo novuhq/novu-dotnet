@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
+using Novu.DTO.WorkflowGroups;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
 using Novu.Models.Workflows.Trigger;
@@ -61,5 +62,5 @@ public class Workflow
 
     [Required]
     [JsonProperty("notificationGroup")]
-    public Models.Workflows.WorkflowGroup WorkflowGroup { get; set; }
+    public WorkflowGroup WorkflowGroup { get; set; }
 }

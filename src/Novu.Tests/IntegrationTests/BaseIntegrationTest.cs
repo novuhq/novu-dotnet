@@ -11,11 +11,13 @@ using Newtonsoft.Json.Serialization;
 using Novu.DTO;
 using Novu.DTO.Integrations;
 using Novu.DTO.Layouts;
+using Novu.DTO.Subscribers;
 using Novu.DTO.Topics;
-using Novu.DTO.WorkflowGroup;
+using Novu.DTO.WorkflowGroups;
 using Novu.DTO.Workflows;
 using Novu.Extensions;
 using Novu.Interfaces;
+using Novu.Models.Subscribers;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step.Message;
 using Novu.NotificationTemplates;
@@ -48,9 +50,9 @@ public abstract class BaseIntegrationTest : IDisposable
 
     public ITestOutputHelper Output { get; set; }
 
-    private List<SubscriberDto> Subscribers { get; } = new();
+    private List<Subscriber> Subscribers { get; } = new();
     private List<Topic> Topics { get; } = new();
-    private List<WorkflowGroupSingleResponseDto> WorkflowGroups { get; } = new();
+    private List<WorkflowGroup> WorkflowGroups { get; } = new();
     private List<Workflow> Workflows { get; } = new();
     private List<Layout> Layouts { get; } = new();
 
@@ -115,7 +117,7 @@ public abstract class BaseIntegrationTest : IDisposable
                 // don't catch any errors because we need to see errors in tests
                 try
                 {
-                    var error = JsonConvert.DeserializeObject<ErrorResponseDto>(content);
+                    var error = JsonConvert.DeserializeObject<ErrorData>(content);
                     if (error is not null)
                     {
                         Output.WriteLine("=================================");
@@ -154,7 +156,7 @@ public abstract class BaseIntegrationTest : IDisposable
     {
         foreach (var topic in Topics)
         {
-            await Topic.DeleteTopicAsync(topic.Key);
+            await Topic.Delete(topic.Key);
         }
     }
 
@@ -162,7 +164,7 @@ public abstract class BaseIntegrationTest : IDisposable
     {
         foreach (var workflowGroup in WorkflowGroups)
         {
-            await WorkflowGroup.DeleteWorkflowGroupAsync(workflowGroup.PayloadDto.Id);
+            await WorkflowGroup.Delete(workflowGroup.Id);
         }
     }
 
@@ -206,9 +208,9 @@ public abstract class BaseIntegrationTest : IDisposable
         _serviceProvider = _services.BuildServiceProvider();
     }
 
-    protected async Task<T> Make<T>(CreateSubscriberDto data = null) where T : SubscriberDto
+    protected async Task<T> Make<T>(SubscriberCreateData data = null) where T : Subscriber
     {
-        var createData = data ?? new CreateSubscriberDto
+        var createData = data ?? new SubscriberCreateData
         {
             SubscriberId = Guid.NewGuid().ToString(),
             FirstName = NameGenerator.AnyForename(),
@@ -217,7 +219,7 @@ public abstract class BaseIntegrationTest : IDisposable
             Email = EmailAddressGenerator.AnyEmailAddress(),
             Locale = "en-US",
             Phone = TelephoneNumberGenerator.AnyTelephoneNumber(),
-            Data = new List<AdditionalDataDto>
+            Data = new List<AdditionalData>
             {
                 new()
                 {
@@ -232,7 +234,7 @@ public abstract class BaseIntegrationTest : IDisposable
             },
         };
 
-        var subscriber = await Subscriber.CreateSubscriber(createData);
+        var subscriber = await Subscriber.Create(createData);
 
         Subscribers.Add(subscriber.Data);
 
@@ -240,43 +242,44 @@ public abstract class BaseIntegrationTest : IDisposable
     }
 
     protected async Task<T> Make<T>(
-        TopicCreateDto data = null,
-        SubscriberDto subscriber = null,
-        List<SubscriberDto> additionalSubscribers = null)
-        where T : TopicCreateResponseDto
+        TopicCreateData data = null,
+        Subscriber subscriber = null,
+        List<Subscriber> additionalSubscribers = null)
+        where T : Topic
     {
-        var createData = data ?? new TopicCreateDto
+        var createData = data ?? new TopicCreateData
         {
             Key = $"test:{NumberGenerator.RandomNumberBetween(600, 100000)}",
             Name = StringGenerator.LoremIpsum(10),
         };
 
-        var topic = await Topic.CreateTopicAsync(createData) as T;
+        var result = await Topic.Create(createData);
+        var topic = result.Data;
 
         if (subscriber is not null)
         {
-            await Add<TopicSubscriberAdditionResponseDto>(subscriber, topic, additionalSubscribers);
+            await Add<SucceedData>(subscriber, topic, additionalSubscribers);
         }
 
         if (topic is not null)
         {
-            Topics.Add(topic.Data);
+            Topics.Add(topic);
         }
 
-        return topic;
+        return topic as T;
     }
 
-    protected async Task<T> Make<T>(WorkflowGroupDto data = null)
-        where T : WorkflowGroupSingleResponseDto
+    protected async Task<T> Make<T>(WorkflowGroupCreateData data = null)
+        where T : WorkflowGroup
     {
-        var createData = data ?? new WorkflowGroupDto
+        var createData = data ?? new WorkflowGroupCreateData
         {
-            WorkflowGroupName = StringGenerator.LoremIpsum(10),
+            Name = StringGenerator.LoremIpsum(10),
         };
 
-        var workflowGroup = await WorkflowGroup.CreateWorkflowGroup(createData);
-        WorkflowGroups.Add(workflowGroup);
-        return workflowGroup as T;
+        var workflowGroup = await WorkflowGroup.Create(createData);
+        WorkflowGroups.Add(workflowGroup.Data);
+        return workflowGroup.Data as T;
     }
 
     protected async Task<T> Make<T>(
@@ -335,8 +338,8 @@ public abstract class BaseIntegrationTest : IDisposable
 
         if (string.IsNullOrWhiteSpace(createData.WorkflowGroupId))
         {
-            var group = await Make<WorkflowGroupSingleResponseDto>();
-            createData.WorkflowGroupId = group.PayloadDto.Id;
+            var group = await Make<WorkflowGroup>();
+            createData.WorkflowGroupId = group.Id;
         }
 
         var workflow = await Workflow.Create(createData);
@@ -345,18 +348,18 @@ public abstract class BaseIntegrationTest : IDisposable
     }
 
     protected async Task<T> Add<T>(
-        SubscriberDto subscriber,
-        TopicCreateResponseDto topic,
-        List<SubscriberDto> additionalSubscribers = null)
-        where T : TopicSubscriberAdditionResponseDto
+        Subscriber subscriber,
+        Topic topic,
+        List<Subscriber> additionalSubscribers = null)
+        where T : SucceedData
     {
         var subscribers = additionalSubscribers is not null
             ? additionalSubscribers.Select(x => x.SubscriberId).Prepend(subscriber.SubscriberId).ToList()
             : new List<string> { subscriber.SubscriberId };
 
-        var subscriberList = new TopicSubscriberUpdateDto(subscribers);
-        var topicSubscriberAdditionResponseDto = await Topic.AddSubscriberAsync(topic.Data.Key, subscriberList) as T;
-        Topics.Add(topic.Data);
-        return topicSubscriberAdditionResponseDto;
+        var subscriberList = new TopicSubscriberCreateData(subscribers);
+        var topicSubscriberAdditionResponseDto = await Topic.AddSubscriber(topic.Key, subscriberList);
+        Topics.Add(topic);
+        return topicSubscriberAdditionResponseDto.Data as T;
     }
 }

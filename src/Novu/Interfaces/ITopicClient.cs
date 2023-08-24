@@ -7,31 +7,6 @@ namespace Novu.Interfaces;
 public interface ITopicClient
 {
     /// <summary>
-    ///     Create a topic
-    /// </summary>
-    /// <example>
-    ///     <para>
-    ///         <code>
-    /// var topicRequest = new TopicCreateDto
-    /// {
-    ///     Key = $"test:topic:{Guid.NewGuid().ToString()}",
-    ///     Name = "Test Topic",
-    /// };
-    /// 
-    /// var topic = await client.Topic.CreateTopicAsync(topicRequest);
-    /// </code>
-    ///     </para>
-    /// </example>
-    /// <param name="dto">
-    ///     <see cref="TopicCreateDto" />
-    /// </param>
-    /// <returns>
-    ///     <see cref="TopicCreateResponseDto" />
-    /// </returns>
-    [Post("/topics")]
-    public Task<TopicCreateResponseDto> CreateTopicAsync([Body] TopicCreateDto dto);
-
-    /// <summary>
     ///     <para>
     ///         Returns a list of topics that can be paginated using the `page` query parameter.
     ///         Default page is 0 and counts on zero-based indexing.
@@ -50,10 +25,29 @@ public interface ITopicClient
     ///     Page number - zero-based indexing (<see cref="int" />)
     /// </param>
     /// <returns>
-    ///     Returns a <see cref="PaginatedResponseDto{T}" /> of type <see cref="TopicDto" />
+    ///     Returns a <see cref="NovuPaginatedResponse{T}" /> of type <see cref="Topic" />
     /// </returns>
     [Get("/topics")]
-    public Task<PaginatedResponseDto<TopicDto>> GetTopicsAsync([Query] int page = 0);
+    public Task<NovuPaginatedResponse<Topic>> Get([Query] int page = 0);
+
+    /// <summary>
+    ///     Create a topic
+    /// </summary>
+    /// <example>
+    ///     <para>
+    ///         <code>
+    /// var topicRequest = new TopicCreateDto
+    /// {
+    ///     Key = $"test:topic:{Guid.NewGuid().ToString()}",
+    ///     Name = "Test Topic",
+    /// };
+    /// 
+    /// var topic = await client.Topic.CreateTopicAsync(topicRequest);
+    /// </code>
+    ///     </para>
+    /// </example>
+    [Post("/topics")]
+    public Task<NovuResponse<Topic>> Create([Body] TopicCreateData data);
 
     /// <summary>
     ///     <para>
@@ -70,7 +64,7 @@ public interface ITopicClient
     /// </param>
     /// <returns></returns>
     [Get("/topics/{topicKey}")]
-    public Task<TopicResponseDto> GetTopicAsync(string topicKey);
+    public Task<NovuResponse<Topic>> Get(string topicKey);
 
     /// <summary>
     ///     Add an array of subscribers to a topic.
@@ -89,17 +83,8 @@ public interface ITopicClient
     /// 
     /// </code>
     /// </example>
-    /// <param name="topicKey">
-    ///     Topic key that the subscribers will be added to
-    /// </param>
-    /// <param name="dto">
-    ///     <see cref="TopicSubscriberUpdateDto" /> - Array of subscriber IDs
-    /// </param>
-    /// <returns>
-    ///     <see cref="TopicSubscriberAdditionResponseDto" />
-    /// </returns>
     [Post("/topics/{topicKey}/subscribers")]
-    public Task<TopicSubscriberAdditionResponseDto> AddSubscriberAsync(string topicKey, TopicSubscriberUpdateDto dto);
+    public Task<NovuResponse<SucceedData>> AddSubscriber(string topicKey, TopicSubscriberCreateData data);
 
     /// <summary>
     ///     Check if a subscriber belongs to a certain topic
@@ -114,7 +99,7 @@ public interface ITopicClient
     /// <param name="subscriberId">Subscriber ID</param>
     /// <returns></returns>
     [Get("/topics/{topicKey}/subscribers/{subscriberId}")]
-    public Task<TopicSubscriberDto> VerifySubscriberAsync(string topicKey, string subscriberId);
+    public Task<NovuResponse<TopicSubscriber>> Verify(string topicKey, string subscriberId);
 
     /// <summary>
     ///     Remove a subscriber from a topic
@@ -137,7 +122,7 @@ public interface ITopicClient
     /// <param name="subscriberKey"></param>
     /// <returns></returns>
     [Post("/topics/{topicKey}/subscribers/removal")]
-    public Task RemoveSubscriberAsync(string topicKey, [Body] TopicSubscriberUpdateDto subscriberKey);
+    public Task RemoveSubscriber(string topicKey, [Body] TopicSubscriberCreateData subscriberKey);
 
     /// <summary>
     ///     Delete a topic by key
@@ -152,7 +137,7 @@ public interface ITopicClient
     /// </param>
     /// <returns></returns>
     [Delete("/topics/{topicKey}")]
-    public Task DeleteTopicAsync(string topicKey);
+    public Task Delete(string topicKey);
 
     /// <summary>
     ///     Rename a topic
@@ -162,15 +147,6 @@ public interface ITopicClient
     ///         var topic = await client.Topic.RenameTopicAsync("topic-key", "new-topic-name");
     ///     </code>
     /// </example>
-    /// <param name="topicKey">
-    ///     Topic to be renamed
-    /// </param>
-    /// <param name="newTopicName">
-    ///     New topic name
-    /// </param>
-    /// <returns>
-    ///     <see cref="TopicResponseDto" />
-    /// </returns>
     [Patch("/topics/{topicKey}")]
-    public Task<TopicResponseDto> RenameTopicAsync(string topicKey, [Body] RenameTopicRequest request);
+    public Task<NovuResponse<Topic>> Rename(string topicKey, [Body] TopicEditData data);
 }

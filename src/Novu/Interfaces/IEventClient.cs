@@ -1,5 +1,5 @@
 using Novu.DTO;
-using Novu.DTO.Triggers;
+using Novu.DTO.Events;
 using Refit;
 
 namespace Novu.Interfaces;
@@ -7,7 +7,7 @@ namespace Novu.Interfaces;
 public interface IEventClient
 {
     [Post("/events/trigger")]
-    Task<TriggerResponseDto> Trigger([Body] EventTriggerDataDto dto);
+    Task<NovuResponse<EventAcknowledgeData>> Trigger([Body] EventCreateData data);
 
     /// <summary>
     ///     Trigger a notification to all the subscribers assigned to a topic, which helps to have
@@ -16,10 +16,10 @@ public interface IEventClient
     ///     see https://docs.novu.co/platform/topics#sending-a-notification-to-a-topic
     /// </summary>
     [Post("/events/trigger")]
-    Task<TriggerResponseDto> Trigger([Body] TopicTriggerDataDto dto);
-
+    Task<NovuResponse<EventAcknowledgeData>> Create([Body] TopicCreateData data);
+    
     [Post("/events/trigger/bulk")]
-    Task<TriggerBulkResponseDto> TriggerBulkAsync([Body] SendBulkRequest payload);
+    Task<NovuResponse<IEnumerable<EventAcknowledgeData>>> CreateBulk([Body] BulkEventCreateData data);
 
     /// <summary>
     ///     Trigger a broadcast event to all existing subscribers, could be used to send announcements, etc. In the
@@ -29,11 +29,8 @@ public interface IEventClient
     ///     A broadcast with fail with a 500 error if the workflow and at least one step is enabled.
     /// </remarks>
     [Post("/events/trigger/broadcast")]
-    Task<TriggerResponseDto> TriggerBroadcastAsync([Body] BroadcastMessageRequest dto);
+    Task<NovuResponse<EventAcknowledgeData>> CreateBroadcast([Body] BroadcastEventCreateData dto);
 
     [Delete("/events/trigger/{transactionId}")]
-    Task TriggerCancelAsync(string transactionId);
-
-    [Post("/events/trigger")]
-    Task<TriggerResponseDto> TriggerTopicAsync(EventTopicTriggerDto dto);
+    Task Cancel(string transactionId);
 }
