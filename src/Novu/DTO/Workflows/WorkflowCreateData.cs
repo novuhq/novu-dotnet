@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
+using Novu.Models.Workflows.Trigger;
 
 namespace Novu.DTO.Workflows;
 

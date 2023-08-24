@@ -3,7 +3,6 @@ using Novu.DTO.Notifications;
 using Novu.DTO.Subscribers;
 using Novu.DTO.Subscribers.Notifications;
 using Novu.DTO.Subscribers.Preferences;
-using Novu.Exceptions;
 using Refit;
 
 namespace Novu.Interfaces;
@@ -17,7 +16,6 @@ public interface ISubscriberClient
     /// <exception cref="HttpRequestException">
     ///     Thrown when the status code does not equal 200.
     /// </exception>
-    /// <exception cref="NovuClientException"></exception>
     [Get("/subscribers")]
     Task<NovuPaginatedResponse<Subscriber>> Get([Query] int page = 0, int limit = 100);
     

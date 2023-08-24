@@ -10,6 +10,7 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
+        <PackageReference Include="Moq" Version="4.20.69"/>
         <PackageReference Include="ParkSquare.Testing.Helpers" Version="3.4.7"/>
         <PackageReference Include="Polly" Version="7.2.4"/>
         <PackageReference Include="xunit" Version="2.4.2"/>
@@ -26,6 +27,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Novu.Extensions\Novu.Extensions.csproj"/>
+        <ProjectReference Include="..\Novu.Sync\Novu.Sync.csproj"/>
         <ProjectReference Include="..\Novu\Novu.csproj"/>
     </ItemGroup>
 
@@ -37,8 +39,15 @@
         <None Update="appsettings.$(USER).json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="AcceptanceTests\Fixtures\default.html">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
 
     </ItemGroup>
+
+
+
+
 
 
 </Project>

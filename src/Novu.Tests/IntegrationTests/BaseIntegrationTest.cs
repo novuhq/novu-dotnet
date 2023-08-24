@@ -21,6 +21,7 @@ using Novu.Models.Subscribers;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step.Message;
 using Novu.NotificationTemplates;
+using Novu.Sync;
 using ParkSquare.Testing.Generators;
 using Refit;
 using Xunit;
@@ -100,7 +101,10 @@ public abstract class BaseIntegrationTest : IDisposable
             ExceptionFactory = TestExceptionFactory,
         };
 
-        Register(services => services.RegisterClients(_configurationRoot, refitSettings));
+        Register(services =>
+            services
+                .RegisterClients(_configurationRoot, refitSettings)
+                .RegisterSync());
 
         // Reports the client errors up to the tests for diagnosis
         async Task<Exception> TestExceptionFactory(HttpResponseMessage message)

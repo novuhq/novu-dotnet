@@ -4,7 +4,7 @@ using Novu.Interfaces;
 namespace Novu.DTO;
 
 /// <summary>
-///     see PaginatedResponseDto
+///     see NovuPaginatedResponse
 /// </summary>
 /// <typeparam name="T"></typeparam>
 public class NovuPaginatedResponse<T>

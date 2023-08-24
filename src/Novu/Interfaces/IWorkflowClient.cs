@@ -12,6 +12,9 @@ public interface IWorkflowClient
     [Get("/workflows")]
     public Task<NovuPaginatedResponse<Workflow>> Get([Query] int page = 0, [Query] int limit = 10);
 
+    [Get("/workflows")]
+    public Task<NovuPaginatedResponse<Workflow>> Get([Query] PaginationQueryParams queryParams);
+
     /// <summary>
     ///     see https://docs.novu.co/api/get-workflow/
     /// </summary>

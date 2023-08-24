@@ -26,6 +26,9 @@ public interface ILayoutClient
         [Query] string? sortBy = default,
         [Query] int orderBy = default);
 
+    [Get("/layouts")]
+    public Task<NovuPaginatedResponse<Layout>> Get([Query] PaginationQueryParams queryParams);
+
     /// <summary>
     ///     Get a layout by its ID
     ///     see https://docs.novu.co/api/get-layout/
