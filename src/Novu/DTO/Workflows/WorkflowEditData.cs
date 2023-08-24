@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
+using Novu.Models.Workflows.Trigger;
 
 namespace Novu.DTO.Workflows;
 
@@ -35,6 +36,8 @@ public class WorkflowEditData
     [JsonProperty("critical", Required = Required.AllowNull)]
     public bool Critical { get; set; }
 
+    [JsonProperty("active")] public bool Active { get; set; }
+
     /// <remarks>
     ///     This is a workflow group in the api see https://docs.novu.co/api/create-workflow-group/
     /// </remarks>
@@ -46,4 +49,6 @@ public class WorkflowEditData
     /// </summary>
     [JsonProperty("data")]
     public object Data { get; set; }
+
+    [JsonProperty("triggers")] public Trigger[] Triggers { get; set; }
 }

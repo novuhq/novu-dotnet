@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novu.Tests", "Novu.Tests\No
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novu.Extensions", "Novu.Extensions\Novu.Extensions.csproj", "{4E3463DE-D21D-49EA-9679-9EF430E22220}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novu.Sync", "Novu.Sync\Novu.Sync.csproj", "{03F3C972-3416-49E3-8C24-1F926C3C04D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{4E3463DE-D21D-49EA-9679-9EF430E22220}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E3463DE-D21D-49EA-9679-9EF430E22220}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E3463DE-D21D-49EA-9679-9EF430E22220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03F3C972-3416-49E3-8C24-1F926C3C04D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03F3C972-3416-49E3-8C24-1F926C3C04D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03F3C972-3416-49E3-8C24-1F926C3C04D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03F3C972-3416-49E3-8C24-1F926C3C04D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

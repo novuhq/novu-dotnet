@@ -363,12 +363,12 @@ var result = await novu.Topic.RenameTopicAsync("my-topic", topicRequest);
 Using Novu.DTO.WorkflowGroup
 
 // Create a new Workflow group
-var request = new WorkflowGroupDto
+var request = new WorkflowCreateData
 {
     WorkflowGroupName = "<name of workflow group to be created>"
 }
 
-var response = await client.WorkflowGroup.CreateWorkflowGroup(request);
+var response = await client.WorkflowGroup.Create(request);
 
 
 // Get All Workflow groups
