@@ -11,13 +11,13 @@ public static class ApiExceptionExtensions
     ///     where Refit throws a <see cref="ValidationApiException" />
     ///     see https://github.com/reactiveui/refit#handling-exceptions
     /// </summary>
-    public static ErrorResponseDto ToErrorMessage(this ApiException apiException)
+    public static ErrorData ToErrorMessage(this ApiException apiException)
     {
         switch (apiException.HasContent)
         {
             case true:
             {
-                var error = JsonConvert.DeserializeObject<ErrorResponseDto>(apiException.Content!);
+                var error = JsonConvert.DeserializeObject<ErrorData>(apiException.Content!);
                 if (error is not null)
                 {
                     return error;
@@ -27,6 +27,6 @@ public static class ApiExceptionExtensions
             }
         }
 
-        return new ErrorResponseDto();
+        return new ErrorData();
     }
 }

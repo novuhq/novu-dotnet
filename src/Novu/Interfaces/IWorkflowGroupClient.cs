@@ -1,4 +1,5 @@
-﻿using Novu.DTO.WorkflowGroup;
+﻿using Novu.DTO;
+using Novu.DTO.WorkflowGroups;
 using Refit;
 
 namespace Novu.Interfaces;
@@ -9,21 +10,15 @@ public interface IWorkflowGroupClient
     ///     Create a Workflow Group
     /// </summary>
     /// <param name="requestBody"></param>
-    /// <returns>
-    ///     <see cref="WorkflowGroupSingleResponseDto" /> - The created workflow group
-    /// </returns>
     [Post("/notification-groups")]
-    public Task<WorkflowGroupSingleResponseDto> CreateWorkflowGroup([Body] WorkflowGroupDto requestBody);
+    public Task<NovuResponse<WorkflowGroup>> Create([Body] WorkflowGroupCreateData requestBody);
 
     /// <summary>
     ///     Get All Workflow Groups
     /// </summary>
-    /// <returns>
-    ///     <see cref="WorkflowGroupBulkResponseDto" /> - List of workflow groups
-    /// </returns>
     [Get("/notification-groups")]
-    public Task<WorkflowGroupBulkResponseDto> GetWorkflowGroups();
+    public Task<NovuResponse<IEnumerable<WorkflowGroup>>> Get();
 
     [Delete("/notification-groups/{id}")]
-    public Task DeleteWorkflowGroupAsync(string id);
+    public Task Delete(string id);
 }

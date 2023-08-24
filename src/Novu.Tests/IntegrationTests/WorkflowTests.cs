@@ -115,7 +115,7 @@ public class WorkflowTests : BaseIntegrationTest
         var workflow = workflows.Data.First();
         var result = await Workflow.UpdateStatus(
             workflow.Id,
-            new WorkflowEditStatusData
+            new WorkflowStatusEditData
             {
                 Active = !workflow.Active,
             });

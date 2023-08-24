@@ -327,7 +327,7 @@ var subscriberList = new TopicSubscriberUpdateDto
     }
 };
 
-var result = await novu.Topic.AddSubscriberAsync(topic.Data.Key, subscriberList);
+var result = await novu.Topic.AddSubscriberAsync(topic.Key, subscriberList);
 
 // Remove Subscriber from Topic
 
@@ -339,7 +339,7 @@ var subscriberList = new TopicSubscriberUpdateDto
     }
 };
 
-var result = await novu.Topic.RemoveSubscriberAsync(topic.Data.Key, subscriberList);
+var result = await novu.Topic.RemoveSubscriberAsync(topic.Key, subscriberList);
 
 // Delete Topic
 

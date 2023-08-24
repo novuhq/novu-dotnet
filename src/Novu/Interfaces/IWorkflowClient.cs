@@ -10,7 +10,7 @@ public interface IWorkflowClient
     ///     see https://docs.novu.co/api/get-workflows/
     /// </summary>
     [Get("/workflows")]
-    public Task<PaginatedResponseDto<Workflow>> Get([Query] int page = 0, [Query] int limit = 10);
+    public Task<NovuPaginatedResponse<Workflow>> Get([Query] int page = 0, [Query] int limit = 10);
 
     /// <summary>
     ///     see https://docs.novu.co/api/get-workflow/
@@ -44,5 +44,5 @@ public interface IWorkflowClient
     [Put("/workflows/{id}/status")]
     public Task<NovuResponse<Workflow>> UpdateStatus(
         string id,
-        [Body] WorkflowEditStatusData request);
+        [Body] WorkflowStatusEditData request);
 }

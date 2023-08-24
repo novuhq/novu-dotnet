@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Newtonsoft.Json;
 using Novu.DTO;
+using Novu.DTO.Events;
 using Novu.DTO.Integrations;
 using Novu.DTO.Notifications;
-using Novu.DTO.Subscriber.Preferences;
+using Novu.DTO.Subscribers;
+using Novu.DTO.Subscribers.Preferences;
 using Novu.DTO.Topics;
-using Novu.DTO.Triggers;
-using Novu.DTO.WorkflowGroup;
+using Novu.DTO.WorkflowGroups;
 using Novu.DTO.Workflows;
 using Novu.Interfaces;
-using Novu.Models.Subscriber.Preferences;
+using Novu.Models.Subscribers.Preferences;
 using Novu.Models.Triggers;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
@@ -24,6 +25,7 @@ using Polly;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Sdk;
+using TopicCreateData = Novu.DTO.Events.TopicCreateData;
 
 namespace Novu.Tests.AcceptanceTests;
 
@@ -40,14 +42,14 @@ public class NotificationTests : BaseIntegrationTest
         var subscriber = await MakeSubscriberOnWorkflow(workflow);
 
         var trigger = await Event.Trigger(
-            new EventTriggerDataDto
+            new EventCreateData
             {
                 EventName = eventName,
                 To = { SubscriberId = subscriber.SubscriberId! },
                 Payload = new TestMessage(),
             });
 
-        trigger.TriggerResponsePayloadDto.Acknowledged.Should().BeTrue();
+        trigger.Data.Acknowledged.Should().BeTrue();
 
         await VerifyNotifications(subscriber);
     }
@@ -59,26 +61,26 @@ public class NotificationTests : BaseIntegrationTest
         var subscriber = await MakeSubscriberOnWorkflow(workflow);
         var subscriber2 = await MakeSubscriberOnWorkflow(workflow);
 
-        var topic = await Make<TopicCreateResponseDto>(
+        var topic = await Make<Topic>(
             subscriber: subscriber,
-            additionalSubscribers: new List<SubscriberDto> { subscriber2 });
+            additionalSubscribers: new List<Subscriber> { subscriber2 });
 
-        var trigger = await Event.Trigger(
-            new TopicTriggerDataDto
+        var trigger = await Event.Create(
+            new TopicCreateData
             {
                 EventName = eventName,
-                To = new[] { new TopicTrigger(topic.Data.Key) },
+                To = new[] { new TopicTrigger(topic.Key) },
                 Payload = new TestMessage(),
             });
 
-        trigger.TriggerResponsePayloadDto.Acknowledged.Should().BeTrue();
+        trigger.Data.Acknowledged.Should().BeTrue();
 
         await VerifyNotifications(subscriber);
         await VerifyNotifications(subscriber2);
     }
 
 
-    private async Task VerifyNotifications(SubscriberDto subscriber)
+    private async Task VerifyNotifications(Subscriber subscriber)
     {
         // WAIT for system to catch up given it is async
         const int maxRetryAttempts = 3;
@@ -139,15 +141,15 @@ public class NotificationTests : BaseIntegrationTest
 
     private async Task<(Workflow, string)> MakeInAppWorkflow()
     {
-        var workflowGroup = await Make<WorkflowGroupSingleResponseDto>(new WorkflowGroupDto
+        var workflowGroup = await Make<WorkflowGroup>(new WorkflowGroupCreateData
         {
-            WorkflowGroupName = $"End2EndGroup ({StringGenerator.SequenceOfAlphaNumerics(5)})",
+            Name = $"End2EndGroup ({StringGenerator.SequenceOfAlphaNumerics(5)})",
         });
         var workflow = await Make<Workflow>(new WorkflowCreateData
         {
             Name = $"In-App [End2end {StringGenerator.SequenceOfAlphaNumerics(10)}]",
             Description = StringGenerator.LoremIpsum(5),
-            WorkflowGroupId = workflowGroup.PayloadDto.Id,
+            WorkflowGroupId = workflowGroup.Id,
             PreferenceSettings = new PreferenceChannels
             {
                 InApp = true,
@@ -206,9 +208,9 @@ public class NotificationTests : BaseIntegrationTest
         return (workflow, eventName);
     }
 
-    private async Task<SubscriberDto> MakeSubscriberOnWorkflow(Workflow workflow)
+    private async Task<Subscriber> MakeSubscriberOnWorkflow(Workflow workflow)
     {
-        var subscriber = await Make<SubscriberDto>();
+        var subscriber = await Make<Subscriber>();
 
         // update subscriber preferences
         var preferences = await Subscriber.GetPreferences(subscriber.SubscriberId!);

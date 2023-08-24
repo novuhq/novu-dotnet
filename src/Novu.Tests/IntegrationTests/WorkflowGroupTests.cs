@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using Novu.DTO.WorkflowGroup;
+using Novu.DTO.WorkflowGroups;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -14,24 +14,24 @@ public class WorkflowGroupTests : BaseIntegrationTest
     [Fact]
     public async void Should_Create_WorkflowGroup()
     {
-        var workflowGroup = await Make<WorkflowGroupSingleResponseDto>();
-        workflowGroup.PayloadDto.Should().NotBeNull();
+        var workflowGroup = await Make<WorkflowGroup>();
+        workflowGroup.Should().NotBeNull();
     }
 
     [Fact]
     public async void Should_Return_WorkflowGroup_List()
     {
-        await Make<WorkflowGroupSingleResponseDto>();
-        var listOfWorkflowGroups = await WorkflowGroup.GetWorkflowGroups();
+        await Make<WorkflowGroup>();
+        var listOfWorkflowGroups = await WorkflowGroup.Get();
 
         Assert.NotNull(listOfWorkflowGroups);
-        Assert.NotEmpty(listOfWorkflowGroups.PayloadDtos);
+        Assert.NotEmpty(listOfWorkflowGroups.Data);
     }
 
     [Fact]
     public async void Should_Delete_WorkflowGroup()
     {
-        var workflowGroup = await Make<WorkflowGroupSingleResponseDto>();
-        await WorkflowGroup.DeleteWorkflowGroupAsync(workflowGroup.PayloadDto.Id);
+        var workflowGroup = await Make<WorkflowGroup>();
+        await WorkflowGroup.Delete(workflowGroup.Id);
     }
 }

@@ -7,7 +7,7 @@ namespace Novu.Interfaces;
 public interface INotificationsClient
 {
     [Get("/notifications")]
-    public Task<PaginatedResponseDto<Notification>> Get([Query] NotificationQueryParams? queryParam = null);
+    public Task<NovuPaginatedResponse<Notification>> Get([Query] NotificationQueryParams? queryParam = null);
 
     [Get("/notifications/stats")]
     public Task<NovuResponse<NotificationStats>> GetStats();

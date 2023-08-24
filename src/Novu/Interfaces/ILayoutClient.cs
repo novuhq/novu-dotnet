@@ -20,7 +20,7 @@ public interface ILayoutClient
     /// <param name="orderBy">Direction of the sorting query param. Either ascending (1) or descending (-1)</param>
     /// <returns></returns>
     [Get("/layouts")]
-    public Task<PaginatedResponseDto<Layout>> Get(
+    public Task<NovuPaginatedResponse<Layout>> Get(
         [Query] int page = 0,
         [Query] int pageSize = 10,
         [Query] string? sortBy = default,

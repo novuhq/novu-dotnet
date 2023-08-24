@@ -1,7 +1,8 @@
 ﻿using Novu.DTO;
 using Novu.DTO.Notifications;
-using Novu.DTO.Subscriber;
-using Novu.DTO.Subscriber.Preferences;
+using Novu.DTO.Subscribers;
+using Novu.DTO.Subscribers.Notifications;
+using Novu.DTO.Subscribers.Preferences;
 using Novu.Exceptions;
 using Refit;
 
@@ -18,7 +19,10 @@ public interface ISubscriberClient
     /// </exception>
     /// <exception cref="NovuClientException"></exception>
     [Get("/subscribers")]
-    Task<PaginatedResponseDto<SubscriberDto>> GetSubscribers([Query] int page = 0, int limit = 100);
+    Task<NovuPaginatedResponse<Subscriber>> Get([Query] int page = 0, int limit = 100);
+    
+    [Get("/subscribers")]
+    Task<NovuPaginatedResponse<Subscriber>> Get([Query] SubscriberQueryParams? queryParams = default);
 
     /// <summary>
     ///     Get a single Subscriber
@@ -26,30 +30,25 @@ public interface ISubscriberClient
     /// <param name="id"><see cref="String" /> Subscriber ID</param>
     /// <returns></returns>
     [Get("/subscribers/{id}")]
-    Task<NovuResponse<SubscriberDto>> GetSubscriber(string id);
+    Task<NovuResponse<Subscriber>> Get(string id);
 
     /// <summary>
     ///     Create a new Subscriber
     /// </summary>
     /// <param name="dto">
-    ///     <see cref="CreateSubscriberDto" /> Model to create a new Subscriber
+    ///     <see cref="SubscriberCreateData" /> Model to create a new Subscriber
     /// </param>
     /// <returns>
-    ///     <see cref="SubscriberDto" /> The newly created Subscriber
+    ///     <see cref="Subscriber" /> The newly created Subscriber
     /// </returns>
     [Post("/subscribers")]
-    Task<NovuResponse<SubscriberDto>> CreateSubscriber([Body] CreateSubscriberDto dto);
+    Task<NovuResponse<Subscriber>> Create([Body] SubscriberCreateData dto);
 
     /// <summary>
     ///     Update a Subscriber
     /// </summary>
-    /// <param name="id">
-    ///     <see cref="string" /> Subscriber ID to update
-    /// </param>
-    /// <param name="requestDto"></param>
-    /// <returns></returns>
     [Put("/subscribers/{id}")]
-    Task<NovuResponse<SubscriberDto>> UpdateSubscriber(string id, [Body] SubscriberDto requestDto);
+    Task<NovuResponse<Subscriber>> Update(string id, [Body] SubscriberEditData data);
 
     /// <summary>
     ///     Delete a Subscriber
@@ -57,22 +56,14 @@ public interface ISubscriberClient
     /// <param name="id">
     ///     <see cref="string" /> Subscriber ID to delete
     /// </param>
-    /// <returns>
-    ///     <see cref="DeleteResponseDto" />
-    /// </returns>
     [Delete("/subscribers/{id}")]
-    Task<DeleteResponseDto> DeleteSubscriber(string id);
+    Task<NovuResponse<AcknowledgeData>> DeleteSubscriber(string id);
 
     /// <summary>
     ///     Update Subscribers online status
     /// </summary>
-    /// <param name="id"><see cref="SubscriberDto.SubscriberId" /> Subscribers ID</param>
-    /// <param name="model">
-    ///     <see cref="SubscriberOnlineDto" />
-    /// </param>
-    /// <returns></returns>
     [Patch("/subscribers/{id}/online-status")]
-    Task<NovuResponse<SubscriberDto>> UpdateOnlineStatus(string id, [Body] SubscriberOnlineDto model);
+    Task<NovuResponse<Subscriber>> UpdateOnlineStatus(string id, [Body] SubscriberOnlineEditData data);
 
     [Get("/subscribers/{id}/preferences")]
     Task<NovuResponse<IEnumerable<SubscriberPreference>>> GetPreferences(string id);
@@ -84,7 +75,7 @@ public interface ISubscriberClient
         [Body] SubscriberPreferenceEditData model);
 
     [Get("/subscribers/{id}/notifications/feed")]
-    Task<PaginatedResponseDto<Notification>> GetInApp(string id, [Query] InAppFeedQueryParams? queryParams = default);
+    Task<NovuPaginatedResponse<Notification>> GetInApp(string id, [Query] InAppFeedQueryParams? queryParams = default);
 
     [Get("/subscribers/{id}/notifications/unseen")]
     Task<NovuResponse<NotificationCount>> GetInAppUnseen(string id);

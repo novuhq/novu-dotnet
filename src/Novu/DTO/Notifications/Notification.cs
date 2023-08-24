@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 using Novu.Models.Notifications;
-using Novu.Models.Subscriber.Preferences;
+using Novu.Models.Subscribers.Preferences;
 using Template = Novu.Models.Notifications.Template;
 
 namespace Novu.DTO.Notifications;
@@ -14,6 +14,12 @@ public class Notification
     [JsonProperty("transactionId")] public string TransactionId { get; set; }
     [JsonProperty("channels")] public ChannelTypeEnum[] Channels { get; set; }
     [JsonProperty("template")] public Template Template { get; set; }
-    [JsonProperty("subscriber")] public Models.Notifications.Subscriber Subscriber { get; set; }
+
+    /// <summary>
+    ///     Sometimes this can be null and not sure why
+    /// </summary>
+    [JsonProperty("subscriber")]
+    public Subscriber? Subscriber { get; set; }
+
     [JsonProperty("jobs")] public Job[] Jobs { get; set; }
 }
