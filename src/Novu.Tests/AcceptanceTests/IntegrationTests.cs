@@ -25,7 +25,7 @@ public class IntegrationTests : BaseIntegrationTest
         };
 
     /// <summary>
-    ///     Integrations have their own lifecycle.
+    ///     Sync have their own lifecycle.
     ///     - list is not known via API (need to know out of band eg via source code)
     ///     - can't delete—only active or inactive
     ///     - global set of configuration but each integration uses a subset that is undocumented

@@ -6,11 +6,12 @@ using Novu.DTO.Integrations;
 using Novu.Interfaces;
 using Novu.Sync.Comparers;
 using Novu.Sync.Models;
+using Novu.Sync.Utils;
 using Novu.Utils;
 
-namespace Novu.Sync;
+namespace Novu.Sync.Services;
 
-public class IntegrationSync
+public class IntegrationSync : INovuSync<TemplateIntegration>
 {
     private readonly IIntegrationClient _integrationClient;
 
@@ -19,19 +20,19 @@ public class IntegrationSync
         _integrationClient = integrationClient;
     }
 
-    public async Task Integrations(TemplateIntegration templateTemplateIntegration)
+    public async Task Sync(TemplateIntegration templateTemplateIntegration)
     {
-        await Integrations(new[] { templateTemplateIntegration });
+        await Sync(new[] { templateTemplateIntegration });
     }
 
     /// <summary>
-    ///     Take list of template integrations and look through the Integrations found on an organisation and synchronise.
+    ///     Take list of template integrations and look through the Sync found on an organisation and synchronise.
     ///     Note: this current implementation takes control of an environment and deletes anything unknown to the templates
     /// </summary>
     /// <exception cref="AggregateException">
     ///     The <see cref="AggregateException.InnerExceptions" /> will return list of <see cref="Refit.ApiException" />
     /// </exception>
-    public async Task Integrations(IEnumerable<TemplateIntegration> templateIntegrations)
+    public async Task Sync(IEnumerable<TemplateIntegration> templateIntegrations)
     {
         var src = templateIntegrations
             .Select(template =>

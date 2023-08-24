@@ -82,7 +82,7 @@ public abstract class BaseIntegrationTest : IDisposable
 
     protected void DeRegisterExceptionHandler()
     {
-        Register(services => services.RegisterClients(_configurationRoot));
+        Register(services => services.RegisterNovuClients(_configurationRoot));
     }
 
     protected void RegisterExceptionHandler()
@@ -103,8 +103,8 @@ public abstract class BaseIntegrationTest : IDisposable
 
         Register(services =>
             services
-                .RegisterClients(_configurationRoot, refitSettings)
-                .RegisterSync());
+                .RegisterNovuClients(_configurationRoot, refitSettings)
+                .RegisterNovuSync());
 
         // Reports the client errors up to the tests for diagnosis
         async Task<Exception> TestExceptionFactory(HttpResponseMessage message)

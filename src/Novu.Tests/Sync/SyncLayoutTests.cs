@@ -8,6 +8,7 @@ using Novu.DTO.Layouts;
 using Novu.Interfaces;
 using Novu.Sync;
 using Novu.Sync.Models;
+using Novu.Sync.Services;
 using Novu.Tests.IntegrationTests;
 using ParkSquare.Testing.Generators;
 using Xunit;
@@ -148,9 +149,9 @@ public class SyncLayoutTests : BaseIntegrationTest
                 Data = currentSetAtDestination.ToArray(),
             });
 
-        var syncClient = Get<LayoutSync>();
+        var syncClient = Get<INovuSync<TemplateLayout>>();
 
-        await syncClient.Layouts(templateLayouts);
+        await syncClient.Sync(templateLayouts);
 
         _layoutClient.Verify(x => x.Get(It.IsAny<PaginationQueryParams>()), getCalls);
         _layoutClient.Verify(x => x.Create(It.IsAny<LayoutCreateData>()), createCalls);

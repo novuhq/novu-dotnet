@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Novu.Sync;
+namespace Novu.Sync.Utils;
 
 public class ChangeSet<T>
 {

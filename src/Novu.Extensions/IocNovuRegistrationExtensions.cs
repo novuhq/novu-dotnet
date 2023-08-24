@@ -13,7 +13,7 @@ public static class IocNovuRegistrationExtensions
     /// <summary>
     ///     Register Api client for Refit
     /// </summary>
-    public static IServiceCollection RegisterClients(
+    public static IServiceCollection RegisterNovuClients(
         this IServiceCollection services,
         IConfiguration configuration,
         RefitSettings refitSettings = null)

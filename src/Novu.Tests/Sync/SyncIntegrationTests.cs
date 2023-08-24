@@ -9,6 +9,7 @@ using Novu.Models.Integrations;
 using Novu.Models.Subscribers.Preferences;
 using Novu.Sync;
 using Novu.Sync.Models;
+using Novu.Sync.Services;
 using Novu.Tests.IntegrationTests;
 using Novu.Utils;
 using Xunit;
@@ -161,9 +162,9 @@ public class SyncIntegrationTests : BaseIntegrationTest
             .Setup(x => x.Get())
             .ReturnsAsync(new NovuResponse<IEnumerable<Integration>>(currentSetAtDestination));
 
-        var syncClient = Get<IntegrationSync>();
+        var syncClient = Get<INovuSync<TemplateIntegration>>();
 
-        await syncClient.Integrations(templateIntegrations);
+        await syncClient.Sync(templateIntegrations);
 
         _integrationClient.Verify(x => x.Get(), getCalls);
         _integrationClient.Verify(x => x.Create(It.IsAny<IntegrationCreateData>()), createCalls);

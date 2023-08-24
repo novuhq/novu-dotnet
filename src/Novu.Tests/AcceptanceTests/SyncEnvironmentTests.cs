@@ -10,6 +10,7 @@ using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
 using Novu.Sync;
 using Novu.Sync.Models;
+using Novu.Sync.Services;
 using Novu.Tests.IntegrationTests;
 using Xunit.Abstractions;
 
@@ -79,7 +80,7 @@ public class SyncEnvironmentTests : BaseIntegrationTest
     {
         DeRegisterExceptionHandler();
 
-        await Get<IntegrationSync>().Integrations(
+        await Get<INovuSync<TemplateIntegration>>().Sync(
             new[]
             {
                 NovuInApp,
@@ -91,7 +92,7 @@ public class SyncEnvironmentTests : BaseIntegrationTest
         // test will continue on if it experiences a 409
         try
         {
-            await Get<LayoutSync>().Layouts(
+            await Get<INovuSync<TemplateLayout>>().Sync(
                 new TemplateLayout
                 {
                     Name = "Default Layout",
@@ -105,7 +106,7 @@ public class SyncEnvironmentTests : BaseIntegrationTest
             // ignored 
         }
 
-        await Get<WorkflowGroupSync>().WorkflowGroups(
+        await Get<INovuSync<TemplateWorkflowGroup>>().Sync(
             new List<TemplateWorkflowGroup>
             {
                 new() { Name = "Default WorkflowGroup [e2e test]" },
@@ -118,7 +119,7 @@ public class SyncEnvironmentTests : BaseIntegrationTest
 
         workflowGroup.Should().NotBeNull();
 
-        await Get<WorkflowSync>().Workflows(
+        await Get<INovuSync<TemplateWorkflow>>().Sync(
             new TemplateWorkflow
             {
                 Name = "Invite (e2e)",

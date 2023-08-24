@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Novu.Sync;
+namespace Novu.Sync.Utils;
 
 public static class Comparer
 {

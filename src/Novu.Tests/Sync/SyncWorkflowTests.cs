@@ -7,8 +7,8 @@ using Novu.DTO;
 using Novu.DTO.Workflows;
 using Novu.Interfaces;
 using Novu.Models.Workflows;
-using Novu.Sync;
 using Novu.Sync.Models;
+using Novu.Sync.Services;
 using Novu.Tests.IntegrationTests;
 using Xunit;
 using Xunit.Abstractions;
@@ -165,9 +165,9 @@ public class SyncWorkflowTests : BaseIntegrationTest
                 Data = currentSetAtDestination.ToArray(),
             });
 
-        var syncClient = Get<WorkflowSync>();
+        var syncClient = Get<INovuSync<TemplateWorkflow>>();
 
-        await syncClient.Workflows(templateWorkflows);
+        await syncClient.Sync(templateWorkflows);
 
         _workflowClient.Verify(x => x.Get(It.IsAny<PaginationQueryParams>()), getCalls);
         _workflowClient.Verify(x => x.Create(It.IsAny<WorkflowCreateData>()), createCalls);
