@@ -13,7 +13,7 @@ public class NotificationTemplatesTests : BaseIntegrationTest
     {
     }
 
-    [Fact]
+    [Fact(Skip = "Interface is deprecated")]
     public async Task Should_Get_Notification_Templates()
     {
         var templates = await NotificationTemplates.GetTemplates();
@@ -22,7 +22,7 @@ public class NotificationTemplatesTests : BaseIntegrationTest
         templates.Data.Should().NotBeEmpty();
     }
 
-    [Fact]
+    [Fact(Skip = "Interface is deprecated")]
     public async Task Should_SetStatus()
     {
         var templates = await NotificationTemplates.GetTemplates();
