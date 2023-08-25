@@ -42,4 +42,5 @@ jobs:
         working-directory: ./src
         run: dotnet test 
         env:
+          NOVU_API: https://api.novu.co/v1
           NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
