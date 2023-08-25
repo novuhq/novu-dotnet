@@ -16,17 +16,36 @@
 
 novu-dotnet targets .NET Standard 2.0 and is compatible with .NET Core 2.0+ and .NET Framework 4.6.1+.
 
+## Features
+* Bindings against most [API endpoints](https://docs.novu.co/api/overview/)
+  * Events, subscribers, notifications, integrations, layouts, topics, workflows, workflow groups, messages, execution details
+  * Not Implemented: [environments](https://docs.novu.co/api/get-current-environment/), [inbound parse](https://docs.novu.co/api/validate-the-mx-record-setup-for-the-inbound-parse-functionality/), [changes](https://docs.novu.co/api/get-changes/)
+* Bootstrap each services as part of services provider or directly as a singleton class (setting injectable)
+* A Sync service that will mirror an environment based a set of templates (layouts, integrations, workflow groups, workflows)
+
+**WARNING**: 0.3.0 has breaking changes and the tests should be relied on for understanding the client libraries
+
+## Dependencies
+
+| dotnet novu | novu api [package](https://github.com/novuhq/novu/pkgs/container/novu%2Fapi) | Notes                                                                                                                                                                                                                                   |
+|-------------|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 0.2.2       | <= 0.17          | Singleton client with Refit's use of RestService                                                                                                                                                                                        |
+| 0.3.0       | >= 0.18          | 0.3.0 is not compatible with 0.2.2 and requires upgrade to code. Also 0.18 introduced a breaking change only found in 0.3.0. All 0.2.2 must be upgraded if used against the production system. HttpClient can now be used and injected. |
+
 ## Installation
 
 ```bash
 dotnet add package Novu
 ```
 
+## Configuration
+
+### Direct instantiation
+
 ```csharp
 using Novu.DTO;
 using Novu.Models;
 using Novu;
-...
 
  var novuConfiguration = new NovuClientConfiguration
 {
@@ -37,356 +56,82 @@ using Novu;
 
 var novu = new NovuClient(novuConfiguration);
 
-var subscribers = await novu.Subscriber.GetSubscribers();
-
+// Note: this client exposes all endpoints as methods but uses RestService
+var subscribers = await novu.Subscriber.Get();
 ```
 
+### Dependency Injection
+
+Configure via settings
+```appsettings.json
+{
+  "Novu": {
+    "Url": "http://localhost:3000/v1",
+    "ApiKey": "e36b820fcc9a68a83db6c79c30f1a461"
+  }
+}
+
+```
+Setup Injection via extension methods
+```csharp
+
+public static IServiceCollection RegisterNotificationSetupServices(
+    this IServiceCollection services,
+    IConfiguration configuration)
+{
+    // registers all clients with novu config from appsetting.json
+    // the services inject HttpClient
+    return services
+        .RegisterNovuClients(configuration)
+        // here as an example that the registered services are injected into local service
+        .AddTransient<NovuNotificationService>();
+}
+```
+
+Write your consuming code with the injected clients
+
+```csharp
+// then instantiate via injection
+public class NovuNotificationService
+{
+    private readonly IEventClient _event;
+ 
+    public NovuSyncService(IEventClient @event)
+    {
+        _event = @event;
+    }
+
+    public async Task Trigger(string subscriberId){
+       var trigger = await Event.Trigger(
+            new EventCreateData
+            {
+                EventName = 'event-name',
+                To = { SubscriberId =subscriberId },
+                Payload = new Payload("Bogus payload"),
+            });
+    }
+    
+    public record Payload(string Message)
+    {
+        [JsonProperty("message")] public string Message { get; set; }
+    }
+}
+```
 ## Examples
 
-### Novu Client
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var config = new NovuClientConfiguration
-{
-  ApiKey = "my-key",
-};
-
-var novu = new NovuClient(config);
-
-```
-
-## Subscribers
-
-### Get Subscribers
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var subscribers = await novu.Subscriber.GetSubscribers()
-
-
-```
-
-### Get Subscriber
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var subscriber = await novu.Subscriber.GetSubscriber("subscriberId");
-
-
-```
-
-### Create Subscriber
-
-```csharp
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var additionalData = new List<AdditionalDataDto>
-{
-  new AdditionalDataDto
-  {
-    Key = "External ID",
-    Value = "1122334455"
-  },
-  new AdditionalDataDto
-  {
-    Key = "SMS_PREFERENCE",
-    Value = "EMERGENT_ONLY"
-  }
-};
-
-var newSubscriberDto = new CreateSubscriberDto
-{
-  SubscriberId = Guid.NewGuid().ToString(),
-  FirstName = "John",
-  LastName = "Doe",
-  Avatar = "https://unslpash.com/random",
-  Email = "jdoe@novu.co",
-  Locale = "en-US",
-  Phone = "+11112223333",
-  Data = additionalData
-};
-
-var subscriber = await novu.Subscriber.CreateSubscriber(newSubscriberDto)
-
-
-```
-
-### Update Subscriber
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var subscriber = await novu.Subscriber.GetSubscriber("subscriberId");
-
-subscriber.FirstName = "Updated";
-subscriber.LastName = "Subscriber";
-
-var updatedSubscriber = await novu.Subscriber.UpdateSubscriber("subscriberId",subscriber);
-
-
-```
-
-### Delete Subscriber
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var deleted = await novu.Subscriber.DeleteSubscriber("subscriberId");
-
-
-```
-
-### Update Online Status
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var onlineDto = new SubscriberOnlineDto
-{
-  IsOnline = true
-};
-
-var online = await novu.Subscriber.UpdateOnlineStatus("subscriberId", onlineDto);
-
-```
-
-## Events
-
-### Trigger
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-```csharp
-
-// OnboardEventPayload.cs
-public class OnboardEventPayload
-{
-  [JsonProperty("username")]
-  public string Username { get; set; }
-
-  [JsonProperty("welcomeMessage")]
-  public string WelcomeMessage { get; set; }
-}
-
-// MyFile.cs
-var onboardingMessage = new OnboardEventPayload
-{
-  Username = "jdoe",
-  WelcomeMessage = "Welcome to novu-dotnet"
-};
-
-var payload = new EventTriggerDataDto()
-{
-  EventName = "onboarding",
-  To = { SubscriberId = "subscriberId" },
-  Payload = onboardingMessage
-};
-
-var trigger = await novu.Event.Trigger(payload);
-
-if (trigger.TriggerResponsePayloadDto.Acknowledged)
-{
-  Console.WriteLine("Trigger has been created.");
-}
-
-```
-
-### Trigger Bulk
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var payload = new List<EventTriggerDataDto>()
-{
-    new()
-    {
-        EventName = "test",
-        To = { SubscriberId = subscriber.SubscriberId},
-        Payload = new TestRecord(){ Message = "Hello"}
-    },
-    new()
-    {
-        EventName = "test",
-        To = { SubscriberId = subscriber.SubscriberId},
-        Payload = new TestRecord(){ Message = "World"}
-    },
-};
-
-var trigger = await novu.Event.TriggerBulkAsync(payload);
-
-```
-
-### Broadcast Trigger
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var testRecord = new TestRecord
-{
-    Message = "This is a test message"
-};
-
-var dto = new EventTriggerDataDto()
-{
-    EventName = "test",
-    To =
-    {
-        SubscriberId = subscriber.SubscriberId
-    },
-    Payload = testRecord
-};
-
-var trigger = await novu.Event.TriggerBroadcastAsync(dto);
-
-```
-
-### Cancel Trigger
-
-```csharp
-
-using Novu.DTO;
-using Novu.Models;
-using Novu;
-...
-
-var cancelled = await novu.Event.TriggerCancelAsync("triggerTransactionId");
-
-```
-
-## Topics
-
-```csharp
-
-// Get Topic
-
-var result = await novu.Topic.GetTopicAsync("my-topic");
-
-// Get Topics
-
-var results = await novu.Topic.GetTopicsAsync();
-
-// Create Topic
-var topicRequest = new TopicCreateDto
-{
-    Key = $"test:topic:{Guid.NewGuid().ToString()}",
-    Name = "Test Topic",
-    
-};
-
-var topic = await novu.Topic.CreateTopicAsync(topicRequest);
-
-
-// Add Subscriber to Topic
-var subscriberList = new TopicSubscriberUpdateDto
-{
-    Keys = new List<string>
-    {
-        "test:subscriber:1",
-    }
-};
-
-var result = await novu.Topic.AddSubscriberAsync(topic.Key, subscriberList);
-
-// Remove Subscriber from Topic
-
-var subscriberList = new TopicSubscriberUpdateDto
-{
-    Keys = new List<string>
-    {
-        "test:subscriber:1",
-    }
-};
-
-var result = await novu.Topic.RemoveSubscriberAsync(topic.Key, subscriberList);
-
-// Delete Topic
-
-var result =  await novu.Topic.DeleteTopicAsync("my-topic");
-
-// Rename Topic
-
-var topicRequest = new TopicRenameDto
-{
-    Name = "New Name"
-};
-
-var result = await novu.Topic.RenameTopicAsync("my-topic", topicRequest);
-
-```
-
-## WorkflowGroups
-
-```csharp
-...
-Using Novu.DTO.WorkflowGroup
-
-// Create a new Workflow group
-var request = new WorkflowCreateData
-{
-    WorkflowGroupName = "<name of workflow group to be created>"
-}
-
-var response = await client.WorkflowGroup.Create(request);
-
-
-// Get All Workflow groups
-var response = await client.WorkflowGroup.GetWorkflowGroups();
-```
+Usage of the library is best understood by looking at the tests.
+* [Integration Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests/IntegrationTests): these show the minimal dependencies required to do one primary request (create, update, delete)
+* [Acceptance Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests/AcceptanceTests): these show a sequence of actions to complete a business process in an environment
 
 ## Repository Overview
-
-All code is located under the `src` directory and this will service as the project root.
-
-`Novu` is the main SDK with `Novu.Tests` housing all unit tests.
+[Novu](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu) is the main SDK with [Novu.Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests) housing all unit tests. [Novu.Extensions](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Extensions) is required for DI and [Novu.Sync](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Sync)
+if your are looking for mirroring environments.
 
 ### novu-dotnet
 
-- `Clients` directory holds all clients that house the actual implementation of the various API calls.
-- `DTO` directory holds all Data Transfer Objects
-- `Exceptions` directory holds the custom exception creations
-- `Interfaces` directory holds all interfaces that are inteded to outline how a class should be structured.
-- `Models` directory holds various models
-- `Utilities` directory holds various utility functions used around the project.
+The key folders to look into:
+
+- [DTO](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu/DTO) directory holds all objects needed to use the clients
+- [Interfaces](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu/Interfaces) directory holds all interfaces that are intended to outline how a class should be structured
+- [Models](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu/Models) directory holds various models that are sub-resources inside the DTOs
 
