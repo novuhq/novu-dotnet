@@ -37,6 +37,9 @@ jobs:
       ## Test Novu
       - name: Test
         working-directory: ./src/Novu.Tests
-        run: dotnet test
-        env:
-          NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
+        run: dotnet test -p:Novu__Url=https://api.novu.co/v1 -p:Novu__ApiKey=${{ secrets.NOVU_API_KEY }}
+
+
+## name: Test
+#        working-directory: ./src/Novu.Tests
+#        run: dotnet test  -p:Novu__Url=https://api.novu.co/v1 -p:Novu__ApiKey=${{ secrets.NOVU_API_KEY }}
