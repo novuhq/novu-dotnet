@@ -36,7 +36,7 @@ public class IntegrationTests : BaseIntegrationTest
         string provider)
     {
         var integrations = await Integration.Get();
-        var existingIntegration = integrations.Data.SingleOrDefault(x => x.ProviderId == provider);
+        var existingIntegration = integrations.Data.FirstOrDefault(x => x.ProviderId == provider);
 
         if (existingIntegration is not null)
         {
