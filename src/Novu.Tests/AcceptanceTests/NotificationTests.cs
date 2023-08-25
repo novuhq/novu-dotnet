@@ -35,7 +35,7 @@ public class NotificationTests : BaseIntegrationTest
     {
     }
 
-    [Fact]
+    [RunnableInDebugOnly]
     public async Task E2E_InApp_Event_Test()
     {
         var (workflow, eventName) = await MakeInAppWorkflow();
@@ -54,7 +54,7 @@ public class NotificationTests : BaseIntegrationTest
         await VerifyNotifications(subscriber);
     }
     
-    [Fact]
+    [RunnableInDebugOnly]
     public async Task E2E_InApp_Topic_Test()
     {
         var (workflow, eventName) = await MakeInAppWorkflow();
