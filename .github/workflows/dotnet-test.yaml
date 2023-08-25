@@ -36,6 +36,17 @@ jobs:
       - name: Restore test dependencies
         working-directory: ./src/Novu.Tests
         run: dotnet restore
+        
+      - name: Delete current appsettings.Integration.json file
+        run: |
+          rm ./src/Novu.Tests/appsettings.Integration.json
+        
+      - name: Update appsettings.json with test values
+        uses: jsdaniell/create-json@v1.2.2
+        with:
+          name: "appsettings.json"
+          json: '{ "Novu": {"Url": "https://api.novu.co/v1", "ApiKey": ${{ secrets.NOVU_API_KEY }}}}'
+          dir: 'src/Novu.Tests'
 
       ## Test Novu
       - name: Test
