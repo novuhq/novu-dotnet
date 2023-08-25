@@ -10,37 +10,6 @@ env:
   NUGET_SOURCE_URL: "https://api.nuget.org/v3/index.json"
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.0.x
-
-      ## Restore Novu
-      - name: Restore dependencies
-        working-directory: ./src/Novu
-        run: dotnet restore
-
-      ## Build Novu
-      - name: Build Novu
-        working-directory: ./src/Novu
-        run: dotnet build --no-restore
-
-        ## Restore Novu.Tests
-      - name: Restore test dependencies
-        working-directory: ./src/Novu.Tests
-        run: dotnet restore
-
-      ## Test Novu
-      - name: Test
-        working-directory: ./src/Novu.Tests
-        run: dotnet test
-        env:
-          NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
-
   deploy:
     runs-on: ubuntu-latest
     needs: [test]
