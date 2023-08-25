@@ -3,6 +3,9 @@ name: "Test Pull Request"
 on:
   pull_request:
     branches: [main]
+  
+  workflow_dispatch: 
+    
 
 env:
   PROJECT_PATH: "./src/Novu/Novu.csproj"
@@ -36,10 +39,7 @@ jobs:
 
       ## Test Novu
       - name: Test
-        working-directory: ./src/Novu.Tests
-        run: dotnet test -p:Novu__Url=https://api.novu.co/v1 -p:Novu__ApiKey=${{ secrets.NOVU_API_KEY }}
-
-
-## name: Test
-#        working-directory: ./src/Novu.Tests
-#        run: dotnet test  -p:Novu__Url=https://api.novu.co/v1 -p:Novu__ApiKey=${{ secrets.NOVU_API_KEY }}
+        working-directory: ./src
+        run: dotnet test 
+        env:
+          NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
