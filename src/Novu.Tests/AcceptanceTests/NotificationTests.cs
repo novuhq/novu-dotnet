@@ -14,6 +14,7 @@ using Novu.DTO.Topics;
 using Novu.DTO.WorkflowGroups;
 using Novu.DTO.Workflows;
 using Novu.Interfaces;
+using Novu.Models;
 using Novu.Models.Subscribers.Preferences;
 using Novu.Models.Triggers;
 using Novu.Models.Workflows;
@@ -53,7 +54,7 @@ public class NotificationTests : BaseIntegrationTest
 
         await VerifyNotifications(subscriber);
     }
-    
+
     [RunnableInDebugOnly]
     public async Task E2E_InApp_Topic_Test()
     {
@@ -189,15 +190,7 @@ public class NotificationTests : BaseIntegrationTest
         {
             await Integration.Update(
                 existingIntegration.Id,
-                new IntegrationEditData
-                {
-                    Active = true,
-                    Identifier = existingIntegration.Identifier,
-                    Name = existingIntegration.Name,
-                    Credentials = existingIntegration.Credentials,
-                    Channel = existingIntegration.Channel,
-                    EnvironmentId = existingIntegration.EnvironmentId,
-                });
+                existingIntegration.ToEditData(x => x.Active = true));
         }
         else if (existingIntegration is null)
         {

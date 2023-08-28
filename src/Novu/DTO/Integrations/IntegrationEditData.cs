@@ -15,6 +15,12 @@ public class IntegrationEditData
 
     [JsonProperty("active")] public bool Active { get; set; }
 
-    [JsonProperty("check")] public bool Check { get; set; }
     [JsonProperty("channel")] public string Channel { get; set; }
+
+    /// <summary>
+    ///     Flag that is not stored on the resource but rather has the server perform a check that the integration
+    ///     can make a connection
+    /// </summary>
+    [JsonProperty("check")]
+    public bool Check { get; set; }
 }
