@@ -9,7 +9,7 @@
     <!-- Nuget Settings -->
     <PropertyGroup>
         <PackageId>Novu.Sync</PackageId>
-        <Version>0.0.0</Version>
+        <Version>0.3.2</Version>
         <ProductName>Novu.Sync</ProductName>
         <Description>Novu .NET SDK</Description>
         <RepositoryType>git</RepositoryType>
