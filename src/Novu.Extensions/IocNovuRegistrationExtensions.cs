@@ -19,6 +19,7 @@ public static class IocNovuRegistrationExtensions
         RefitSettings refitSettings = null)
     {
         var novuConfiguration = configuration.GetNovuClientConfiguration();
+        services.AddTransient<INovuClientConfiguration>(_ => novuConfiguration);
 
         Action<HttpClient> configureClient = c =>
         {
