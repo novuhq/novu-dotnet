@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Novu.Interfaces;
-using Novu.NotificationTemplates;
 using Refit;
 
 namespace Novu;
@@ -24,34 +23,6 @@ public class NovuClient : INovuClient
         },
     };
 
-    public NovuClient(INovuClientConfiguration configuration) : this(configuration, default)
-    {
-    }
-
-    public NovuClient(
-        ISubscriberClient subscriber,
-        IEventClient @event,
-        ITopicClient topic,
-        INotificationTemplatesClient notificationTemplates,
-        IWorkflowClient workflow,
-        IWorkflowGroupClient workflowGroup,
-        IIntegrationClient integration,
-        INotificationsClient notifications,
-        IMessageClient message,
-        ILayoutClient layout)
-    {
-        Subscriber = subscriber;
-        Event = @event;
-        Topic = topic;
-        NotificationTemplates = notificationTemplates;
-        Workflow = workflow;
-        WorkflowGroup = workflowGroup;
-        Integration = integration;
-        Notifications = notifications;
-        Message = message;
-        Layout = layout;
-    }
-
     public NovuClient(
         INovuClientConfiguration configuration,
         HttpClient? client = default,
@@ -69,7 +40,6 @@ public class NovuClient : INovuClient
         Subscriber = RestService.For<ISubscriberClient>(httpClient, refitSettings);
         Event = RestService.For<IEventClient>(httpClient, refitSettings);
         Topic = RestService.For<ITopicClient>(httpClient, refitSettings);
-        NotificationTemplates = RestService.For<INotificationTemplatesClient>(httpClient, refitSettings);
         WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, refitSettings);
         Workflow = RestService.For<IWorkflowClient>(httpClient, refitSettings);
         Layout = RestService.For<ILayoutClient>(httpClient, refitSettings);
@@ -89,6 +59,5 @@ public class NovuClient : INovuClient
     public ISubscriberClient Subscriber { get; }
     public IEventClient Event { get; }
     public ITopicClient Topic { get; }
-    public INotificationTemplatesClient NotificationTemplates { get; }
     public IWorkflowGroupClient WorkflowGroup { get; }
 }

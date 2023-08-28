@@ -38,6 +38,10 @@
     </ItemGroup>
     <ItemGroup>
       <Compile Remove="JsonConverters\EnumMemberExtensions.cs" />
+      <Compile Remove="NotificationTemplates\Child.cs" />
+      <Compile Remove="NotificationTemplates\Filter.cs" />
+      <Compile Remove="NotificationTemplates\Step.cs" />
+      <Compile Remove="NotificationTemplates\Trigger.cs" />
     </ItemGroup>
 
 </Project>

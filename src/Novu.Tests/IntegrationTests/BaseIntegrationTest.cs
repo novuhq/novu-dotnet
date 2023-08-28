@@ -20,7 +20,6 @@ using Novu.Interfaces;
 using Novu.Models.Subscribers;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step.Message;
-using Novu.NotificationTemplates;
 using Novu.Sync;
 using ParkSquare.Testing.Generators;
 using Refit;
@@ -62,7 +61,6 @@ public abstract class BaseIntegrationTest : IDisposable
     protected IEventClient Event => Get<IEventClient>();
     protected ITopicClient Topic => Get<ITopicClient>();
     protected IWorkflowGroupClient WorkflowGroup => Get<IWorkflowGroupClient>();
-    protected INotificationTemplatesClient NotificationTemplates => Get<INotificationTemplatesClient>();
     protected IWorkflowClient Workflow => Get<IWorkflowClient>();
     protected ILayoutClient Layout => Get<ILayoutClient>();
     protected IIntegrationClient Integration => Get<IIntegrationClient>();

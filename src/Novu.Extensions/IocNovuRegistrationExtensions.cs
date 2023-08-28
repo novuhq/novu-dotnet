@@ -3,7 +3,6 @@ using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Novu.Interfaces;
-using Novu.NotificationTemplates;
 using Refit;
 
 namespace Novu.Extensions;
@@ -19,7 +18,6 @@ public static class IocNovuRegistrationExtensions
         RefitSettings refitSettings = null)
     {
         var novuConfiguration = configuration.GetNovuClientConfiguration();
-        services.AddTransient<INovuClientConfiguration>(_ => novuConfiguration);
 
         Action<HttpClient> configureClient = c =>
         {
@@ -42,7 +40,6 @@ public static class IocNovuRegistrationExtensions
         services.AddRefitClient<IEventClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<ITopicClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IWorkflowGroupClient>(settings).ConfigureHttpClient(configureClient);
-        services.AddRefitClient<INotificationTemplatesClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IWorkflowClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<ILayoutClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IIntegrationClient>(settings).ConfigureHttpClient(configureClient);
@@ -51,6 +48,7 @@ public static class IocNovuRegistrationExtensions
         services.AddRefitClient<IExecutionDetailsClient>(settings).ConfigureHttpClient(configureClient);
 
         return services
+            .AddTransient<INovuClientConfiguration>(_ => novuConfiguration)
             .AddTransient<INovuClient, NovuClient>();
     }
 }
