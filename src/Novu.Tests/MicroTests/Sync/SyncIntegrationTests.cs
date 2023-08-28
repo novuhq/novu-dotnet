@@ -7,7 +7,6 @@ using Novu.DTO.Integrations;
 using Novu.Interfaces;
 using Novu.Models.Integrations;
 using Novu.Models.Subscribers.Preferences;
-using Novu.Sync;
 using Novu.Sync.Models;
 using Novu.Sync.Services;
 using Novu.Tests.IntegrationTests;
@@ -15,7 +14,7 @@ using Novu.Utils;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Novu.Tests.Sync;
+namespace Novu.Tests.MicroTests.Sync;
 
 public class SyncIntegrationTests : BaseIntegrationTest
 {

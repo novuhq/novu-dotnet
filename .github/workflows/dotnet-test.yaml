@@ -2,9 +2,9 @@ name: "Test Pull Request"
 
 on:
   pull_request:
-    branches: [main]
+    branches: [ main ]
   
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build_and_test:
@@ -21,9 +21,19 @@ jobs:
         working-directory: ./src/
         run: dotnet restore
 
+      ## each test type is targeted specifically via a filter
+      ## see https://learn.microsoft.com/en-us/dotnet/core/testing/selective-unit-tests?pivots=mstest
+      
       ## Test Novu
-      - name: Test
+      - name: Micro Tests
         working-directory: ./src/
+        run: dotnet test --filter FullyQualifiedName~MicroTests
+        env:
+          NOVU_API_URL: https://api.novu.co/v1
+          NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
+        
+        ##
+        ## FOR TESTS WITH REAL CONNECTIONS
         ##
         ## this run should work but something is not picking up values and mapping in the configuration
         ## run: dotnet test -p:Novu__Url=https://api.novu.co/v1 -p:Novu__ApiKey=${{ secrets.NOVU_API_KEY }}
@@ -32,7 +42,19 @@ jobs:
         ##
         ## also up the logging because when something is wrong it is hard to diagnose
         ##
-        run: dotnet test --verbosity normal
+
+      - name: Integration Tests
+        working-directory: ./src/
+        run: dotnet test --verbosity normal --filter FullyQualifiedName~IntegrationTests
         env:
           NOVU_API_URL: https://api.novu.co/v1
           NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
+
+      - name: Acceptance Tests
+        working-directory: ./src/
+
+        run: dotnet test --verbosity normal --filter FullyQualifiedName~AcceptanceTests
+        env:
+          NOVU_API_URL: https://api.novu.co/v1
+          NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
+          

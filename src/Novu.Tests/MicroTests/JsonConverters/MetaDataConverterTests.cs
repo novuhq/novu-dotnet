@@ -7,7 +7,7 @@ using Novu.JsonConverters;
 using Novu.Models.Workflows.Step;
 using Xunit;
 
-namespace Novu.Tests.JsonConverters;
+namespace Novu.Tests.MicroTests.JsonConverters;
 
 public class MetaDataConverterTests
 {

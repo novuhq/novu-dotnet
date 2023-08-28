@@ -13,7 +13,7 @@ using Novu.Tests.IntegrationTests;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Novu.Tests.Sync;
+namespace Novu.Tests.MicroTests.Sync;
 
 public class SyncWorkflowTests : BaseIntegrationTest
 {
