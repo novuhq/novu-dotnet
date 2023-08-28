@@ -32,24 +32,24 @@ jobs:
         id: version
         uses: battila7/get-version-action@v2
 
-      - name: [Novu] — create Nuget package
+      - name: Novu — create Nuget package
         ## dotnet pack Novu/Novu.csproj --no-restore --no-build --configuration Release -p:PackageVersion=0.0.0.0 -p:Version=0.0.0.0 --output .
         run: dotnet pack ${{ env.WORKING_DIRECTORY }}/Novu/Novu.csproj --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:Version=${{ steps.version.outputs.version-without-v }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
 
-      - name: [Novu.Extensions] — create Nuget package
+      - name: Novu.Extensions — create Nuget package
         ## dotnet pack Novu.Extensions/Novu.Extensions.csproj --no-restore --no-build --configuration Release -p:PackageVersion=0.0.0.0 -p:Version=0.0.0.0 --output .
         run: dotnet pack ${{ env.WORKING_DIRECTORY }}/Novu.Extensions/Novu.Extensions.csproj --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:Version=${{ steps.version.outputs.version-without-v }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
 
-      - name: [Novu.Sync] — create Nuget package
+      - name: Novu.Sync — create Nuget package
         ## dotnet pack Novu.Sync/Novu.Sync.csproj --no-restore --no-build --configuration Release -p:PackageVersion=0.0.0.0 -p:Version=0.0.0.0 --output .
         run: dotnet pack ${{ env.WORKING_DIRECTORY }}/Novu.Sync/Novu.Sync.csproj --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:Version=${{ steps.version.outputs.version-without-v }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
 
       # Step Four: publish all 
-      - name: [Novu] — push Nuget package
+      - name: Novu — push Nuget package
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY}}/Novu.${{ steps.version.outputs.version-without-v }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL}}
 
-      - name: [Novu.Extensions] — push Nuget package
+      - name: Novu.Extensions — push Nuget package
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY}}/Novu.Extensions.${{ steps.version.outputs.version-without-v }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL}}
 
-      - name: [Novu.Sync] — push Nuget package
+      - name: Novu.Sync — push Nuget package
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY}}/Novu.Sync.${{ steps.version.outputs.version-without-v }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL}}
