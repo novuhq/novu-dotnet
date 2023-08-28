@@ -5,11 +5,6 @@ on:
     branches: [main]
   
   workflow_dispatch: 
-    
-env:
-  PROJECT_PATH: "./src/Novu/Novu.csproj"
-  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output
-  NUGET_SOURCE_URL: "https://api/nuget/org/v3/index.json"
 
 jobs:
   build_and_test:
@@ -28,8 +23,8 @@ jobs:
 
       ## Test Novu
       - name: Test
-        working-directory: ./src
-        
+        working-directory: ./src/
+        ##
         ## this run should work but something is not picking up values and mapping in the configuration
         ## run: dotnet test -p:Novu__Url=https://api.novu.co/v1 -p:Novu__ApiKey=${{ secrets.NOVU_API_KEY }}
         ## instead inject using the ad hoc environment variable override
