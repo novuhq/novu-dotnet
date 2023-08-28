@@ -26,17 +26,14 @@ novu-dotnet targets .NET Standard 2.0 and is compatible with .NET Core 2.0+ and 
 
 **WARNING**: 0.3.0 has breaking changes and the tests should be relied on for understanding the client libraries
 
-## Notice
-
-0.3.1 was a failed deployment to Nuget. Disregard that release.
-
 ## Dependencies
 
 | dotnet novu | novu api [package](https://github.com/novuhq/novu/pkgs/container/novu%2Fapi) | Notes                                                                                                                                                                                                                                   |
 | ----------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0.2.2       | <= 0.17                                                                      | Singleton client with Refit's use of RestService                                                                                                                                                                                        |
 | 0.3.0       | >= 0.18                                                                      | 0.3.0 is not compatible with 0.2.2 and requires upgrade to code. Also 0.18 introduced a breaking change only found in 0.3.0. All 0.2.2 must be upgraded if used against the production system. HttpClient can now be used and injected. |
-| 0.3.1       | >= 0.18                                                                      | [BREAKING} Obsolete Notification Templates has been removed. Service registration separation of single client and each client. Novu.Extension and Novu.Sync released as packages.                                                       |
+| 0.3.1       | >= 0.18                                                                      | Failed release. You will not find this release on Nuget.                                                                                                                                                                                |
+| 0.3.2       | >= 0.18                                                                      | [BREAKING} Obsolete Notification Templates has been removed. Service registration separation of single client and each client. Novu.Extension and Novu.Sync released as packages.                                                       |
 
 ## Installation
 
