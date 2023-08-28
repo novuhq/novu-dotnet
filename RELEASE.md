@@ -30,7 +30,7 @@ All deployments should take place from the `main` branch. To release a new featu
 * Nothing functionality from 0.3.1—had a problem in the build scripts for publishing to nuget
 
 
-**Full Changelog**: https://github.com/novuhq/novu-dotnet/compare/vX.X.last)...vX.X.latest)
+**Full Changelog**: https://github.com/novuhq/novu-dotnet/compare/vX.X.last...vX.X.latest
 ```
 
 - [x] Set as the latest release
