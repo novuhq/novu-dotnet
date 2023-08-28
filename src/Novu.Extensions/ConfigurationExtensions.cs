@@ -50,6 +50,12 @@ public static class ConfigurationExtensions
             novuConfiguration.Url = novuConfigurationUrl;
         }
 
+        var novuConfigurationApiKey = Environment.GetEnvironmentVariable("NOVU_API_KEY");
+        if (novuConfigurationApiKey is not null)
+        {
+            novuConfiguration.ApiKey = novuConfigurationApiKey;
+        }
+
         return novuConfiguration;
     }
 }
