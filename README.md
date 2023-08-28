@@ -17,21 +17,26 @@
 novu-dotnet targets .NET Standard 2.0 and is compatible with .NET Core 2.0+ and .NET Framework 4.6.1+.
 
 ## Features
-* Bindings against most [API endpoints](https://docs.novu.co/api/overview/)
-    * Events, subscribers, notifications, integrations, layouts, topics, workflows, workflow groups, messages, execution details
-    * Not Implemented: [environments](https://docs.novu.co/api/get-current-environment/), [inbound parse](https://docs.novu.co/api/validate-the-mx-record-setup-for-the-inbound-parse-functionality/), [changes](https://docs.novu.co/api/get-changes/)
-* Bootstrap each services as part of services provider or directly as a singleton class (setting injectable)
-* A Sync service that will mirror an environment based a set of templates (layouts, integrations, workflow groups, workflows)
+
+- Bindings against most [API endpoints](https://docs.novu.co/api/overview/)
+  - Events, subscribers, notifications, integrations, layouts, topics, workflows, workflow groups, messages, execution details
+  - Not Implemented: [environments](https://docs.novu.co/api/get-current-environment/), [inbound parse](https://docs.novu.co/api/validate-the-mx-record-setup-for-the-inbound-parse-functionality/), [changes](https://docs.novu.co/api/get-changes/)
+- Bootstrap each services as part of services provider or directly as a singleton class (setting injectable)
+- A Sync service that will mirror an environment based a set of templates (layouts, integrations, workflow groups, workflows)
 
 **WARNING**: 0.3.0 has breaking changes and the tests should be relied on for understanding the client libraries
+
+## Notice
+
+0.3.1 was a failed deployment to Nuget. Disregard that release.
 
 ## Dependencies
 
 | dotnet novu | novu api [package](https://github.com/novuhq/novu/pkgs/container/novu%2Fapi) | Notes                                                                                                                                                                                                                                   |
-|-------------|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0.2.2       | <= 0.17          | Singleton client with Refit's use of RestService                                                                                                                                                                                        |
-| 0.3.0       | >= 0.18          | 0.3.0 is not compatible with 0.2.2 and requires upgrade to code. Also 0.18 introduced a breaking change only found in 0.3.0. All 0.2.2 must be upgraded if used against the production system. HttpClient can now be used and injected. |
-| 0.3.1       | >= 0.18          | [BREAKING} Obsolete Notification Templates has been removed. Service registration separation of single client and each client. Novu.Extension and Novu.Sync released as packages.                                                       |
+| ----------- | ---------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0.2.2       | <= 0.17                                                                      | Singleton client with Refit's use of RestService                                                                                                                                                                                        |
+| 0.3.0       | >= 0.18                                                                      | 0.3.0 is not compatible with 0.2.2 and requires upgrade to code. Also 0.18 introduced a breaking change only found in 0.3.0. All 0.2.2 must be upgraded if used against the production system. HttpClient can now be used and injected. |
+| 0.3.1       | >= 0.18                                                                      | [BREAKING} Obsolete Notification Templates has been removed. Service registration separation of single client and each client. Novu.Extension and Novu.Sync released as packages.                                                       |
 
 ## Installation
 
@@ -64,6 +69,7 @@ var subscribers = await novu.Subscriber.Get();
 ### Dependency Injection
 
 Configure via settings
+
 ```appsettings.json
 {
   "Novu": {
@@ -73,7 +79,9 @@ Configure via settings
 }
 
 ```
+
 Setup Injection via extension methods
+
 ```csharp
 
 public static IServiceCollection RegisterNotificationSetupServices(
@@ -96,7 +104,7 @@ Write your consuming code with the injected clients
 public class NovuNotificationService
 {
     private readonly IEventClient _event;
- 
+
     public NovuSyncService(IEventClient @event)
     {
         _event = @event;
@@ -111,20 +119,23 @@ public class NovuNotificationService
                 Payload = new Payload("Bogus payload"),
             });
     }
-    
+
     public record Payload(string Message)
     {
         [JsonProperty("message")] public string Message { get; set; }
     }
 }
 ```
+
 ## Examples
 
 Usage of the library is best understood by looking at the tests.
-* [Integration Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests/IntegrationTests): these show the minimal dependencies required to do one primary request (create, update, delete)
-* [Acceptance Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests/AcceptanceTests): these show a sequence of actions to complete a business process in an environment
+
+- [Integration Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests/IntegrationTests): these show the minimal dependencies required to do one primary request (create, update, delete)
+- [Acceptance Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests/AcceptanceTests): these show a sequence of actions to complete a business process in an environment
 
 ## Repository Overview
+
 [Novu](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu) is the main SDK with [Novu.Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests) housing all unit tests. [Novu.Extensions](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Extensions) is required for DI and [Novu.Sync](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Sync)
 if your are looking for mirroring environments.
 
@@ -141,12 +152,15 @@ The key folders to look into:
 Github issues closed
 
 #### 0.3.1
+
 - #57
 - #58
 - #59
 - #60
 - #55
+
 #### 0.3.0
+
 - #19
 - #20
 - #21
