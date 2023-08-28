@@ -37,7 +37,7 @@ jobs:
         ##
         ## also up the logging because when something is wrong it is hard to diagnose
         ##
-        run: dotnet test -verbosity normal
+        run: dotnet test --verbosity normal
         env:
           NOVU_API_URL: https://api.novu.co/v1
           NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
