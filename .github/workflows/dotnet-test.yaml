@@ -6,7 +6,6 @@ on:
   
   workflow_dispatch: 
     
-
 env:
   PROJECT_PATH: "./src/Novu/Novu.csproj"
   PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output
@@ -22,36 +21,12 @@ jobs:
         with:
           dotnet-version: 7.0.x
 
-      ## Restore Novu
+      ## Restore Novu as a solution
       - name: Restore dependencies
-        working-directory: ./src/Novu
+        working-directory: ./src/
         run: dotnet restore
-
-      ## Build Novu
-      - name: Build Novu
-        working-directory: ./src/Novu
-        run: dotnet build --no-restore
-
-        ## Restore Novu.Tests
-      - name: Restore test dependencies
-        working-directory: ./src/Novu.Tests
-        run: dotnet restore
-        
-      - name: Delete current appsettings.Integration.json file
-        run: |
-          rm ./src/Novu.Tests/appsettings.Integration.json
-        
-      - name: Update appsettings.json with test values
-        uses: jsdaniell/create-json@v1.2.2
-        with:
-          name: "appsettings.json"
-          json: '{ "Novu": {"Url": "https://api.novu.co/v1", "ApiKey": ${{ secrets.NOVU_API_KEY }}}}'
-          dir: 'src/Novu.Tests'
 
       ## Test Novu
       - name: Test
         working-directory: ./src
-        run: dotnet test 
-        env:
-          NOVU_API: https://api.novu.co/v1
-          NOVU_API_KEY: ${{ secrets.NOVU_API_KEY }}
+        run: dotnet test -p:Novu__Url=https://api.novu.co/v1 -p:Novu__ApiKey=${{ secrets.NOVU_API_KEY }}
