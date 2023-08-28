@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using Novu.DTO;
-using Novu.DTO.WorkflowGroups;
+using Novu.DTO.Layouts;
 using Novu.Interfaces;
 using Novu.Sync.Models;
 using Novu.Sync.Services;
@@ -13,20 +13,20 @@ using ParkSquare.Testing.Generators;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Novu.Tests.Sync;
+namespace Novu.Tests.MicroTests.Sync;
 
-public class SyncWorkflowGroupTests : BaseIntegrationTest
+public class SyncLayoutTests : BaseIntegrationTest
 {
-    private readonly Mock<IWorkflowGroupClient> _workflowGroupClient;
+    private readonly Mock<ILayoutClient> _layoutClient;
 
-    public SyncWorkflowGroupTests(ITestOutputHelper output) : base(output)
+    public SyncLayoutTests(ITestOutputHelper output) : base(output)
     {
-        _workflowGroupClient = new Mock<IWorkflowGroupClient>();
+        _layoutClient = new Mock<ILayoutClient>();
 
         // looks to be a need to registered the swapped out implementations before any are
         // instantiated. Expectations are set in the tests.
         Register(
-            services => { services.SwapTransient(_ => _workflowGroupClient.Object); });
+            services => { services.SwapTransient(_ => _layoutClient.Object); });
     }
 
     public static IEnumerable<object[]> Data => new List<object[]>
@@ -34,82 +34,92 @@ public class SyncWorkflowGroupTests : BaseIntegrationTest
         new object[]
         {
             "both sides empty",
-            Array.Empty<TemplateWorkflowGroup>(),
-            Array.Empty<WorkflowGroup>(),
+            Array.Empty<TemplateLayout>(),
+            Array.Empty<Layout>(),
             (Func<Times>)Times.Once,
+            (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
         },
         new object[]
         {
             "new template - create at dest",
-            new List<TemplateWorkflowGroup>
+            new List<TemplateLayout>
             {
                 new()
                 {
                     Name = StringGenerator.LoremIpsum(4),
+                    Content = LayoutCreateData.BodyExpression,
                 },
             },
-            Array.Empty<WorkflowGroup>(),
+            Array.Empty<Layout>(),
             (Func<Times>)Times.Once,
             (Func<Times>)Times.Once,
+            (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
         },
         new object[]
         {
             "same on both sides - no changes",
-            new List<TemplateWorkflowGroup>
+            new List<TemplateLayout>
             {
                 new()
                 {
                     Name = StringGenerator.LoremIpsum(4),
+                    Content = LayoutCreateData.BodyExpression,
                 },
             },
-            new List<WorkflowGroup>
+            new List<Layout>
             {
                 new()
                 {
                     Name = StringGenerator.LoremIpsum(4),
+                    Content = LayoutCreateData.BodyExpression,
                 },
             },
             (Func<Times>)Times.Once,
+            (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
         },
         new object[]
         {
-            "template changed - update dest (recreate)",
-            new List<TemplateWorkflowGroup>
-            {
-                new()
-                {
-                    Name = StringGenerator.LoremIpsum(5),
-                },
-            },
-            new List<WorkflowGroup>
+            "template changed - update dest",
+            new List<TemplateLayout>
             {
                 new()
                 {
                     Name = StringGenerator.LoremIpsum(4),
+                    Content = LayoutCreateData.BodyExpression + "change",
+                },
+            },
+            new List<Layout>
+            {
+                new()
+                {
+                    Name = StringGenerator.LoremIpsum(4),
+                    Content = LayoutCreateData.BodyExpression,
                 },
             },
             (Func<Times>)Times.Once,
-            // an update is a delete and create
+            (Func<Times>)Times.Never,
             (Func<Times>)Times.Once,
-            (Func<Times>)Times.Once,
+            (Func<Times>)Times.Never,
         },
         new object[]
         {
             "template removed - delete at dest",
-            Array.Empty<TemplateWorkflowGroup>(),
-            new List<WorkflowGroup>
+            Array.Empty<TemplateLayout>(),
+            new List<Layout>
             {
                 new()
                 {
                     Name = StringGenerator.LoremIpsum(4),
+                    Content = LayoutCreateData.BodyExpression,
                 },
             },
             (Func<Times>)Times.Once,
+            (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Once,
         },
@@ -120,25 +130,31 @@ public class SyncWorkflowGroupTests : BaseIntegrationTest
     [MemberData(nameof(Data))]
     public async Task Tests(
         string test,
-        IList<TemplateWorkflowGroup> templateWorkflowGroups,
-        IList<WorkflowGroup> currentSetAtDestination,
+        IList<TemplateLayout> templateLayouts,
+        IList<Layout> currentSetAtDestination,
         Func<Times> getCalls,
         Func<Times> createCalls,
+        Func<Times> updateCalls,
         Func<Times> deleteCalls
     )
     {
         Output.WriteLine(test);
 
-        _workflowGroupClient
-            .Setup(x => x.Get())
-            .ReturnsAsync(new NovuResponse<IEnumerable<WorkflowGroup>>(currentSetAtDestination.ToList()));
+        _layoutClient
+            .Setup(x => x.Get(It.IsAny<PaginationQueryParams>()))
+            .ReturnsAsync(new NovuPaginatedResponse<Layout>
+            {
+                HasMore = false,
+                Data = currentSetAtDestination.ToArray(),
+            });
 
-        var syncClient = Get<INovuSync<TemplateWorkflowGroup>>();
+        var syncClient = Get<INovuSync<TemplateLayout>>();
 
-        await syncClient.Sync(templateWorkflowGroups);
+        await syncClient.Sync(templateLayouts);
 
-        _workflowGroupClient.Verify(x => x.Get(), getCalls);
-        _workflowGroupClient.Verify(x => x.Create(It.IsAny<WorkflowGroupCreateData>()), createCalls);
-        _workflowGroupClient.Verify(x => x.Delete(It.IsAny<string>()), deleteCalls);
+        _layoutClient.Verify(x => x.Get(It.IsAny<PaginationQueryParams>()), getCalls);
+        _layoutClient.Verify(x => x.Create(It.IsAny<LayoutCreateData>()), createCalls);
+        _layoutClient.Verify(x => x.Update(It.IsAny<string>(), It.IsAny<LayoutEditData>()), updateCalls);
+        _layoutClient.Verify(x => x.Delete(It.IsAny<string>()), deleteCalls);
     }
 }
