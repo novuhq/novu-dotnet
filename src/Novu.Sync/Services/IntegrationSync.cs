@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Novu.DTO.Integrations;
 using Novu.Interfaces;
+using Novu.Models;
 using Novu.Sync.Comparers;
 using Novu.Sync.Models;
 using Novu.Sync.Utils;
@@ -78,16 +79,7 @@ public class IntegrationSync : INovuSync<TemplateIntegration>
                     .Single(c => c.ProviderId == x.ProviderId &&
                                  c.Channel == x.Channel);
 
-                return Task.Run(() => _integrationClient.Update(
-                    x.Id,
-                    new IntegrationEditData
-                    {
-                        Identifier = updateTo.Identifier,
-                        Channel = updateTo.Channel,
-                        Active = updateTo.Active,
-                        Credentials = updateTo.Credentials,
-                        Name = updateTo.Name,
-                    }));
+                return Task.Run(() => _integrationClient.Update(x.Id, updateTo.ToEditData()));
             }));
         }
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Novu.DTO.Integrations;
+using Novu.Models;
 using Novu.Tests.IntegrationTests;
 using Xunit;
 using Xunit.Abstractions;
@@ -17,6 +18,7 @@ public class IntegrationTests : BaseIntegrationTest
 
     /// <summary>
     ///     TODO: add more integrations to this list
+    ///     TODO: have integrations as an enumeration
     /// </summary>
     public static IEnumerable<object[]> Data =>
         new List<object[]>
@@ -36,16 +38,32 @@ public class IntegrationTests : BaseIntegrationTest
         string provider)
     {
         var integrations = await Integration.Get();
-        var existingIntegration = integrations.Data.FirstOrDefault(x => x.ProviderId == provider);
+
+        // the understanding is that providers are always unique by provider id
+        var existingIntegration = integrations.Data.SingleOrDefault(x => x.ProviderId == provider);
 
         if (existingIntegration is not null)
         {
             // delete and not find
             await Integration.Delete(existingIntegration.Id);
-        }
+            var deletedIntegration = await Integration.Get(existingIntegration.Id);
+            deletedIntegration.Data.Should().BeNull();
 
-        // create (and delete in is teardown)
-        var integration = await Make<Integration>(providerId: provider);
-        integration.Active.Should().BeTrue();
+            // now remake
+            var newIntegration = await Make<Integration>(providerId: provider);
+            newIntegration.Active.Should().BeTrue();
+
+            // reinstate the integration given this might be a working test system
+            await Integration.Update(newIntegration.Id, existingIntegration.ToEditData());
+        }
+        else
+        {
+            // create 
+            var integration = await Make<Integration>(providerId: provider);
+            integration.Active.Should().BeTrue();
+
+            // teardown here rather than in base
+            await Integration.Delete(integration.Id);
+        }
     }
 }
