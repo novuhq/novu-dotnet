@@ -1,5 +1,5 @@
 name: "Deploy to Nuget"
-# Step One: Perhaps most importantly, the trigger has changed, this workflow will run whenever a tag is pushed 
+# Step One: Perhaps most importantly, the trigger has changed, this workflow will run whenever a tag is pushed
 # to the repository that matches the v#.#.# pattern (where # is one or more digits).
 on:
   push:
@@ -21,13 +21,13 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 7.0.x
-      
-      # Step Two: build 
+
+      # Step Two: build
       - name: Build Novu Solution (all projects)
-        working-directory: ${{ WORKING_DIRECTORY }}
+        working-directory: ${{ env.WORKING_DIRECTORY }}
         run: dotnet build --configuration Release
 
-      # Step Three: package each of the libraries with the version updated (note: this allow source to hold version 0.0.0) 
+      # Step Three: package each of the libraries with the version updated (note: this allow source to hold version 0.0.0)
       - name: Get version
         id: version
         uses: battila7/get-version-action@v2
@@ -44,7 +44,7 @@ jobs:
         ## dotnet pack Novu.Sync/Novu.Sync.csproj --no-restore --no-build --configuration Release -p:PackageVersion=0.0.0.0 -p:Version=0.0.0.0 --output .
         run: dotnet pack ${{ env.WORKING_DIRECTORY }}/Novu.Sync/Novu.Sync.csproj --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:Version=${{ steps.version.outputs.version-without-v }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
 
-      # Step Four: publish all 
+      # Step Four: publish all
       - name: Novu — push Nuget package
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY}}/Novu.${{ steps.version.outputs.version-without-v }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL}}
 
