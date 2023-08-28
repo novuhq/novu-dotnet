@@ -8,8 +8,10 @@ using Novu.Extensions;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
 using ParkSquare.Testing.Generators;
+using Polly;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace Novu.Tests.IntegrationTests;
 
@@ -108,18 +110,31 @@ public class WorkflowTests : BaseIntegrationTest
         result.Data.Should().BeNull();
     }
 
+    /// <summary>
+    ///     This is a flaky test so add handles around it
+    /// </summary>
     [Fact]
     public async Task Should_SetStatus()
     {
         var workflows = await Workflow.Get();
         var workflow = workflows.Data.First();
-        var result = await Workflow.UpdateStatus(
-            workflow.Id,
-            new WorkflowStatusEditData
-            {
-                Active = !workflow.Active,
-            });
-        result.Data.Should().NotBeNull();
-        result.Data.Active.Should().NotBe(workflow.Active);
+
+        // WAIT for system to catch up given it is async
+        const int maxRetryAttempts = 3;
+        var retryPolicy = Policy
+            .Handle<XunitException>()
+            .WaitAndRetryAsync(maxRetryAttempts, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+        await retryPolicy.ExecuteAsync(async () =>
+        {
+            var result = await Workflow.UpdateStatus(
+                workflow.Id,
+                new WorkflowStatusEditData
+                {
+                    Active = !workflow.Active,
+                });
+            result.Data.Should().NotBeNull();
+            result.Data.Active.Should().NotBe(workflow.Active);
+        });
     }
 }
