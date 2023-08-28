@@ -10,7 +10,7 @@
     <PropertyGroup>
         <PackageId>Novu.Extensions</PackageId>
         <Version>0.3.1</Version>
-        <ProductName>Novu</ProductName>
+        <ProductName>Novu.Extensions</ProductName>
         <Description>Novu .NET SDK</Description>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/novuhq/novu-dotnet</RepositoryUrl>
@@ -33,6 +33,12 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Novu\Novu.csproj"/>
+    </ItemGroup>
+
+    <!-- Nuget Assets -->
+    <ItemGroup>
+        <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+        <None Include="LICENSE.txt" Pack="true" PackagePath=""/>
     </ItemGroup>
 
 </Project>
