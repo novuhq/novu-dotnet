@@ -19,22 +19,19 @@ public static class IocNovuRegistrationExtensions
     {
         var novuConfiguration = configuration.GetNovuClientConfiguration();
 
-        Action<HttpClient> configureClient = c =>
+        Action<HttpClient> configureClient = client =>
         {
-            c.BaseAddress = new Uri(novuConfiguration.Url);
+            client.BaseAddress = new Uri(novuConfiguration.Url);
 
             // allow for multiple registrations—authorization cannot have multiple entries
-            if (c.DefaultRequestHeaders.Contains("Authorization"))
+            if (client.DefaultRequestHeaders.Contains("Authorization"))
             {
-                c.DefaultRequestHeaders.Remove("Authorization");
+                client.DefaultRequestHeaders.Remove("Authorization");
             }
 
-            c.DefaultRequestHeaders.Add("Authorization", $"ApiKey {novuConfiguration.ApiKey}");
+            client.DefaultRequestHeaders.Add("Authorization", $"ApiKey {novuConfiguration.ApiKey}");
         };
-        var settings = refitSettings ?? new RefitSettings
-        {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(NovuClient.DefaultSerializerSettings),
-        };
+        var settings = RefitSettings(refitSettings);
 
         services.AddRefitClient<ISubscriberClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IEventClient>(settings).ConfigureHttpClient(configureClient);
@@ -48,7 +45,26 @@ public static class IocNovuRegistrationExtensions
         services.AddRefitClient<IExecutionDetailsClient>(settings).ConfigureHttpClient(configureClient);
 
         return services
-            .AddTransient<INovuClientConfiguration>(_ => novuConfiguration)
-            .AddTransient<INovuClient, NovuClient>();
+            .AddTransient<INovuClientConfiguration>(_ => novuConfiguration);
+    }
+
+
+    public static IServiceCollection RegisterNovuClient(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        RefitSettings refitSettings = null)
+    {
+        return services
+            .AddTransient<INovuClient>(_ => new NovuClient(
+                configuration.GetNovuClientConfiguration(),
+                refitSettings: RefitSettings(refitSettings)));
+    }
+    
+    private static RefitSettings RefitSettings(RefitSettings refitSettings)
+    {
+        return refitSettings ?? new RefitSettings
+        {
+            ContentSerializer = new NewtonsoftJsonContentSerializer(NovuClient.DefaultSerializerSettings),
+        };
     }
 }
