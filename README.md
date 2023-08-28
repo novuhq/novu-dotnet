@@ -31,6 +31,7 @@ novu-dotnet targets .NET Standard 2.0 and is compatible with .NET Core 2.0+ and 
 |-------------|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | 0.2.2       | <= 0.17          | Singleton client with Refit's use of RestService                                                                                                                                                                                        |
 | 0.3.0       | >= 0.18          | 0.3.0 is not compatible with 0.2.2 and requires upgrade to code. Also 0.18 introduced a breaking change only found in 0.3.0. All 0.2.2 must be upgraded if used against the production system. HttpClient can now be used and injected. |
+| 0.3.1       | >= 0.18          | [BREAKING} Obsolete Notification Templates has been removed. Service registration separation of single client and each client. Novu.Extension and Novu.Sync released as packages.                                                       |
 
 ## Installation
 
@@ -135,3 +136,23 @@ The key folders to look into:
 - [Interfaces](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu/Interfaces) directory holds all interfaces that are intended to outline how a class should be structured
 - [Models](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu/Models) directory holds various models that are sub-resources inside the DTOs
 
+### Major changes
+
+Github issues closed
+
+#### 0.3.1
+- #57
+- #58
+- #59
+- #60
+- #55
+#### 0.3.0
+- #19
+- #20
+- #21
+- #34
+- #48
+- #49
+- #50
+- #47
+- #45
