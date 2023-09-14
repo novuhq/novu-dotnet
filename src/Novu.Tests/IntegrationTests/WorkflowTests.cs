@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Novu.DTO;
+using Novu.DTO.Layouts;
 using Novu.DTO.Workflows;
 using Novu.Extensions;
 using Novu.Models.Workflows;
@@ -81,6 +83,22 @@ public class WorkflowTests : BaseIntegrationTest
         workflow.Should().NotBeNull();
         workflow.Steps.Should().HaveCount(stepsCount);
         workflow.Triggers.Should().HaveCount(1);
+    }
+
+
+    [Fact]
+    public async Task Should_Create_Step_With_LayoutSet()
+    {
+        // we know there is always a default layout
+        var layout = (await Layout.Get())
+            .Data
+            .Single(x => x.IsDefault);
+
+        var steps = new[] { StepFactory.Email(layoutId: layout.Id) };
+        var workflow = await Make<Workflow>(steps: steps);
+        workflow.Should().NotBeNull();
+        workflow.Triggers.Should().HaveCount(1);
+        workflow.Steps.First().Template.LayoutId.Should().Be(layout.Id);
     }
 
     [Fact]

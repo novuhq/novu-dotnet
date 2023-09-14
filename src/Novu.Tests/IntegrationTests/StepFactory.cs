@@ -39,12 +39,12 @@ public static class StepFactory
         };
     }
 
-    public static Step Email(bool active = false)
+    public static Step Email(bool active = false, string layoutId = null)
     {
         return new Step
         {
             Name = $"Email ({StringGenerator.LoremIpsum(2)})",
-            Template = MessageTemplateFactory.EmailMessageTemplate(),
+            Template = MessageTemplateFactory.EmailMessageTemplate(layoutId),
             Active = active,
         };
     }

@@ -48,7 +48,7 @@ public static class MessageTemplateFactory
         return new DigestMessageTemplate();
     }
 
-    public static EmailMessageTemplate EmailMessageTemplate()
+    public static EmailMessageTemplate EmailMessageTemplate(string layoutId = null)
     {
         return new EmailMessageTemplate
         {
@@ -56,6 +56,7 @@ public static class MessageTemplateFactory
             ContentType = MessageTemplateContentType.Editor,
             SenderName = "Hello",
             Subject = "{{mail.subject}}",
+            LayoutId = layoutId,
             Content = new List<EmailBlock>
             {
                 new()
