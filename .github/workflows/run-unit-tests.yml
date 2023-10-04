@@ -1,0 +1,24 @@
+name: Unit Tests
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup dotNET environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0'
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build project
+        run: dotnet build
+      - name: Run unit tests
+        run: dotnet test
