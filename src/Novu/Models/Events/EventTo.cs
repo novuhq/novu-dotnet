@@ -17,8 +17,38 @@ public record EventTo
     public string Email { get; set; }
 
     /// <summary>
+    ///     Subscriber first name to be populated in workflows.
+    /// </summary>
+    [JsonProperty("firstName", Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+    public string FirstName { get; set; }
+
+    /// <summary>
+    ///     Subscriber last name to be populated in workflows.
+    /// </summary>
+    [JsonProperty("lastName", Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+    public string LastName { get; set; }
+
+    /// <summary>
     ///     Subscriber phone to be populated in workflows.
     /// </summary>
     [JsonProperty("phone", Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
     public string Phone { get; set; }
+
+    /// <summary>
+    ///     Subscriber avatar to be populated in workflows.
+    /// </summary>
+    [JsonProperty("avatar", Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+    public string Avatar { get; set; }
+
+    /// <summary>
+    ///     Subscriber locale to be populated in workflows.
+    /// </summary>
+    [JsonProperty("locale", Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+    public string Locale { get; set; }
+
+    /// <summary>
+    ///     Subscriber data to be populated in workflows.
+    /// </summary>
+    [JsonProperty("data", Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
+    public object Data { get; set; }
 }
