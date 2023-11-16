@@ -50,5 +50,5 @@ public record EventTo
     ///     Subscriber data to be populated in workflows.
     /// </summary>
     [JsonProperty("data", Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public object Data { get; set; }
+    public dynamic Data { get; set; }
 }
