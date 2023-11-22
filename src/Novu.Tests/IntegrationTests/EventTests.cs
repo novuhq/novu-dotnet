@@ -36,68 +36,6 @@ public class EventTests : BaseIntegrationTest
     }
 
     [Fact]
-    public async void Should_Update_Subscriber_And_Trigger_Event()
-    {
-        var subscriber = await Make<Subscriber>();
-
-        var trigger = await Event.Trigger(
-            new EventCreateData
-            {
-                EventName = await GetActiveEvent(),
-                To = 
-                {
-                    SubscriberId = subscriber?.SubscriberId!,
-                    Email = subscriber?.Email + ".changed",
-                    FirstName = subscriber?.FirstName + " Changed",
-                    LastName = subscriber?.FirstName + " Changed",
-                    Phone = "+777" + subscriber?.Phone,
-                    Avatar = subscriber?.Avatar + "?changed=1",
-                    Locale = subscriber?.Locale + ",ro-RO",
-                    Data = new
-                    {
-                        EMAIL_PREFERENCE = "NONE",
-                        ADDITIONAL_PROPERTIES = new { IS_TEST_SUBSCRIBER = true }
-                    }
-                },
-                Payload = new TestPayload(),
-            });
-        trigger.Data.Acknowledged.Should().BeTrue();
-
-        // TODO: how to detect success for a subscriber
-    }
-
-    [Fact]
-    public async void Should_Create_Subscriber_And_Trigger_Event()
-    {
-        var subscriber = await Make<Subscriber>();
-
-        var trigger = await Event.Trigger(
-            new EventCreateData
-            {
-                EventName = await GetActiveEvent(),
-                To = 
-                {
-                    SubscriberId = subscriber?.SubscriberId! + "-new",
-                    Email = subscriber?.Email + ".changed",
-                    FirstName = subscriber?.FirstName + " Changed",
-                    LastName = subscriber?.FirstName + " Changed",
-                    Phone = "+777" + subscriber?.Phone,
-                    Avatar = subscriber?.Avatar + "?changed=1",
-                    Locale = subscriber?.Locale + ",ro-RO",
-                    Data = new
-                    {
-                        EMAIL_PREFERENCE = "NONE",
-                        ADDITIONAL_PROPERTIES = new { IS_TEST_SUBSCRIBER = true }
-                    }
-                },
-                Payload = new TestPayload(),
-            });
-        trigger.Data.Acknowledged.Should().BeTrue();
-
-        // TODO: how to detect success for a subscriber
-    }
-
-    [Fact]
     public async void Should_Trigger_Bulk_Event()
     {
         var subscriber = await Make<Subscriber>();

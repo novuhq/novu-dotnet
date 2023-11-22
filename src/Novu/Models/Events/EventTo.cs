@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Novu.Models.Subscribers;
 
 namespace Novu.Models.Events;
 
@@ -50,5 +51,5 @@ public record EventTo
     ///     Subscriber data to be populated in workflows.
     /// </summary>
     [JsonProperty("data", Required = Required.AllowNull, DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public dynamic Data { get; set; }
+    public List<AdditionalData> Data { get; set; }
 }
