@@ -13,6 +13,7 @@ public class Notification
     [JsonProperty("_organizationId")] public string OrganizationId { get; set; }
     [JsonProperty("transactionId")] public string TransactionId { get; set; }
     [JsonProperty("channels")] public ChannelTypeEnum[] Channels { get; set; }
+    [JsonProperty("content")] public string Content { get; set; }
     [JsonProperty("template")] public Template Template { get; set; }
 
     /// <summary>
