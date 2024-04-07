@@ -8,3 +8,5 @@ obj
 src/Novu.sln.DotSettings.user
 **/.vs
 appsettings.todd.json
+**/.env
+**/refitter/**

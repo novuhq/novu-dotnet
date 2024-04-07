@@ -1,0 +1,121 @@
+= NOVU API (v 1.0)
+:reproducible:
+:sectlinks:
+:toc:
+
+== What's Changed
+=== GET   /v1/integrations
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/integrations
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+* Return Type:
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/integrations/active
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== PUT   /v1/integrations/{integrationId}
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== DELETE/v1/integrations/{integrationId}
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/integrations/{integrationId}/set-primary
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/workflows
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Missing property: data._id (string)
+
+*** Missing property: data.name (string)
+
+*** Missing property: data.description (string)
+
+*** Missing property: data.active (boolean)
+
+*** Missing property: data.draft (boolean)
+
+*** Missing property: data.preferenceSettings (object)
+
+*** Missing property: data.critical (boolean)
+
+*** Missing property: data.tags (array)
+
+*** Missing property: data.steps (array)
+
+*** Missing property: data._organizationId (string)
+
+*** Missing property: data._creatorId (string)
+
+*** Missing property: data._environmentId (string)
+
+*** Missing property: data.triggers (array)
+
+*** Missing property: data._notificationGroupId (string)
+
+*** Missing property: data._parentId (string)
+
+*** Missing property: data.deleted (boolean)
+
+*** Missing property: data.deletedAt (string)
+
+*** Missing property: data.deletedBy (string)
+
+*** Missing property: data.notificationGroup (object)
+
+*** Missing property: data.workflowIntegrationStatus (object)
+
+*** Changed property type: data.data (object -> array)
+
+
+
+WARNING: API changes broke backward compatibility

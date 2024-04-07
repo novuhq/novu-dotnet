@@ -1,0 +1,224 @@
+version: '3.9'
+name: novu
+# original file: https://github.com/novuhq/novu/blob/next/docker/local/deployment/docker-compose.yml
+services:
+  # s3 minio is used for local development (rather than tests)
+  # because it stores files across docker restart unlike localstack free version (requires pro)
+  s3:
+    image: 'minio/minio:latest'
+    container_name: s3-minio
+    ports:
+      - '${FORWARD_MINIO_PORT:-9000}:${FORWARD_MINIO_PORT:-9000}'
+      - '${FORWARD_MINIO_CONSOLE_PORT:-9090}:${FORWARD_MINIO_CONSOLE_PORT:-9090}'
+    environment:
+      MINIO_ROOT_USER: '${AWS_ACCESS_KEY_ID:-AKIA3ZZZZZZ3XI5SIVEZS}'
+      MINIO_ROOT_PASSWORD: '${AWS_SECRET_ACCESS_KEY:-wl4spNtMUcarryQcOml+bnpqXu7gN7ZZZbyal5rZa}'
+      MINIO_API_CORS_ALLOW_ORIGIN: '${FRONT_BASE_URL:-http://localhost:${WEB_PORT:-4200}}'
+    restart: always
+    volumes:
+      - 'minio:/data/minio'
+    command: minio server /data/minio --console-address ":${FORWARD_MINIO_CONSOLE_PORT:-9090}"
+    networks:
+      - default
+  redis:
+    image: 'redis:alpine'
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:${REDIS_PORT:-6379}"
+    healthcheck:
+      test: "bash -c 'redis-cli ping'"
+      retries: 5
+      interval: 10s
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+        max-file: '5'
+    networks:
+      - default
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+        max-file: '5'
+    environment:
+      - PUID=1000
+      - PGID=1000
+      # for testing, mongodb is wide open (simple connection string below)
+      # - MONGO_INITDB_ROOT_USERNAME='${MONGO_INITDB_ROOT_USERNAME:-root}'
+      # - MONGO_INITDB_ROOT_PASSWORD='${MONGO_INITDB_ROOT_PASSWORD:-roOtPassw0r#}'
+    volumes:
+      - mongodb:/data/db
+    ports:
+      - '${MONGO_PORT:-27017}:${MONGO_PORT:-27017}'
+  #
+  # Novu notification services
+  # see https://github.com/novuhq/novu/blob/next/docker/local/deployment/docker-compose.yml
+  #
+  api:
+    image: 'ghcr.io/novuhq/novu/api:${IMAGE_VERSION:-0.24.0}'
+    depends_on:
+      - mongodb
+      - redis
+    container_name: api
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+        max-file: '5'
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      API_ROOT_URL: '${API_ROOT_URL:-http://localhost:${API_PORT:-3000}}'
+      DISABLE_USER_REGISTRATION: ${DISABLE_USER_REGISTRATION:-false}
+      PORT: ${API_PORT:-3000}
+      FRONT_BASE_URL: '${FRONT_BASE_URL:-http://localhost:${WEB_PORT:-4200}}'
+      MONGO_URL: ${MONGO_URL:-mongodb://mongodb:${MONGO_PORT:-27017}/${MONGO_DB:-novu-db-test}}
+      MONGO_MIN_POOL_SIZE: ${MONGO_MIN_POOL_SIZE:-500}
+      MONGO_MAX_POOL_SIZE: ${MONGO_MAX_POOL_SIZE:-500}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DB_INDEX: 2
+      REDIS_CACHE_SERVICE_HOST: ${REDIS_CACHE_SERVICE_HOST}
+      REDIS_CACHE_SERVICE_PORT: ${REDIS_CACHE_SERVICE_PORT:-6379}
+      S3_LOCAL_STACK: ${S3_LOCAL_STACK:-http://localhost:${FORWARD_MINIO_CONSOLE_PORT:-9090}}
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME:-novu-local-test}
+      S3_REGION: ${S3_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: '${AWS_ACCESS_KEY_ID:-AKIA3ZZZZZZ3XI5SIVEZS}'
+      AWS_SECRET_ACCESS_KEY: '${AWS_SECRET_ACCESS_KEY:-wl4spNtMUcarryQcOml+bnpqXu7gN7ZZZbyal5rZa}'
+      JWT_SECRET: ${JWT_SECRET:-your-secret}
+      STORE_ENCRYPTION_KEY: ${STORE_ENCRYPTION_KEY:-<ENCRYPTION_KEY_MUST_BE_32_LONG>}
+      SENTRY_DSN: ${SENTRY_DSN}
+      NEW_RELIC_APP_NAME: '${NEW_RELIC_APP_NAME:-test.local}'
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      API_CONTEXT_PATH: ${API_CONTEXT_PATH}
+    ports:
+      - '${API_PORT:-3000}:${API_PORT:-3000}'
+  worker:
+    image: 'ghcr.io/novuhq/novu/worker:${IMAGE_VERSION:-0.24.0}'
+    depends_on:
+      - mongodb
+      - redis
+    container_name: worker
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+        max-file: '5'
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      MONGO_URL: ${MONGO_URL:-mongodb://mongodb:${MONGO_PORT:-27017}/${MONGO_DB:-novu-db-test}}
+      MONGO_MAX_POOL_SIZE: ${MONGO_MAX_POOL_SIZE:-500}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DB_INDEX: 2
+      REDIS_CACHE_SERVICE_HOST: ${REDIS_CACHE_SERVICE_HOST}
+      REDIS_CACHE_SERVICE_PORT: ${REDIS_CACHE_SERVICE_PORT:-6379}
+      S3_LOCAL_STACK: ${S3_LOCAL_STACK:-http://localhost:${FORWARD_MINIO_CONSOLE_PORT:-9090}}
+      S3_BUCKET_NAME: ${S3_BUCKET_NAME:-novu-local-test}
+      S3_REGION: ${S3_REGION:-us-east-1}
+      AWS_ACCESS_KEY_ID: '${AWS_ACCESS_KEY_ID:-AKIA3ZZZZZZ3XI5SIVEZS}'
+      AWS_SECRET_ACCESS_KEY: '${AWS_SECRET_ACCESS_KEY:-wl4spNtMUcarryQcOml+bnpqXu7gN7ZZZbyal5rZa}'
+      STORE_ENCRYPTION_KEY: ${STORE_ENCRYPTION_KEY}
+      SENTRY_DSN: ${SENTRY_DSN}
+      NEW_RELIC_APP_NAME: '${NEW_RELIC_APP_NAME:-test.local}'
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+      BROADCAST_QUEUE_CHUNK_SIZE: ${BROADCAST_QUEUE_CHUNK_SIZE}
+      MULTICAST_QUEUE_CHUNK_SIZE: ${MULTICAST_QUEUE_CHUNK_SIZE}
+  ws:
+    image: 'ghcr.io/novuhq/novu/ws:${IMAGE_VERSION:-0.24.0}'
+    depends_on:
+      - mongodb
+      - redis
+    container_name: ws
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+        max-file: '5'
+    environment:
+      PORT: ${WS_PORT:-3002}
+      NODE_ENV: ${NODE_ENV:-production}
+      MONGO_URL: ${MONGO_URL:-mongodb://mongodb:${MONGO_PORT:-27017}/${MONGO_DB:-novu-db-test}}
+      MONGO_MAX_POOL_SIZE: ${MONGO_MAX_POOL_SIZE:-500}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET:-your-secret}
+      WS_CONTEXT_PATH: ${WS_CONTEXT_PATH}
+      NEW_RELIC_APP_NAME: '${NEW_RELIC_APP_NAME:-test.local}'
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+    ports:
+      - '${WS_PORT:-3002}:${WS_PORT:-3002}'
+  web:
+    image: 'ghcr.io/novuhq/novu/web:${IMAGE_VERSION:-0.24.0}'
+    depends_on:
+      - api
+      - worker
+    container_name: web
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+        max-file: '5'
+    environment:
+      REACT_APP_API_URL: '${API_ROOT_URL:-http://localhost:${API_PORT:-3000}}'
+      REACT_APP_ENVIRONMENT: ${NODE_ENV:-production}
+      REACT_APP_WIDGET_EMBED_PATH: '${WIDGET_EMBED_PATH:-http://localhost:${EMBED_PORT:-4701}/embed.umd.min.js}'
+      REACT_APP_DOCKER_HOSTED_ENV: 'true'
+      REACT_APP_WS_URL: '${REACT_APP_WS_URL:-http://localhost:${WS_PORT:-3002}}'
+    ports:
+      - '${WEB_PORT:-4200}:${WEB_PORT:-4200}'
+  widget:
+    image: 'ghcr.io/novuhq/novu/widget:${IMAGE_VERSION:-0.24.0}'
+    depends_on:
+      - api
+      - worker
+      - web
+    container_name: widget
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+        max-file: '5'
+    environment:
+      REACT_APP_API_URL: '${API_ROOT_URL:-http://localhost:${API_PORT:-3000}}'
+      REACT_APP_WS_URL: '${REACT_APP_WS_URL:-http://localhost:${WS_PORT:-3002}}'
+      REACT_APP_ENVIRONMENT: ${NODE_ENV:-production}
+      WIDGET_CONTEXT_PATH: ${WIDGET_CONTEXT_PATH}
+    ports:
+      - '${WIDGET_PORT:-4500}:${WIDGET_PORT:-4500}'
+  embed:
+    depends_on:
+      - widget
+    image: 'ghcr.io/novuhq/novu/embed:${IMAGE_VERSION:-0.24.0}'
+    container_name: embed
+    restart: unless-stopped
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '50m'
+        max-file: '5'
+    environment:
+      WIDGET_URL: '${WIDGET_URL:-http://localhost:${WIDGET_PORT:-4500}}'
+      NEW_RELIC_APP_NAME: '${NEW_RELIC_APP_NAME:-test.local}'
+      NEW_RELIC_LICENSE_KEY: ${NEW_RELIC_LICENSE_KEY}
+    ports:
+      - '${EMBED_PORT:-4701}:${EMBED_PORT:-4701}'
+volumes:
+  mongodb: ~
+  minio:
+    driver: local
+networks:
+  default:

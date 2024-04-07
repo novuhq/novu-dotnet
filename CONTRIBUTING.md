@@ -24,7 +24,8 @@ You can open a new issue with this [issue form](https://github.com/novuhq/novu-d
 
 ### Setup the project
 
-Clone the repository and run `dotnet restore` against `Novu.sln` 
+* Clone the repository and run `dotnet restore` against `Novu.sln`
+* Start the local docker version of Novu against the version you are reporting/building against
 
 ## Missing a Feature?
 
