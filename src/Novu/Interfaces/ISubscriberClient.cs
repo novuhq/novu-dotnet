@@ -72,6 +72,11 @@ public interface ISubscriberClient
         string templateId,
         [Body] SubscriberPreferenceEditData model);
 
+    [Patch("/subscribers/{id}/preferences")]
+    Task<NovuResponse<SubscriberPreference>> UpdateGlobalPreference(
+    string id,
+    [Body] SubscriberPreferenceEditData model);
+
     [Get("/subscribers/{id}/notifications/feed")]
     Task<NovuPaginatedResponse<Notification>> GetInApp(string id, [Query] InAppFeedQueryParams? queryParams = default);
 
