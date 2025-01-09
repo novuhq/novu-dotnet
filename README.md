@@ -343,10 +343,6 @@ The key folders to look into:
 | GET         | /v1/blueprints/group-by-category |             | None          |       |
 | GET         | /v1/blueprints/{templateId}      |             | None          |       |
 
-
-
-
-
 ### Events
 
 | HTTP Method | Endpoint                           | Description            | New    | Changed | Deleted | Deprecated | Compatability | Notes |
@@ -387,9 +383,7 @@ The key folders to look into:
 |-------------|----------------------------------------------------------|------------------------|--------|---------|---------|------------|---------------|-------|
 | POST        | /v1/topics                                               | Topic creation         | 0.18.0 |         |         |            | Full          |       |
 | GET         | /v1/topics                                               | Filter topics          | 0.18.0 |         |         |            | Full          |       |
-| POST        | /v1/topics/{topicKey}/subscribers                        | Subscribers
-
- addition   | 0.18.0 |         |         |            | Full          |       |
+| POST        | /v1/topics/{topicKey}/subscribers                        | Subscribers addition   | 0.18.0 |         |         |            | Full          |       |
 | GET         | /v1/topics/{topicKey}/subscribers/{externalSubscriberId} | Check topic subscriber | 0.18.0 |         |         |            | Full          |       |
 | POST        | /v1/topics/{topicKey}/subscribers/removal                | Subscribers removal    | 0.18.0 |         |         |            | Full          |       |
 | DELETE      | /v1/topics/{topicKey}                                    | Delete topic           | 0.18.0 |         |         |            | Full          |       |
@@ -527,8 +521,6 @@ The key folders to look into:
 
 | HTTP Method | Endpoint                         | Description | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|----------------------------------|-------------|--------|---------|---------|------------|---------------|-------|
-| GET         | /v1/blueprints/group-by-category |             | 0.18
-
-.0 |         |         |            | Full          |       |
+| GET         | /v1/blueprints/group-by-category |             | 0.18.0 |         |         |            | Full          |       |
 | GET         | /v1/blueprints/list              |             | 0.18.0 |         |         |            | Full          |       |
 | GET         | /v1/blueprints/{id}              |             | 0.18.0 |         |         |            | Full          |       |
