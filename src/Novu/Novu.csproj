@@ -43,5 +43,8 @@
       <Compile Remove="NotificationTemplates\Step.cs" />
       <Compile Remove="NotificationTemplates\Trigger.cs" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="OpenApi\" />
+    </ItemGroup>
 
 </Project>
