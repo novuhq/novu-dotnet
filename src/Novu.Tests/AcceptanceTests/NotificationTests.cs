@@ -64,7 +64,7 @@ public class NotificationTests(
         var subscriber = await MakeSubscriberOnWorkflow(workflow);
         var subscriber2 = await MakeSubscriberOnWorkflow(workflow);
 
-        var topic = await topicFactory.Make<Topic>(
+        var topic = await topicFactory.Make(
             subscriber: subscriber,
             additionalSubscribers: [subscriber2]);
 
@@ -144,11 +144,11 @@ public class NotificationTests(
 
     private async Task<(Workflow, string)> MakeInAppWorkflow()
     {
-        var workflowGroup = await workflowGroupFactory.Make<WorkflowGroup>(new WorkflowGroupCreateData
+        var workflowGroup = await workflowGroupFactory.Make(new WorkflowGroupCreateData
         {
             Name = $"End2EndGroup ({StringGenerator.SequenceOfAlphaNumerics(5)})",
         });
-        var workflow = await workflowFactory.Make<Workflow>(new WorkflowCreateData
+        var workflow = await workflowFactory.Make(new WorkflowCreateData
         {
             Name = $"In-App [End2end {StringGenerator.SequenceOfAlphaNumerics(10)}]",
             Description = StringGenerator.LoremIpsum(5),
@@ -196,7 +196,7 @@ public class NotificationTests(
         }
         else if (existingIntegration is null)
         {
-            await integrationFactory.Make<Integration>(providerId: "novu");
+            await integrationFactory.Make(providerId: "novu");
         }
 
         var eventName = workflow.Triggers.FirstOrDefault()?.Identifier;
@@ -205,7 +205,7 @@ public class NotificationTests(
 
     private async Task<Subscriber> MakeSubscriberOnWorkflow(Workflow workflow)
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
 
         // update subscriber preferences
         var preferences = await subscriberClient.GetPreferences(subscriber.SubscriberId!);

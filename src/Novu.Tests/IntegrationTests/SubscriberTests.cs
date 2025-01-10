@@ -18,14 +18,14 @@ public class SubscriberTests(SubscriberFactory subscriberFactory, ISubscriberCli
     [Fact]
     public async Task Should_Create_Subscriber()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         Assert.NotNull(subscriber);
     }
 
     [Fact]
     public async Task Should_Get_One_Subscriber()
     {
-        var testSub = await subscriberFactory.Make<Subscriber>();
+        var testSub = await subscriberFactory.Make();
         var subscriber = await subscriberClient.Get(testSub.SubscriberId!);
 
         Assert.Equal(subscriber.Data.SubscriberId, testSub.SubscriberId);
@@ -64,7 +64,7 @@ public class SubscriberTests(SubscriberFactory subscriberFactory, ISubscriberCli
     [Fact]
     public async Task Should_Update_Subscriber()
     {
-        var subToUpdate = await subscriberFactory.Make<Subscriber>();
+        var subToUpdate = await subscriberFactory.Make();
 
         subToUpdate.FirstName += " Updated";
         subToUpdate.LastName += " Update";
@@ -105,7 +105,7 @@ public class SubscriberTests(SubscriberFactory subscriberFactory, ISubscriberCli
     [Fact]
     public async Task Should_Delete_Subscriber()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         var deleteResponse = await subscriberClient.DeleteSubscriber(subscriber.SubscriberId!);
         deleteResponse.Data.Acknowledged.Should().BeTrue();
     }
@@ -113,7 +113,7 @@ public class SubscriberTests(SubscriberFactory subscriberFactory, ISubscriberCli
     [Fact]
     public async Task Should_Delete_Subscriber_DoesNotThrowOnGet()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         subscriber.SubscriberId.Should().NotBeNull();
         await subscriberClient.DeleteSubscriber(subscriber.SubscriberId!);
         var response = await subscriberClient.Get(subscriber.SubscriberId);
@@ -135,7 +135,7 @@ public class SubscriberTests(SubscriberFactory subscriberFactory, ISubscriberCli
         // override the base exception trap to expose 404
         // DeRegisterExceptionHandler();
 
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         var deleteResponse = await subscriberClient.DeleteSubscriber(subscriber.SubscriberId!);
         deleteResponse.Data.Acknowledged.Should().BeTrue();
 
@@ -146,7 +146,7 @@ public class SubscriberTests(SubscriberFactory subscriberFactory, ISubscriberCli
     [Fact]
     public async Task Should_Update_Online_Status()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         var response = await subscriberClient.UpdateOnlineStatus(
             subscriber.SubscriberId!,
             new SubscriberOnlineEditData

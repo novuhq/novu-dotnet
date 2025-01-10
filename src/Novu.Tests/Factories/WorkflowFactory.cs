@@ -10,12 +10,11 @@ namespace Novu.Tests.Factories;
 
 public class WorkflowFactory(Tracker tracker, IWorkflowClient workflowClient, WorkflowGroupFactory workflowGroupFactory)
 {
-    public async Task<T> Make<T>(
+    public async Task<Workflow> Make(
         WorkflowCreateData data = null,
         Step[] steps = null,
         bool active = false,
         PreferenceChannels preferenceChannels = null)
-        where T : Workflow
     {
         // the simplest workflow is empty without steps and this returns a workflow with a trigger
         var createData = data ?? new WorkflowCreateData
@@ -29,12 +28,12 @@ public class WorkflowFactory(Tracker tracker, IWorkflowClient workflowClient, Wo
 
         if (string.IsNullOrWhiteSpace(createData.WorkflowGroupId))
         {
-            var group = await workflowGroupFactory.Make<WorkflowGroup>();
+            var group = await workflowGroupFactory.Make();
             createData.WorkflowGroupId = group.Id;
         }
 
         var workflow = await workflowClient.Create(createData);
         tracker.Workflows.Add(workflow.Data);
-        return workflow.Data as T;
+        return workflow.Data;
     }
 }

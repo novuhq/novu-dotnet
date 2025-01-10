@@ -12,14 +12,14 @@ public class WorkflowGroupTests(WorkflowGroupFactory workflowGroupFactory, IWork
     [Fact]
     public async Task Should_Create_WorkflowGroup()
     {
-        var workflowGroup = await workflowGroupFactory.Make<WorkflowGroup>();
+        var workflowGroup = await workflowGroupFactory.Make();
         workflowGroup.Should().NotBeNull();
     }
 
     [Fact]
     public async Task Should_Return_WorkflowGroup_List()
     {
-        await workflowGroupFactory.Make<WorkflowGroup>();
+        await workflowGroupFactory.Make();
         var listOfWorkflowGroups = await workflowGroupClient.Get();
 
         Assert.NotNull(listOfWorkflowGroups);
@@ -29,7 +29,7 @@ public class WorkflowGroupTests(WorkflowGroupFactory workflowGroupFactory, IWork
     [Fact]
     public async Task Should_Delete_WorkflowGroup()
     {
-        var workflowGroup = await workflowGroupFactory.Make<WorkflowGroup>();
+        var workflowGroup = await workflowGroupFactory.Make();
         await workflowGroupClient.Delete(workflowGroup.Id);
     }
 }

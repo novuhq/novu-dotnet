@@ -1,7 +1,5 @@
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.DTO;
-using Novu.DTO.Subscribers;
 using Novu.DTO.Topics;
 using Novu.Interfaces;
 using Novu.Tests.Factories;
@@ -30,16 +28,16 @@ public class TopicTests(
     [Fact]
     public async Task Should_Create_Topic()
     {
-        var topic = await topicFactory.Make<Topic>();
+        var topic = await topicFactory.Make();
         topic.Key.Should().NotBeNull();
     }
 
     [Fact]
     public async Task Should_Add_Subscriber_To_Topic()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
-        var topic = await topicFactory.Make<Topic>();
-        var addSubscribers = await topicFactory.AddSubscriber<SucceedData>(topic, subscriber);
+        var subscriber = await subscriberFactory.Make();
+        var topic = await topicFactory.Make();
+        var addSubscribers = await topicFactory.AddSubscriber(topic, subscriber);
 
         addSubscribers.Succeeded.Should().ContainSingle();
         addSubscribers.Succeeded.Should().Contain(x => x == subscriber.SubscriberId);
@@ -48,7 +46,7 @@ public class TopicTests(
     [Fact]
     public async Task Should_List_Topics()
     {
-        await topicFactory.Make<Topic>();
+        await topicFactory.Make();
         var topics = await topicClient.Get();
         topics.Data.Should().NotBeEmpty();
         // because of paging, it needs to look through more
@@ -58,8 +56,8 @@ public class TopicTests(
     [Fact]
     public async Task Should_Validate_Topic_Subscriber()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
-        var topic = await topicFactory.Make<Topic>(null, subscriber);
+        var subscriber = await subscriberFactory.Make();
+        var topic = await topicFactory.Make(null, subscriber);
 
         await topicClient.Verify(topic.Key, subscriber.SubscriberId!);
     }
@@ -67,8 +65,8 @@ public class TopicTests(
     [Fact]
     public async Task Should_Remove_Subscriber_From_Topic()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
-        var topic = await topicFactory.Make<Topic>(null, subscriber);
+        var subscriber = await subscriberFactory.Make();
+        var topic = await topicFactory.Make(null, subscriber);
 
         await topicClient.RemoveSubscriber(
             topic.Key,
@@ -78,7 +76,7 @@ public class TopicTests(
     [Fact]
     public async Task Should_Delete_Topic()
     {
-        var topic = await topicFactory.Make<Topic>();
+        var topic = await topicFactory.Make();
         await topicClient.Delete(topic.Key);
         var result = await topicClient.Get(topic.Key);
         result.Data.Should().BeNull();
@@ -87,7 +85,7 @@ public class TopicTests(
     [Fact]
     public async Task Should_Get_Single_Topic()
     {
-        var topic = await topicFactory.Make<Topic>();
+        var topic = await topicFactory.Make();
 
         var result = await topicClient.Get(topic.Key);
         result.Data.Should().NotBeNull();
@@ -97,7 +95,7 @@ public class TopicTests(
     [Fact]
     public async Task Should_Rename_Topic()
     {
-        var topic = await topicFactory.Make<Topic>();
+        var topic = await topicFactory.Make();
 
         var newTopicName = $"topic:test:rename-{StringGenerator.LoremIpsum(10)}";
         var result = await topicClient.Rename(topic.Key, new TopicEditData(newTopicName));

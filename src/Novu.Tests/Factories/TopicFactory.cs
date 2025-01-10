@@ -11,11 +11,10 @@ namespace Novu.Tests.Factories;
 
 public class TopicFactory(Tracker tracker, ITopicClient client)
 {
-    public async Task<T> Make<T>(
+    public async Task<Topic> Make(
         TopicCreateData data = null,
         Subscriber subscriber = null,
         List<Subscriber> additionalSubscribers = null)
-        where T : Topic
     {
         var createData = data ?? new TopicCreateData
         {
@@ -28,7 +27,7 @@ public class TopicFactory(Tracker tracker, ITopicClient client)
 
         if (subscriber is not null)
         {
-            await AddSubscriber<SucceedData>(topic, subscriber, additionalSubscribers);
+            await AddSubscriber(topic, subscriber, additionalSubscribers);
         }
 
         if (topic is not null)
@@ -36,13 +35,12 @@ public class TopicFactory(Tracker tracker, ITopicClient client)
             tracker.Topics.Add(topic);
         }
 
-        return topic as T;
+        return topic;
     }
 
-    public async Task<T> AddSubscriber<T>(Topic topic,
+    public async Task<SucceedData> AddSubscriber(Topic topic,
         Subscriber subscriber,
         List<Subscriber> additionalSubscribers = null)
-        where T : SucceedData
     {
         var subscribers = additionalSubscribers is not null
             ? additionalSubscribers.Select(x => x.SubscriberId).Prepend(subscriber.SubscriberId).ToList()
@@ -51,6 +49,6 @@ public class TopicFactory(Tracker tracker, ITopicClient client)
         var subscriberList = new TopicSubscriberCreateData(subscribers);
         var subscribersResults = await client.AddSubscriber(topic.Key, subscriberList);
         tracker.Topics.Add(topic);
-        return subscribersResults.Data as T;
+        return subscribersResults.Data;
     }
 }

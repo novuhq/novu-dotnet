@@ -7,8 +7,7 @@ namespace Novu.Tests.Factories;
 
 public class IntegrationFactory(IIntegrationClient client)
 {
-    public async Task<T> Make<T>(IntegrationCreateData data = null, string providerId = null, string channel = null)
-        where T : Integration
+    public async Task<Integration> Make(IntegrationCreateData data = null, string providerId = null, string channel = null)
     {
         var createData = data ?? new IntegrationCreateData
         {
@@ -22,6 +21,6 @@ public class IntegrationFactory(IIntegrationClient client)
 
         // do not manage integrations as other types. 
 
-        return layout.Data as T;
+        return layout.Data;
     }
 }

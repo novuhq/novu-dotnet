@@ -7,8 +7,7 @@ namespace Novu.Tests.Factories;
 
 public class WorkflowGroupFactory(Tracker tracker, IWorkflowGroupClient client)
 {
-    public async Task<T> Make<T>(WorkflowGroupCreateData data = null)
-        where T : WorkflowGroup
+    public async Task<WorkflowGroup> Make(WorkflowGroupCreateData data = null)
     {
         var createData = data ?? new WorkflowGroupCreateData
         {
@@ -17,21 +16,6 @@ public class WorkflowGroupFactory(Tracker tracker, IWorkflowGroupClient client)
 
         var workflowGroup = await client.Create(createData);
         tracker.WorkflowGroups.Add(workflowGroup.Data);
-        return workflowGroup.Data as T;
+        return workflowGroup.Data;
     }
 }
-
-// public class WorkflowGroupFactory2(Tracker tracker, IWorkflowGroupClient client)
-// {
-//     public async Task<WorkflowGroup> Make(WorkflowGroupCreateData data = null)
-//     {
-//         var createData = data ?? new WorkflowGroupCreateData
-//         {
-//             Name = StringGenerator.LoremIpsum(10),
-//         };
-//
-//         var workflowGroup = await client.Create(createData);
-//         tracker.WorkflowGroups.Add(workflowGroup.Data);
-//         return workflowGroup.Data as T;
-//     }
-// }

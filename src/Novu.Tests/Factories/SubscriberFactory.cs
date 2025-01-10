@@ -8,7 +8,7 @@ namespace Novu.Tests.Factories;
 
 public class SubscriberFactory(Tracker tracker, ISubscriberClient client)
 {
-    public async Task<T> Make<T>(SubscriberCreateData data = null) where T : Subscriber
+    public async Task<Subscriber> Make(SubscriberCreateData data = null) 
     {
         var createData = data ?? new SubscriberCreateData
         {
@@ -39,6 +39,6 @@ public class SubscriberFactory(Tracker tracker, ISubscriberClient client)
 
         tracker.Subscribers.Add(subscriber.Data);
 
-        return subscriber.Data as T;
+        return subscriber.Data;
     }
 }

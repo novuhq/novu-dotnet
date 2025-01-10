@@ -74,7 +74,7 @@ public class WorkflowTests(WorkflowFactory workflowFactory, IWorkflowClient work
     [MemberData(nameof(Data))]
     public async Task Should_Create_Steps(string test, Step[] steps, int stepsCount)
     {
-        var workflow = await workflowFactory.Make<Workflow>(steps: steps);
+        var workflow = await workflowFactory.Make(steps: steps);
         workflow.Should().NotBeNull();
         workflow.Steps.Should().HaveCount(stepsCount);
         workflow.Triggers.Should().HaveCount(1);
@@ -90,7 +90,7 @@ public class WorkflowTests(WorkflowFactory workflowFactory, IWorkflowClient work
             .Single(x => x.IsDefault);
 
         var steps = new[] { StepFactory.Email(layoutId: layout.Id) };
-        var workflow = await workflowFactory.Make<Workflow>(steps: steps);
+        var workflow = await workflowFactory.Make(steps: steps);
         workflow.Should().NotBeNull();
         workflow.Triggers.Should().HaveCount(1);
         workflow.Steps.First().Template.LayoutId.Should().Be(layout.Id);
@@ -108,7 +108,7 @@ public class WorkflowTests(WorkflowFactory workflowFactory, IWorkflowClient work
     [Fact]
     public async Task Should_Get_Workflow()
     {
-        var workflow = await workflowFactory.Make<Workflow>();
+        var workflow = await workflowFactory.Make();
         var result = await workflowClient.Get(workflow.Id);
         result.Data.Should().NotBeNull();
         result.Data.Id.Should().Be(workflow.Id);
@@ -117,7 +117,7 @@ public class WorkflowTests(WorkflowFactory workflowFactory, IWorkflowClient work
     [Fact]
     public async Task Should_Delete_Workflow()
     {
-        var workflow = await workflowFactory.Make<Workflow>();
+        var workflow = await workflowFactory.Make();
         await workflowClient.Delete(workflow.Id);
         var result = await workflowClient.Get(workflow.Id);
         result.Data.Should().BeNull();

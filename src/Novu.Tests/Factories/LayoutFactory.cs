@@ -8,11 +8,11 @@ namespace Novu.Tests.Factories;
 
 public class LayoutFactory(ILayoutClient client, Tracker tracker)
 {
-    public async Task<T> Make<T>(
+    public async Task<Layout> Make<T>(
         LayoutCreateData data = null,
         string content = null,
         TemplateVariable[] variables = null)
-        where T : Layout
+       
     {
         var createData = data ?? new LayoutCreateData
         {
@@ -24,6 +24,6 @@ public class LayoutFactory(ILayoutClient client, Tracker tracker)
 
         var layout = await client.Create(createData);
         tracker.Layouts.Add(layout.Data);
-        return layout.Data as T;
+        return layout.Data;
     }
 }

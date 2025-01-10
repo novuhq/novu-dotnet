@@ -21,9 +21,9 @@ public class SubscriberPreferencesTests(
     public async Task Should_Get_Preferences()
     {
         // a preference requires a workflow (so if the system was clean no preferences would be returned)
-        await workflowFactory.Make<Workflow>(steps: [StepFactory.InApp()]);
+        await workflowFactory.Make(steps: [StepFactory.InApp()]);
 
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         subscriber.SubscriberId.Should().NotBeNull();
         var preferences = await subscriberClient.GetPreferences(subscriber.SubscriberId!);
 
@@ -38,7 +38,7 @@ public class SubscriberPreferencesTests(
         // The workflow must:
         //   - have the channel
         //   - be ACTIVE
-        var workflow = await workflowFactory.Make<Workflow>(
+        var workflow = await workflowFactory.Make(
             steps: [StepFactory.InApp()],
             active: true,
             preferenceChannels: new PreferenceChannels
@@ -46,7 +46,7 @@ public class SubscriberPreferencesTests(
                 InApp = true,
             });
 
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         subscriber.SubscriberId.Should().NotBeNull();
         var preferences = await subscriberClient.GetPreferences(subscriber.SubscriberId!);
 
@@ -84,7 +84,7 @@ public class SubscriberPreferencesTests(
     [Fact]
     public async Task Should_Get_InApp_Unseen()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         subscriber.SubscriberId.Should().NotBeNull();
         var messagesCount = await subscriberClient.GetInAppUnseen(subscriber.SubscriberId!);
 
@@ -95,7 +95,7 @@ public class SubscriberPreferencesTests(
     [Fact]
     public async Task Should_Get_InApp()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         subscriber.SubscriberId.Should().NotBeNull();
         var messages = await subscriberClient.GetInApp(subscriber.SubscriberId!);
 

@@ -46,7 +46,7 @@ public class IntegrationTests(IIntegrationClient integrationClient, IntegrationF
             deletedIntegration.Data.Should().BeNull();
 
             // now remake
-            var newIntegration = await integrationFactory.Make<Integration>(providerId: provider);
+            var newIntegration = await integrationFactory.Make(providerId: provider);
             newIntegration.Active.Should().BeTrue();
 
             // reinstate the integration given this might be a working test system
@@ -55,7 +55,7 @@ public class IntegrationTests(IIntegrationClient integrationClient, IntegrationF
         else
         {
             // create 
-            var integration = await integrationFactory.Make<Integration>(providerId: provider);
+            var integration = await integrationFactory.Make(providerId: provider);
             integration.Active.Should().BeTrue();
 
             // teardown here rather than in base

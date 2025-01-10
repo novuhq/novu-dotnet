@@ -18,7 +18,7 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
     [Fact]
     public async Task Should_Trigger_Event()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
 
         var trigger = await eventClient.Trigger(
             new EventCreateData
@@ -35,7 +35,7 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
     [Fact]
     public async Task Should_Trigger_Bulk_Event()
     {
-        var subscriber = await subscriberFactory.Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make();
         var eventName = await GetActiveEvent();
 
         var dto = new BulkEventCreateData(
@@ -81,7 +81,7 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
         // WARN: A non-active workflow throws 500 error
         //
         var workflow =
-            await workflowFactory.Make<Workflow>( /*steps: new[] { StepFactory.InApp(true) }, active: true*/);
+            await workflowFactory.Make( /*steps: new[] { StepFactory.InApp(true) }, active: true*/);
         var eventName = workflow.Triggers.FirstOrDefault()?.Identifier;
         eventName.Should().NotBeNull();
 
@@ -136,7 +136,7 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
     /// </summary>
     private async Task<string> GetActiveEvent()
     {
-        var workflow = await workflowFactory.Make<Workflow>(steps: [StepFactory.InApp(true)], active: true);
+        var workflow = await workflowFactory.Make(steps: [StepFactory.InApp(true)], active: true);
         var eventName = workflow.Triggers.FirstOrDefault()?.Identifier;
         eventName.Should().NotBeNull();
         return eventName;
