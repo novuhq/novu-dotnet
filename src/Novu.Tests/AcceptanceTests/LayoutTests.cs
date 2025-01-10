@@ -1,18 +1,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.Tests.IntegrationTests;
+using Novu.Interfaces;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Novu.Tests.AcceptanceTests;
 
-public class LayoutTests : BaseIntegrationTest
+public class LayoutTests(ILayoutClient Layout)
 {
-    public LayoutTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     /// <summary>
     ///     This is a flaky test because 'default' operates globally to the application
     /// </summary>

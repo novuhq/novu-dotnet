@@ -1,37 +1,35 @@
-﻿using FluentAssertions;
+﻿using System.Threading.Tasks;
+using FluentAssertions;
 using Novu.DTO.WorkflowGroups;
+using Novu.Interfaces;
+using Novu.Tests.Factories;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Novu.Tests.IntegrationTests;
 
-public class WorkflowGroupTests : BaseIntegrationTest
+public class WorkflowGroupTests(WorkflowGroupFactory workflowGroupFactory, IWorkflowGroupClient workflowGroupClient)
 {
-    public WorkflowGroupTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     [Fact]
-    public async void Should_Create_WorkflowGroup()
+    public async Task Should_Create_WorkflowGroup()
     {
-        var workflowGroup = await Make<WorkflowGroup>();
+        var workflowGroup = await workflowGroupFactory.Make<WorkflowGroup>();
         workflowGroup.Should().NotBeNull();
     }
 
     [Fact]
-    public async void Should_Return_WorkflowGroup_List()
+    public async Task Should_Return_WorkflowGroup_List()
     {
-        await Make<WorkflowGroup>();
-        var listOfWorkflowGroups = await WorkflowGroup.Get();
+        await workflowGroupFactory.Make<WorkflowGroup>();
+        var listOfWorkflowGroups = await workflowGroupClient.Get();
 
         Assert.NotNull(listOfWorkflowGroups);
         Assert.NotEmpty(listOfWorkflowGroups.Data);
     }
 
     [Fact]
-    public async void Should_Delete_WorkflowGroup()
+    public async Task Should_Delete_WorkflowGroup()
     {
-        var workflowGroup = await Make<WorkflowGroup>();
-        await WorkflowGroup.Delete(workflowGroup.Id);
+        var workflowGroup = await workflowGroupFactory.Make<WorkflowGroup>();
+        await workflowGroupClient.Delete(workflowGroup.Id);
     }
 }

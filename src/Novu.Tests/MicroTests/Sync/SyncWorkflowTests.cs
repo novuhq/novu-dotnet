@@ -2,20 +2,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Novu.DTO;
 using Novu.DTO.Workflows;
 using Novu.Interfaces;
 using Novu.Models.Workflows;
+using Novu.Sync;
 using Novu.Sync.Models;
 using Novu.Sync.Services;
 using Novu.Tests.IntegrationTests;
 using Xunit;
-using Xunit.Abstractions;
+using Xunit.DependencyInjection;
 
 namespace Novu.Tests.MicroTests.Sync;
 
-public class SyncWorkflowTests : BaseIntegrationTest
+public class SyncWorkflowTests(INovuSync<TemplateWorkflow> syncClient, ILogger<SyncWorkflowTests> log)
 {
     private static readonly TemplateWorkflow InviteInAppSms = new()
     {
@@ -37,18 +41,6 @@ public class SyncWorkflowTests : BaseIntegrationTest
         Active = true,
     };
 
-    private readonly Mock<IWorkflowClient> _workflowClient;
-
-    public SyncWorkflowTests(ITestOutputHelper output) : base(output)
-    {
-        _workflowClient = new Mock<IWorkflowClient>();
-
-        // looks to be a need to registered the swapped out implementations before any are
-        // instantiated. Expectations are set in the tests.
-        Register(
-            services => { services.SwapTransient(_ => _workflowClient.Object); });
-    }
-
     public static IEnumerable<object[]> Data => new List<object[]>
     {
         new object[]
@@ -60,6 +52,7 @@ public class SyncWorkflowTests : BaseIntegrationTest
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
+            null,
         },
         new object[]
         {
@@ -73,6 +66,7 @@ public class SyncWorkflowTests : BaseIntegrationTest
             (Func<Times>)Times.Once,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
+            null,
         },
         new object[]
         {
@@ -96,6 +90,7 @@ public class SyncWorkflowTests : BaseIntegrationTest
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
+            null,
         },
         new object[]
         {
@@ -119,6 +114,7 @@ public class SyncWorkflowTests : BaseIntegrationTest
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Once,
             (Func<Times>)Times.Never,
+            null,
         },
         new object[]
         {
@@ -139,6 +135,7 @@ public class SyncWorkflowTests : BaseIntegrationTest
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Once,
+            null,
         },
     };
 
@@ -152,12 +149,14 @@ public class SyncWorkflowTests : BaseIntegrationTest
         Func<Times> getCalls,
         Func<Times> createCalls,
         Func<Times> updateCalls,
-        Func<Times> deleteCalls
+        Func<Times> deleteCalls,
+        [FromServices] Mock<IWorkflowClient> client
     )
     {
-        Output.WriteLine(test);
+        log.LogInformation(test);
 
-        _workflowClient
+        client.Reset();
+        client
             .Setup(x => x.Get(It.IsAny<PaginationQueryParams>()))
             .ReturnsAsync(new NovuPaginatedResponse<Workflow>
             {
@@ -165,13 +164,31 @@ public class SyncWorkflowTests : BaseIntegrationTest
                 Data = currentSetAtDestination.ToArray(),
             });
 
-        var syncClient = Get<INovuSync<TemplateWorkflow>>();
-
         await syncClient.Sync(templateWorkflows);
 
-        _workflowClient.Verify(x => x.Get(It.IsAny<PaginationQueryParams>()), getCalls);
-        _workflowClient.Verify(x => x.Create(It.IsAny<WorkflowCreateData>()), createCalls);
-        _workflowClient.Verify(x => x.Update(It.IsAny<string>(), It.IsAny<WorkflowEditData>()), updateCalls);
-        _workflowClient.Verify(x => x.Delete(It.IsAny<string>()), deleteCalls);
+        client.Verify(x => x.Get(It.IsAny<PaginationQueryParams>()), getCalls);
+        client.Verify(x => x.Create(It.IsAny<WorkflowCreateData>()), createCalls);
+        client.Verify(x => x.Update(It.IsAny<string>(), It.IsAny<WorkflowEditData>()), updateCalls);
+        client.Verify(x => x.Delete(It.IsAny<string>()), deleteCalls);
+    }
+
+    /// <summary>
+    ///     Automatically bootstrapped through Xunit lifecycle
+    ///     see https://github.com/pengweiqhca/Xunit.DependencyInjection
+    /// </summary>
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services, HostBuilderContext context)
+        {
+            var client = new Mock<IWorkflowClient>();
+
+            services
+                .ConfigureTestServices(context)
+                .RegisterNovuSync()
+                // inject the  mock into each test
+                .AddScoped(typeof(Mock<IWorkflowClient>), _ => client)
+                // override the registered service with a mock
+                .AddScoped(_ => client.Object);
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Novu.Models.Workflows.Step;
+using Novu.Tests.Factories.Models;
 using ParkSquare.Testing.Generators;
 
 namespace Novu.Tests.IntegrationTests;
@@ -21,7 +22,7 @@ public static class StepFactory
                     AtTime = "18:05",
                     MonthlyType = MonthlyTypeEnum.Each,
                     OrdinalValue = OrdinalValueEnum.Day,
-                    MonthDays = new[] { 5, 10 },
+                    MonthDays = [5, 10],
                 },
                 Amount = 1,
                 Unit = UnitEnum.Weeks,
@@ -107,7 +108,7 @@ public static class StepFactory
                 Timed = new TimedConfig
                 {
                     AtTime = "18:05",
-                    WeekDays = new[] { DaysEnum.Monday, DaysEnum.Thursday },
+                    WeekDays = [DaysEnum.Monday, DaysEnum.Thursday],
                 },
                 Amount = 1,
                 Unit = UnitEnum.Weeks,

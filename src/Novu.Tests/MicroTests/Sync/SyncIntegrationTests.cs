@@ -1,22 +1,26 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Novu.DTO;
 using Novu.DTO.Integrations;
 using Novu.Interfaces;
 using Novu.Models.Integrations;
 using Novu.Models.Subscribers.Preferences;
+using Novu.Sync;
 using Novu.Sync.Models;
 using Novu.Sync.Services;
-using Novu.Tests.IntegrationTests;
 using Novu.Utils;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.DependencyInjection;
 
 namespace Novu.Tests.MicroTests.Sync;
 
-public class SyncIntegrationTests : BaseIntegrationTest
+public class SyncIntegrationTests(INovuSync<TemplateIntegration> syncClient, ITestOutputHelper output, ILogger<SyncIntegrationTests> log)
 {
     private static readonly TemplateIntegration NovuInAppTemplateIntegration = new()
     {
@@ -31,18 +35,6 @@ public class SyncIntegrationTests : BaseIntegrationTest
         },
     };
 
-    private readonly Mock<IIntegrationClient> _integrationClient;
-
-    public SyncIntegrationTests(ITestOutputHelper output) : base(output)
-    {
-        _integrationClient = new Mock<IIntegrationClient>();
-
-        // looks to be a need to registered the swapped out implementations before any are
-        // instantiated. Expectations are set in the tests.
-        Register(
-            services => { services.SwapTransient(_ => _integrationClient.Object); });
-    }
-
     public static IEnumerable<object[]> Data => new List<object[]>
     {
         new object[]
@@ -54,6 +46,7 @@ public class SyncIntegrationTests : BaseIntegrationTest
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
+            null,
         },
         new object[]
         {
@@ -67,6 +60,7 @@ public class SyncIntegrationTests : BaseIntegrationTest
             (Func<Times>)Times.Once,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
+            null,
         },
         new object[]
         {
@@ -91,6 +85,7 @@ public class SyncIntegrationTests : BaseIntegrationTest
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
+            null,
         },
         new object[]
         {
@@ -118,6 +113,7 @@ public class SyncIntegrationTests : BaseIntegrationTest
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Once,
             (Func<Times>)Times.Never,
+            null,
         },
         new object[]
         {
@@ -139,6 +135,7 @@ public class SyncIntegrationTests : BaseIntegrationTest
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Never,
             (Func<Times>)Times.Once,
+            null,
         },
     };
 
@@ -152,22 +149,43 @@ public class SyncIntegrationTests : BaseIntegrationTest
         Func<Times> getCalls,
         Func<Times> createCalls,
         Func<Times> updateCalls,
-        Func<Times> deleteCalls
+        Func<Times> deleteCalls,
+        [FromServices] Mock<IIntegrationClient> client
     )
     {
-        Output.WriteLine(test);
+        log.LogInformation("{0}", test);
 
-        _integrationClient
+        client.Reset();
+        client
             .Setup(x => x.Get())
             .ReturnsAsync(new NovuResponse<IEnumerable<Integration>>(currentSetAtDestination));
 
-        var syncClient = Get<INovuSync<TemplateIntegration>>();
-
         await syncClient.Sync(templateIntegrations);
 
-        _integrationClient.Verify(x => x.Get(), getCalls);
-        _integrationClient.Verify(x => x.Create(It.IsAny<IntegrationCreateData>()), createCalls);
-        _integrationClient.Verify(x => x.Update(It.IsAny<string>(), It.IsAny<IntegrationEditData>()), updateCalls);
-        _integrationClient.Verify(x => x.Delete(It.IsAny<string>()), deleteCalls);
+        client.Verify(x => x.Get(), getCalls);
+        client.Verify(x => x.Create(It.IsAny<IntegrationCreateData>()), createCalls);
+        client.Verify(x => x.Update(It.IsAny<string>(), It.IsAny<IntegrationEditData>()), updateCalls);
+        client.Verify(x => x.Delete(It.IsAny<string>()), deleteCalls);
+    }
+
+
+    /// <summary>
+    ///     Automatically bootstrapped through Xunit lifecycle
+    ///     see https://github.com/pengweiqhca/Xunit.DependencyInjection
+    /// </summary>
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services, HostBuilderContext context)
+        {
+            var client = new Mock<IIntegrationClient>();
+
+            services
+                .ConfigureTestServices(context)
+                .RegisterNovuSync()
+                // inject the  mock into each test
+                .AddScoped(typeof(Mock<IIntegrationClient>), _ => client)
+                // override the registered service with a mock
+                .AddScoped(_ => client.Object);
+        }
     }
 }

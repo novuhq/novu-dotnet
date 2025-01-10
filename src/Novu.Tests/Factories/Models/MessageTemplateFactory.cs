@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Novu.Models.Workflows.Step.Message;
 
-namespace Novu.Tests.IntegrationTests;
+namespace Novu.Tests.Factories.Models;
 
 public static class MessageTemplateFactory
 {

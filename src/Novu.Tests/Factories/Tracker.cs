@@ -1,0 +1,76 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Novu.DTO.Layouts;
+using Novu.DTO.Subscribers;
+using Novu.DTO.Topics;
+using Novu.DTO.WorkflowGroups;
+using Novu.DTO.Workflows;
+using Novu.Interfaces;
+
+namespace Novu.Tests.Factories;
+
+public class Tracker(
+    ISubscriberClient subscriberClient,
+    ITopicClient topicClient,
+    IWorkflowGroupClient workflowGroupClient,
+    IWorkflowClient workflowClient,
+    ILayoutClient layoutClient)
+{
+    public List<Subscriber> Subscribers { get; } = [];
+    public List<Topic> Topics { get; } = [];
+    public List<WorkflowGroup> WorkflowGroups { get; } = [];
+    public List<Workflow> Workflows { get; } = [];
+    public List<Layout> Layouts { get; } = [];
+
+    public async Task RemoveAll()
+    {
+        // note: dispose buries errors like 404 Not Found
+        await TeardownWorkflows();
+        await TeardownWorkflowGroups();
+        await TeardownTopics();
+        await TeardownSubscribers();
+        await TeardownLayouts();
+        await TeardownTopics();
+    }
+
+    private async Task TeardownSubscribers()
+    {
+        foreach (var subscriber in Subscribers.Where(subscriber => subscriber.SubscriberId is not null))
+        {
+            await subscriberClient.DeleteSubscriber(subscriber.SubscriberId!);
+        }
+    }
+
+    private async Task TeardownTopics()
+    {
+        foreach (var topic in Topics)
+        {
+            await topicClient.Delete(topic.Key);
+        }
+    }
+
+    private async Task TeardownWorkflowGroups()
+    {
+        foreach (var workflowGroup in WorkflowGroups)
+        {
+            await workflowGroupClient.Delete(workflowGroup.Id);
+        }
+    }
+
+    private async Task TeardownWorkflows()
+    {
+        foreach (var workflow in Workflows)
+        {
+            await workflowClient.Delete(workflow.Id);
+        }
+    }
+
+    private async Task TeardownLayouts()
+    {
+        foreach (var layout in Layouts)
+        {
+            await layoutClient.Delete(layout.Id);
+        }
+    }
+}

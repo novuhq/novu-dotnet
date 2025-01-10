@@ -8,15 +8,19 @@ using Novu.Models.Integrations;
 using Novu.Models.Subscribers.Preferences;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
-using Novu.Sync;
 using Novu.Sync.Models;
 using Novu.Sync.Services;
+using Novu.Tests.Factories.Models;
 using Novu.Tests.IntegrationTests;
-using Xunit.Abstractions;
 
 namespace Novu.Tests.AcceptanceTests;
 
-public class SyncEnvironmentTests : BaseIntegrationTest
+public class SyncEnvironmentTests(
+    INovuSync<TemplateWorkflow> syncWorkflow,
+    INovuSync<TemplateIntegration> syncIntegration,
+    INovuSync<TemplateWorkflowGroup> syncWorkflowGroup,
+    INovuSync<TemplateLayout> syncLayout,
+    IWorkflowGroupClient workflowGroupClient)
 {
     private static readonly TemplateIntegration NovuInApp = new()
     {
@@ -68,9 +72,6 @@ public class SyncEnvironmentTests : BaseIntegrationTest
         },
     };
 
-    public SyncEnvironmentTests(ITestOutputHelper output) : base(output)
-    {
-    }
 
     /// <summary>
     ///     WARNING: this test will synchronise your entire environment (that is it will delete existing resources)
@@ -78,21 +79,20 @@ public class SyncEnvironmentTests : BaseIntegrationTest
     [RunnableInDebugOnly]
     public async Task WorkflowTest()
     {
-        DeRegisterExceptionHandler();
+        // DeRegisterExceptionHandler();
 
-        await Get<INovuSync<TemplateIntegration>>().Sync(
-            new[]
-            {
-                NovuInApp,
+        await syncIntegration.Sync(
+        [
+            NovuInApp,
                 CustomEmail,
                 AmazonSnsSms,
-            });
+        ]);
 
         // depending on environment there can hidden workflow attached to layouts that this
         // test will continue on if it experiences a 409
         try
         {
-            await Get<INovuSync<TemplateLayout>>().Sync(
+            await syncLayout.Sync(
                 new TemplateLayout
                 {
                     Name = "Default Layout",
@@ -106,20 +106,20 @@ public class SyncEnvironmentTests : BaseIntegrationTest
             // ignored 
         }
 
-        await Get<INovuSync<TemplateWorkflowGroup>>().Sync(
+        await syncWorkflowGroup.Sync(
             new List<TemplateWorkflowGroup>
             {
                 new() { Name = "Default WorkflowGroup [e2e test]" },
                 new() { Name = "Other WorkflowGroup [e2e test]" },
             });
 
-        var workflowGroups = await Get<IWorkflowGroupClient>().Get();
+        var workflowGroups = await workflowGroupClient.Get();
         var workflowGroup =
             workflowGroups?.Data?.SingleOrDefault(x => x.Name.Equals("Other WorkflowGroup [e2e test]"));
 
         workflowGroup.Should().NotBeNull();
 
-        await Get<INovuSync<TemplateWorkflow>>().Sync(
+        await syncWorkflow.Sync(
             new TemplateWorkflow
             {
                 Name = "Invite (e2e)",
@@ -131,8 +131,8 @@ public class SyncEnvironmentTests : BaseIntegrationTest
                     Sms = true,
                     Email = true,
                 },
-                Steps = new[]
-                {
+                Steps =
+                [
                     StepFactory.InApp(true),
                     StepFactory.Sms(true),
                     StepFactory.DigestRegular(true),
@@ -142,7 +142,7 @@ public class SyncEnvironmentTests : BaseIntegrationTest
                         Template = MessageTemplateFactory.EmailMessageTemplate(),
                         Active = true,
                     },
-                },
+                ],
                 Active = true,
             });
     }

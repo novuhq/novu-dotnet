@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Novu.DTO;
 using Novu.DTO.Events;
 using Novu.DTO.Integrations;
 using Novu.DTO.Notifications;
@@ -20,29 +18,33 @@ using Novu.Models.Triggers;
 using Novu.Models.Workflows;
 using Novu.Models.Workflows.Step;
 using Novu.Models.Workflows.Step.Message;
-using Novu.Tests.IntegrationTests;
+using Novu.Tests.Factories;
 using ParkSquare.Testing.Generators;
 using Polly;
 using Xunit;
-using Xunit.Abstractions;
 using Xunit.Sdk;
 using TopicCreateData = Novu.DTO.Events.TopicCreateData;
 
 namespace Novu.Tests.AcceptanceTests;
 
-public class NotificationTests : BaseIntegrationTest
+public class NotificationTests(
+    IEventClient eventClient,
+    TopicFactory topicFactory,
+    INotificationsClient notificationsClient,
+    ISubscriberClient subscriberClient,
+    WorkflowGroupFactory workflowGroupFactory,
+    WorkflowFactory workflowFactory,
+    IIntegrationClient integrationClient,
+    IntegrationFactory integrationFactory,
+    SubscriberFactory subscriberFactory)
 {
-    public NotificationTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     [RunnableInDebugOnly]
     public async Task E2E_InApp_Event_Test()
     {
         var (workflow, eventName) = await MakeInAppWorkflow();
         var subscriber = await MakeSubscriberOnWorkflow(workflow);
 
-        var trigger = await Event.Trigger(
+        var trigger = await eventClient.Trigger(
             new EventCreateData
             {
                 EventName = eventName,
@@ -62,15 +64,15 @@ public class NotificationTests : BaseIntegrationTest
         var subscriber = await MakeSubscriberOnWorkflow(workflow);
         var subscriber2 = await MakeSubscriberOnWorkflow(workflow);
 
-        var topic = await Make<Topic>(
+        var topic = await topicFactory.Make<Topic>(
             subscriber: subscriber,
-            additionalSubscribers: new List<Subscriber> { subscriber2 });
+            additionalSubscribers: [subscriber2]);
 
-        var trigger = await Event.Create(
+        var trigger = await eventClient.Create(
             new TopicCreateData
             {
                 EventName = eventName,
-                To = new[] { new TopicTrigger(topic.Key) },
+                To = [new TopicTrigger(topic.Key)],
                 Payload = new TestMessage(),
             });
 
@@ -92,8 +94,8 @@ public class NotificationTests : BaseIntegrationTest
         await retryPolicy.ExecuteAsync(async () =>
         {
             // check, has it arrived?
-            var notificationsForSubscriber = await Get<INotificationsClient>()
-                .Get(new NotificationQueryParams { SubscriberIds = new[] { subscriber.SubscriberId } });
+            var notificationsForSubscriber = await notificationsClient
+                .Get(new NotificationQueryParams { SubscriberIds = [subscriber.SubscriberId] });
 
             notificationsForSubscriber
                 .Data
@@ -126,10 +128,10 @@ public class NotificationTests : BaseIntegrationTest
 
         await retryPolicy.ExecuteAsync(async () =>
         {
-            var dataCount = (await Subscriber.GetInAppUnseen(subscriber.SubscriberId!))
+            var dataCount = (await subscriberClient.GetInAppUnseen(subscriber.SubscriberId!))
                 .Data
                 .Count;
-            var inAppMessages = await Subscriber.GetInApp(subscriber.SubscriberId);
+            var inAppMessages = await subscriberClient.GetInApp(subscriber.SubscriberId);
             dataCount
                 .Should()
                 .Be(1);
@@ -142,11 +144,11 @@ public class NotificationTests : BaseIntegrationTest
 
     private async Task<(Workflow, string)> MakeInAppWorkflow()
     {
-        var workflowGroup = await Make<WorkflowGroup>(new WorkflowGroupCreateData
+        var workflowGroup = await workflowGroupFactory.Make<WorkflowGroup>(new WorkflowGroupCreateData
         {
             Name = $"End2EndGroup ({StringGenerator.SequenceOfAlphaNumerics(5)})",
         });
-        var workflow = await Make<Workflow>(new WorkflowCreateData
+        var workflow = await workflowFactory.Make<Workflow>(new WorkflowCreateData
         {
             Name = $"In-App [End2end {StringGenerator.SequenceOfAlphaNumerics(10)}]",
             Description = StringGenerator.LoremIpsum(5),
@@ -155,27 +157,27 @@ public class NotificationTests : BaseIntegrationTest
             {
                 InApp = true,
             },
-            Steps = new Step[]
-            {
-                new()
+            Steps =
+            [
+                new Step
                 {
                     Name = $"In-App [End2end ({StringGenerator.SequenceOfAlphaNumerics(5)})]",
                     Template = new InAppMessageTemplate
                     {
                         Content = "Fantastic move! {{message}}",
-                        Variables = new[]
-                        {
+                        Variables =
+                        [
                             new TemplateVariable
                             {
                                 Name = "message",
                                 Type = TemplateVariableTypeEnum.String,
                                 Required = true,
                             },
-                        },
+                        ],
                     },
                     Active = true,
                 },
-            },
+            ],
             Active = true,
         });
 
@@ -183,18 +185,18 @@ public class NotificationTests : BaseIntegrationTest
         // Now, ensure that the integration is active. Otherwise, the trigger will not deliver
         // but reports that the subscriber has no active integrations where they problem is that
         // the system has none to offer even though the subscriber has registered
-        var existingIntegration = (await Integration.Get())
+        var existingIntegration = (await integrationClient.Get())
             .Data
             .SingleOrDefault(x => x.ProviderId == "novu");
         if (existingIntegration is not null && !existingIntegration.Active)
         {
-            await Integration.Update(
+            await integrationClient.Update(
                 existingIntegration.Id,
                 existingIntegration.ToEditData(x => x.Active = true));
         }
         else if (existingIntegration is null)
         {
-            await Make<Integration>(providerId: "novu");
+            await integrationFactory.Make<Integration>(providerId: "novu");
         }
 
         var eventName = workflow.Triggers.FirstOrDefault()?.Identifier;
@@ -203,15 +205,15 @@ public class NotificationTests : BaseIntegrationTest
 
     private async Task<Subscriber> MakeSubscriberOnWorkflow(Workflow workflow)
     {
-        var subscriber = await Make<Subscriber>();
+        var subscriber = await subscriberFactory.Make<Subscriber>();
 
         // update subscriber preferences
-        var preferences = await Subscriber.GetPreferences(subscriber.SubscriberId!);
+        var preferences = await subscriberClient.GetPreferences(subscriber.SubscriberId!);
 
         // enable notification
         var templateId = preferences.Data.Single(x => x.Template.Name == workflow.Name).Template.Id;
 
-        await Subscriber.UpdatePreference(
+        await subscriberClient.UpdatePreference(
             subscriber.SubscriberId!,
             templateId,
             new SubscriberPreferenceEditData

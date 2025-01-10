@@ -1,18 +1,16 @@
 using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Novu.Interfaces;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Novu.Tests.IntegrationTests;
 
-public class ExecutionDetailsTests : BaseIntegrationTest
+public class ExecutionDetailsTests(
+    INotificationsClient notificationsClient,
+    IExecutionDetailsClient executionDetailsClient,
+    ILogger<ExecutionDetailsTests> log)
 {
-    public ExecutionDetailsTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     [Fact]
     public async Task Should_Get_Messages()
     {
@@ -21,23 +19,23 @@ public class ExecutionDetailsTests : BaseIntegrationTest
         //
 
         // fingers cross there are some notifications to check serialisation
-        var notifications = await Notifications.Get();
+        var notifications = await notificationsClient.Get();
         var notification = notifications.Data.FirstOrDefault(x => x.Jobs.Any(y => y.ExecutionDetails.Any()));
 
         if (notification is not null)
         {
             if (notification.Subscriber is not null)
             {
-                await Get<IExecutionDetailsClient>().Get(notification.Id, notification.Subscriber.Id);
+                await executionDetailsClient.Get(notification.Id, notification.Subscriber.Id);
             }
             else
             {
-                Output.WriteLine("No real test was run as there is no subscriber on the  data");
+                log.LogWarning("No real test was run as there is no subscriber on the  data");
             }
         }
         else
         {
-            Output.WriteLine("No real test was run as there is no notification data");
+            log.LogError("No real test was run as there is no notification data");
         }
     }
 }
