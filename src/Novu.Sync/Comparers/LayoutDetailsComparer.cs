@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Novu.DTO.Layouts;
+using Novu.Domain.Models.Layouts;
 
 namespace Novu.Sync.Comparers;
 

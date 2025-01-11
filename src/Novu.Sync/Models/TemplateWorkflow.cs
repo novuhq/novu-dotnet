@@ -1,5 +1,5 @@
-using Novu.Models.Workflows;
-using Novu.Models.Workflows.Step;
+using Novu.Domain.Models.Workflows;
+using Novu.Domain.Models.Workflows.Step;
 
 namespace Novu.Sync.Models;
 

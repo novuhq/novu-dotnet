@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Novu.DTO.Subscribers;
-using Novu.Interfaces;
+using Novu.Clients;
+using Novu.Domain.Models.Subscribers;
 using ParkSquare.Testing.Generators;
 
 namespace Novu.Tests.Factories;

@@ -1,4 +1,4 @@
-using Novu.Models.Workflows.Step;
+using Novu.Domain.Models.Workflows.Step;
 using Novu.Tests.Factories.Models;
 using ParkSquare.Testing.Generators;
 

@@ -44,7 +44,7 @@
       <Compile Remove="NotificationTemplates\Trigger.cs" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="OpenApi\" />
+      <ProjectReference Include="..\Novu.Domain\Novu.Domain.csproj" />
     </ItemGroup>
 
 </Project>

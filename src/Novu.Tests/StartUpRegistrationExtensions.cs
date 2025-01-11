@@ -13,10 +13,7 @@ public static class StartUpRegistrationExtensions
     /// </summary>
     public static IServiceCollection ConfigureTestServices(this IServiceCollection services, HostBuilderContext context)
     {
-        // set environment variable to pickup correct configuration
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Integration");
-        context.Configuration = Settings.FileName.CreateConfigurationRoot();
-
+        context.SetNovuConfiguration("Integration");
         return services
                 // register external loggers and then retain with serilog
                 .AddLogging(lb => lb.AddXunitOutput())

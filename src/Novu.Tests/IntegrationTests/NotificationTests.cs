@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.Interfaces;
+using Novu.Clients;
 using Xunit;
 
 namespace Novu.Tests.IntegrationTests;

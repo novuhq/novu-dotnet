@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Novu.DTO.Layouts;
-using Novu.DTO.Subscribers;
-using Novu.DTO.Topics;
-using Novu.DTO.WorkflowGroups;
-using Novu.DTO.Workflows;
-using Novu.Interfaces;
+using Novu.Clients;
+using Novu.Domain.Models.Layouts;
+using Novu.Domain.Models.Subscribers;
+using Novu.Domain.Models.Topics;
+using Novu.Domain.Models.WorkflowGroups;
+using Novu.Domain.Models.Workflows;
 
 namespace Novu.Tests.Factories;
 

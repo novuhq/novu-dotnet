@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.DTO.WorkflowGroups;
-using Novu.Interfaces;
+using Novu.Clients;
 using Novu.Tests.Factories;
 using Xunit;
 

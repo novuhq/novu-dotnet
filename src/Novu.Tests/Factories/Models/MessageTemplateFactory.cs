@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Novu.Models.Workflows.Step.Message;
+using Novu.Domain.Models.Workflows.Step.Message;
 
 namespace Novu.Tests.Factories.Models;
 

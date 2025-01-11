@@ -1,8 +1,9 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Novu.Interfaces;
-using Novu.Models.Integrations;
+using Novu.Clients;
+using Novu.Domain;
+using Novu.Domain.Models.Integrations;
 using Xunit;
 
 namespace Novu.Tests.IntegrationTests;
@@ -20,7 +21,7 @@ public class IntegrationTests(IIntegrationClient integrationClient)
     [Fact]
     public void Should_Serialize_Credentials_WithNulls_IsEmpty()
     {
-        JsonConvert.SerializeObject(new Credentials(), NovuClient.DefaultSerializerSettings)
+        JsonConvert.SerializeObject(new Credentials(), NovuJsonSettings.DefaultSerializerSettings)
             .Should()
             .Be("{}");
     }

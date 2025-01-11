@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Novu.DTO;
+using Novu.Domain;
+using Novu.Domain.Models;
 using Novu.Extensions;
-using Novu.Sync;
 using Novu.Tests.Factories;
 using Refit;
 using Xunit;
+using ConfigurationExtensions = Novu.Extensions.ConfigurationExtensions;
 
 namespace Novu.Tests;
 
@@ -38,11 +39,14 @@ public static class IocModelFactoriesRegistrationExtensions
 
     public static IServiceCollection RegisterNovuClientsWithExceptionHandler(this IServiceCollection services)
     {
-        // set environment variable to pickup correct configuration
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Integration");
-        var configurationRoot = Settings.FileName.CreateConfigurationRoot();
+        var refitSettings = RefitSettingsWithExceptionHandler();
+        return services
+            .RegisterNovuClients(ConfigurationExtensions.GetConfiguration("Integration"), refitSettings);
+    }
 
-        var defaultSerializerSettings = NovuClient.DefaultSerializerSettings;
+    public static RefitSettings RefitSettingsWithExceptionHandler()
+    {
+        var defaultSerializerSettings = NovuJsonSettings.DefaultSerializerSettings;
 
         // setup in-memory logging for
         // see https://www.newtonsoft.com/json/help/html/SerializationTracing.htm
@@ -72,20 +76,14 @@ public static class IocModelFactoriesRegistrationExtensions
                 // don't catch any errors because we need to see errors in tests
                 try
                 {
-                    var error = JsonConvert.DeserializeObject<ErrorData>(content);
+                    var error = JsonConvert.DeserializeObject<NovuErrorData>(content);
                     if (error is not null)
                     {
-                        // Output.WriteLine("=================================");
-                        // Output.WriteLine(traceWriter.ToString());
-                        // Output.WriteLine("=================================");
                         Assert.Fail($"[{error.Code}: '{error.Status}'] '{string.Join("; ", error.Message)}'");
                     }
                 }
                 catch (JsonReaderException e)
                 {
-                    // Output.WriteLine("=================================");
-                    // Output.WriteLine(traceWriter.ToString());
-                    // Output.WriteLine("=================================");
                     Assert.Fail($"Cannot convert error message '{e.GetType()}' {content}");
                 }
             }
@@ -93,7 +91,6 @@ public static class IocModelFactoriesRegistrationExtensions
             return null;
         }
 
-        return services
-            .RegisterNovuClients(configurationRoot, refitSettings);
+        return refitSettings;
     }
 }

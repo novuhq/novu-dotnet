@@ -1,12 +1,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.DTO.Subscribers;
-using Novu.DTO.Subscribers.Preferences;
-using Novu.DTO.Workflows;
-using Novu.Interfaces;
-using Novu.Models.Subscribers.Preferences;
-using Novu.Models.Workflows;
+using Novu.Clients;
+using Novu.Domain.Models.Subscribers.Preferences;
+using Novu.Domain.Models.Workflows;
 using Novu.Tests.Factories;
 using Xunit;
 

@@ -2,9 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.DTO.Integrations;
-using Novu.Interfaces;
-using Novu.Models;
+using Novu.Clients;
+using Novu.Domain.Models;
 using Novu.Tests.Factories;
 using Xunit;
 

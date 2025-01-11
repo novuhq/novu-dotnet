@@ -1,12 +1,25 @@
 using System;
 using System.IO;
 using Microsoft.Extensions.Configuration;
-using Novu.Models;
+using Microsoft.Extensions.Hosting;
 
 namespace Novu.Extensions;
 
 public static class ConfigurationExtensions
 {
+    public static HostBuilderContext SetNovuConfiguration(this HostBuilderContext context, string environment)
+    {
+        context.Configuration = GetConfiguration(environment);
+        return context;
+    }
+
+    public static IConfiguration GetConfiguration(string environment)
+    {
+        // set environment variable to pickup correct configuration
+        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", environment);
+        return Settings.FileName.CreateConfigurationRoot();
+    }
+
     /// <summary>
     ///     Load up the configuration from (based on the directory) the running process
     ///     - appsettings.json

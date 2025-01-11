@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.DTO.Topics;
-using Novu.Interfaces;
+using Novu.Clients;
+using Novu.Domain.Models.Topics;
 using Novu.Tests.Factories;
 using ParkSquare.Testing.Generators;
 using Xunit;

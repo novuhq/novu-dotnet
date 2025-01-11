@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Novu.Interfaces;
+using Novu.Clients;
 using Xunit;
 
 namespace Novu.Tests.IntegrationTests;

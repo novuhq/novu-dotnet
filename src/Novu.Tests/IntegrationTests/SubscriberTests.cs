@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Novu.DTO.Subscribers;
+using Novu.Clients;
+using Novu.Domain.Models.Subscribers;
 using Novu.Extensions;
-using Novu.Interfaces;
 using Novu.Tests.Factories;
 using Refit;
 using Xunit;
@@ -125,11 +124,7 @@ public class SubscriberTests(SubscriberFactory subscriberFactory, ISubscriberCli
     [InlineData(null)]
     public async Task Should_Delete_Twice_Returns_NotFound([FromServices] IServiceCollection services)
     {
-        // set environment variable to pickup correct configuration
-        Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Integration");
-        var configurationRoot = Settings.FileName.CreateConfigurationRoot();
-
-        services.RegisterNovuClients(configurationRoot);
+        services.RegisterNovuClients(ConfigurationExtensions.GetConfiguration("Integration"));
         services.BuildServiceProvider();
 
         // override the base exception trap to expose 404

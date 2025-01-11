@@ -2,7 +2,8 @@ using System;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Novu.Interfaces;
+using Novu.Clients;
+using Novu.Domain;
 using Refit;
 
 namespace Novu.Extensions;
@@ -64,7 +65,7 @@ public static class IocNovuRegistrationExtensions
     {
         return refitSettings ?? new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(NovuClient.DefaultSerializerSettings),
+            ContentSerializer = new NewtonsoftJsonContentSerializer(NovuJsonSettings.DefaultSerializerSettings),
         };
     }
 }

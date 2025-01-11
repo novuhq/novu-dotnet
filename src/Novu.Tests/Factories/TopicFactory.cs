@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Novu.DTO;
-using Novu.DTO.Subscribers;
-using Novu.DTO.Topics;
-using Novu.Interfaces;
+using Novu.Clients;
+using Novu.Domain.Models;
+using Novu.Domain.Models.Subscribers;
+using Novu.Domain.Models.Topics;
 using ParkSquare.Testing.Generators;
 
 namespace Novu.Tests.Factories;
@@ -38,7 +38,7 @@ public class TopicFactory(Tracker tracker, ITopicClient client)
         return topic;
     }
 
-    public async Task<SucceedData> AddSubscriber(Topic topic,
+    public async Task<NovuSucceedData> AddSubscriber(Topic topic,
         Subscriber subscriber,
         List<Subscriber> additionalSubscribers = null)
     {

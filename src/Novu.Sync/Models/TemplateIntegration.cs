@@ -1,5 +1,5 @@
-using Novu.Models.Integrations;
-using Novu.Models.Subscribers.Preferences;
+using Novu.Domain.Models.Integrations;
+using Novu.Domain.Models.Subscribers.Preferences;
 
 namespace Novu.Sync.Models;
 

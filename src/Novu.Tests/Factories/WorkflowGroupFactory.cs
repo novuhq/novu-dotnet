@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using Novu.DTO.WorkflowGroups;
-using Novu.Interfaces;
+using Novu.Clients;
+using Novu.Domain.Models.WorkflowGroups;
 using ParkSquare.Testing.Generators;
 
 namespace Novu.Tests.Factories;

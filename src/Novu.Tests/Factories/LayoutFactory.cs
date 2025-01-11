@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using Novu.DTO.Layouts;
-using Novu.Interfaces;
-using Novu.Models.Workflows.Step.Message;
+using Novu.Clients;
+using Novu.Domain.Models.Layouts;
+using Novu.Domain.Models.Workflows.Step.Message;
 using ParkSquare.Testing.Generators;
 
 namespace Novu.Tests.Factories;
