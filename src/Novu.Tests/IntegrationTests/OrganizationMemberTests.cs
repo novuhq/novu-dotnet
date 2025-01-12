@@ -5,9 +5,7 @@ using Xunit;
 
 namespace Novu.Tests.IntegrationTests;
 
-public class OrganizationMemberTests(
-    IOrganizationMemberClient organizationMemberClient,
-    IOrganizationClient organizationClient)
+public class OrganizationMemberTests(IOrganizationMemberClient organizationMemberClient)
 {
     /// <summary>
     ///     There is no need to create an organization because the update is always made on the
