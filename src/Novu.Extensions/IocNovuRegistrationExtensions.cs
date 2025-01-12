@@ -37,8 +37,9 @@ public static class IocNovuRegistrationExtensions
         services.AddRefitClient<ISubscriberClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IEventClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<ITopicClient>(settings).ConfigureHttpClient(configureClient);
-        services.AddRefitClient<IWorkflowGroupClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IWorkflowClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IWorkflowGroupClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IWorkflowOverrideClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<ILayoutClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IIntegrationClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<INotificationsClient>(settings).ConfigureHttpClient(configureClient);

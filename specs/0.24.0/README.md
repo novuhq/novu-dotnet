@@ -271,10 +271,10 @@ execution.
 
 | HTTP Method | Endpoint                                                         | Description                    | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|------------------------------------------------------------------|--------------------------------|--------|---------|---------|------------|---------------|-------|
-| POST        | /v1/workflow-overrides                                           | Create a workflow override     | 0.19.0 |         |         |            | None          |       |
-| GET         | /v1/workflow-overrides                                           | Get workflow overrides         | 0.19.0 |         |         |            | None          |       |
-| PUT         | /v1/workflow-overrides/{overrideId}                              | Update workflow by override id | 0.19.0 |         |         |            | None          |       |
-| GET         | /v1/workflow-overrides/{overrideId}                              | Get workflow override by id    | 0.19.0 |         |         |            | None          |       |
-| DELETE      | /v1/workflow-overrides/{overrideId}                              | Delete workflow override       | 0.19.0 |         |         |            | None          |       |
-| PUT         | /v1/workflow-overrides/workflows/{workflowId}/tenants/{tenantId} | Update workflow override       | 0.19.0 |         |         |            | None          |       | 
-| GET         | /v1/workflow-overrides/workflows/{workflowId}/tenants/{tenantId} | Get workflow override          | 0.19.0 |         |         |            | None          |       |
+| POST        | /v1/workflow-overrides                                           | Create a workflow override     | 0.19.0 |         |         |            | Full          |       |
+| GET         | /v1/workflow-overrides                                           | Get workflow overrides         | 0.19.0 |         |         |            | Full          |       |
+| PUT         | /v1/workflow-overrides/{overrideId}                              | Update workflow by override id | 0.19.0 |         |         |            | Full          |       |
+| GET         | /v1/workflow-overrides/{overrideId}                              | Get workflow override by id    | 0.19.0 |         |         |            | Full          |       |
+| DELETE      | /v1/workflow-overrides/{overrideId}                              | Delete workflow override       | 0.19.0 |         |         |            | Full          |       |
+| PUT         | /v1/workflow-overrides/workflows/{workflowId}/tenants/{tenantId} | Update workflow override       | 0.19.0 |         |         |            | Full          |       | 
+| GET         | /v1/workflow-overrides/workflows/{workflowId}/tenants/{tenantId} | Get workflow override          | 0.19.0 |         |         |            | Full          |       |

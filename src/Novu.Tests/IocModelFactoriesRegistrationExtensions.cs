@@ -31,6 +31,7 @@ public static class IocModelFactoriesRegistrationExtensions
             .AddTransient<TopicFactory>()
             .AddTransient<WorkflowFactory>()
             .AddTransient<WorkflowGroupFactory>()
+            .AddTransient<WorkflowOverrideFactory>()
             .AddTransient<FeedFactory>()
             .AddTransient<TenantFactory>()
             .AddTransient<OrganizationFactory>()

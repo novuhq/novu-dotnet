@@ -8,6 +8,7 @@ using Novu.Domain.Models.Subscribers;
 using Novu.Domain.Models.Tenants;
 using Novu.Domain.Models.Topics;
 using Novu.Domain.Models.WorkflowGroups;
+using Novu.Domain.Models.WorkflowOverrides;
 using Novu.Domain.Models.Workflows;
 
 namespace Novu.Tests.Factories;
@@ -19,7 +20,8 @@ public class Tracker(
     IWorkflowClient workflowClient,
     ILayoutClient layoutClient,
     IFeedClient feedClient,
-    ITenantClient tenantClient)
+    ITenantClient tenantClient,
+    IWorkflowOverrideClient overrideClient)
 {
     public List<Subscriber> Subscribers { get; } = [];
     public List<Topic> Topics { get; } = [];
@@ -28,10 +30,12 @@ public class Tracker(
     public List<Layout> Layouts { get; } = [];
     public List<Feed> Feeds { get; } = [];
     public List<Tenant> Tenants { get; } = [];
+    public List<WorkflowOverride> WorkflowOverrides { get; } = [];
 
     public async Task RemoveAll()
     {
         // note: dispose buries errors like 404 Not Found
+        await TeardownWorkflowOverrides();
         await TeardownWorkflows();
         await TeardownWorkflowGroups();
         await TeardownTopics();
@@ -63,6 +67,14 @@ public class Tracker(
         foreach (var workflowGroup in WorkflowGroups)
         {
             await workflowGroupClient.Delete(workflowGroup.Id);
+        }
+    }
+
+    private async Task TeardownWorkflowOverrides()
+    {
+        foreach (var workflowOverride in WorkflowOverrides)
+        {
+            await overrideClient.Delete(workflowOverride.Id);
         }
     }
 

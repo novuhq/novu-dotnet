@@ -25,8 +25,9 @@ public class NovuClient : INovuClient
         Subscriber = RestService.For<ISubscriberClient>(httpClient, refitSettings);
         Event = RestService.For<IEventClient>(httpClient, refitSettings);
         Topic = RestService.For<ITopicClient>(httpClient, refitSettings);
-        WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, refitSettings);
         Workflow = RestService.For<IWorkflowClient>(httpClient, refitSettings);
+        WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, refitSettings);
+        WorkflowOverride = RestService.For<IWorkflowOverrideClient>(httpClient, refitSettings);
         Layout = RestService.For<ILayoutClient>(httpClient, refitSettings);
         Integration = RestService.For<IIntegrationClient>(httpClient, refitSettings);
         Notifications = RestService.For<INotificationsClient>(httpClient, refitSettings);
@@ -46,6 +47,8 @@ public class NovuClient : INovuClient
 
 
     public IWorkflowClient Workflow { get; }
+    public IWorkflowGroupClient WorkflowGroup { get; }
+    public IWorkflowOverrideClient WorkflowOverride { get; }
     public ILayoutClient Layout { get; }
     public IIntegrationClient Integration { get; }
     public INotificationsClient Notifications { get; }
@@ -54,7 +57,6 @@ public class NovuClient : INovuClient
     public ISubscriberClient Subscriber { get; }
     public IEventClient Event { get; }
     public ITopicClient Topic { get; }
-    public IWorkflowGroupClient WorkflowGroup { get; }
     public ITenantClient Tenant { get; }
     public IMxRecordClient MxRecord { get; }
     public IOrganizationClient Organization { get; }
