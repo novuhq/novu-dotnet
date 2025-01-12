@@ -34,7 +34,11 @@ public class NovuClient : INovuClient
         ExecutionDetails = RestService.For<IExecutionDetailsClient>(httpClient, refitSettings);
         Feeds = RestService.For<IFeedClient>(httpClient, refitSettings);
         Changes = RestService.For<IChangeClient>(httpClient, refitSettings);
+        Tenant = RestService.For<ITenantClient>(httpClient, refitSettings);
     }
+
+    public IFeedClient Feeds { get; }
+    public IChangeClient Changes { get; }
 
 
     public IWorkflowClient Workflow { get; }
@@ -47,6 +51,5 @@ public class NovuClient : INovuClient
     public IEventClient Event { get; }
     public ITopicClient Topic { get; }
     public IWorkflowGroupClient WorkflowGroup { get; }
-    public IFeedClient Feeds { get; }
-    public IChangeClient Changes { get; }
+    public ITenantClient Tenant { get; }
 }

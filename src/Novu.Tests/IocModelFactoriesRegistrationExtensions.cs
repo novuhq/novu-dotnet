@@ -32,6 +32,7 @@ public static class IocModelFactoriesRegistrationExtensions
             .AddTransient<WorkflowFactory>()
             .AddTransient<WorkflowGroupFactory>()
             .AddTransient<FeedFactory>()
+            .AddTransient<TenantFactory>()
             // test helpers for injection setup/teardown
             // .AddScoped<BeforeAfterTest, FactorySetupTeardown>()
             // IServiceCollection—this service collection for the ability to swap out for mocks

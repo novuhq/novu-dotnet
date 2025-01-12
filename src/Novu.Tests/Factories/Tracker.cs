@@ -5,6 +5,7 @@ using Novu.Clients;
 using Novu.Domain.Models.Feeds;
 using Novu.Domain.Models.Layouts;
 using Novu.Domain.Models.Subscribers;
+using Novu.Domain.Models.Tenants;
 using Novu.Domain.Models.Topics;
 using Novu.Domain.Models.WorkflowGroups;
 using Novu.Domain.Models.Workflows;
@@ -17,7 +18,8 @@ public class Tracker(
     IWorkflowGroupClient workflowGroupClient,
     IWorkflowClient workflowClient,
     ILayoutClient layoutClient,
-    IFeedClient feedClient)
+    IFeedClient feedClient,
+    ITenantClient tenantClient)
 {
     public List<Subscriber> Subscribers { get; } = [];
     public List<Topic> Topics { get; } = [];
@@ -25,6 +27,7 @@ public class Tracker(
     public List<Workflow> Workflows { get; } = [];
     public List<Layout> Layouts { get; } = [];
     public List<Feed> Feeds { get; } = [];
+    public List<Tenant> Tenants { get; } = [];
 
     public async Task RemoveAll()
     {
@@ -36,6 +39,7 @@ public class Tracker(
         await TeardownLayouts();
         await TeardownTopics();
         await TeardownFeeds();
+        await TeardownTenants();
     }
 
     private async Task TeardownSubscribers()
@@ -83,6 +87,14 @@ public class Tracker(
         foreach (var feed in Feeds)
         {
             await feedClient.Delete(feed.Id);
+        }
+    }
+
+    private async Task TeardownTenants()
+    {
+        foreach (var tenant in Tenants)
+        {
+            await tenantClient.Delete(tenant.Id);
         }
     }
 }

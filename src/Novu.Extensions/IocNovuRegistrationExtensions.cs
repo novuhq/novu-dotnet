@@ -46,6 +46,7 @@ public static class IocNovuRegistrationExtensions
         services.AddRefitClient<IExecutionDetailsClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IFeedClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IChangeClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<ITenantClient>(settings).ConfigureHttpClient(configureClient);
 
         return services
             .AddTransient<INovuClientConfiguration>(_ => novuConfiguration);
