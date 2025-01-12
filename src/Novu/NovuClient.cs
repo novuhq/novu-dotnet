@@ -41,6 +41,7 @@ public class NovuClient : INovuClient
         OrganizationMember = RestService.For<IOrganizationMemberClient>(httpClient, refitSettings);
         OrganizationBrand = RestService.For<IOrganizationBrandClient>(httpClient, refitSettings);
         Environment = RestService.For<IEnvironmentClient>(httpClient, refitSettings);
+        Blueprint = RestService.For<IBlueprintClient>(httpClient, refitSettings);
     }
 
     public IFeedClient Feeds { get; }
@@ -64,4 +65,5 @@ public class NovuClient : INovuClient
     public IOrganizationMemberClient OrganizationMember { get; }
     public IOrganizationBrandClient OrganizationBrand { get; }
     public IEnvironmentClient Environment { get; }
+    public IBlueprintClient Blueprint { get; }
 }

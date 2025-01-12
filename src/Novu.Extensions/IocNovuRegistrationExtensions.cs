@@ -53,6 +53,7 @@ public static class IocNovuRegistrationExtensions
         services.AddRefitClient<IOrganizationBrandClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IOrganizationMemberClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IEnvironmentClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IBlueprintClient>(settings).ConfigureHttpClient(configureClient);
 
         return services
             .AddTransient<INovuClientConfiguration>(_ => novuConfiguration);

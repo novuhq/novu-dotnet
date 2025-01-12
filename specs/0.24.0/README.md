@@ -245,7 +245,7 @@ environments and separate domains within a single account.
 | PATCH       | /v1/organizations                          | Rename organization name                         | 0.19.0 |         |         |            | Full          |       |
 | GET         | /v1/organizations/me                       | Fetch current organization details               | 0.19.0 |         |         |            | Full          |       |
 | DELETE      | /v1/organizations/members/{memberId}       | Remove a member from organization using memberId | 0.19.0 |         |         |            | Full          |       |
-| PUT         | /v1/organizations/members/{memberId}/roles | Update a member role to admin                    | 0.19.0 |         |   ??    |            | Removed       |       |
+| PUT         | /v1/organizations/members/{memberId}/roles | Update a member role to admin                    | 0.19.0 |         | ??      |            | Removed       |       |
 | GET         | /v1/organizations/members                  | Fetch all members of current organizations       | 0.19.0 |         |         |            | Full          |       |
 | PUT         | /v1/organizations/branding                 | Update organization branding details             | 0.19.0 |         |         |            | Full          |       |
 
@@ -261,11 +261,11 @@ execution.
 
 ### Default
 
-| HTTP Method | Endpoint                         | Description | New    | Changed | Deleted | Deprecated | Compatability | Notes |
-|-------------|----------------------------------|-------------|--------|---------|---------|------------|---------------|-------|
-| GET         | /v1/blueprints/group-by-category |             | 0.19.0 |         |         |            | Full          |       |
-| GET         | /v1/blueprints/list              |             | 0.19.0 |         |         |            | Full          |       |
-| GET         | /v1/blueprints/{id}              |             | 0.19.0 |         |         |            | Full          |       |
+| HTTP Method | Endpoint                                | Description | New    | Changed | Deleted | Deprecated | Compatability | Notes                        |
+|-------------|-----------------------------------------|-------------|--------|---------|---------|------------|---------------|------------------------------|
+| GET         | /v1/blueprints/group-by-category        |             | 0.19.0 |         |         |            | Full          |                              |
+| GET         | /v1/blueprints/list                     |             | 0.19.0 |         | 0.24.0  |            | None          |                              |
+| GET         | /v1/blueprints/{templateIdOrIdentifier} |             | 0.19.0 |         |         |            | Full          | Throws 500 error on wrong id |
 
 ### Workflow-Overrides
 
