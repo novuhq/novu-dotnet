@@ -167,10 +167,10 @@ to test changes before they are applied to your environment and atomically apply
 
 | HTTP Method | Endpoint                     | Description       | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|------------------------------|-------------------|--------|---------|---------|------------|---------------|-------|
-| GET         | /v1/changes                  | Get changes       | 0.18.0 |         |         |            | None          |       |
-| GET         | /v1/changes/count            | Get changes count | 0.18.0 |         |         |            | None          |       |
-| POST        | /v1/changes/bulk/apply       | Apply changes     | 0.18.0 |         |         |            | None          |       |
-| POST        | /v1/changes/{changeId}/apply | Apply change      | 0.18.0 |         |         |            | None          |       |
+| GET         | /v1/changes                  | Get changes       | 0.18.0 |         |         |            | Full          |       |
+| GET         | /v1/changes/count            | Get changes count | 0.18.0 |         |         |            | Full          |       |
+| POST        | /v1/changes/bulk/apply       | Apply changes     | 0.18.0 |         |         |            | Full          |       |
+| POST        | /v1/changes/{changeId}/apply | Apply change      | 0.18.0 |         |         |            | Full          |       |
 
 ### Environments
 

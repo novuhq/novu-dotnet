@@ -33,6 +33,7 @@ public class NovuClient : INovuClient
         Message = RestService.For<IMessageClient>(httpClient, refitSettings);
         ExecutionDetails = RestService.For<IExecutionDetailsClient>(httpClient, refitSettings);
         Feeds = RestService.For<IFeedClient>(httpClient, refitSettings);
+        Changes = RestService.For<IChangeClient>(httpClient, refitSettings);
     }
 
 
@@ -47,4 +48,5 @@ public class NovuClient : INovuClient
     public ITopicClient Topic { get; }
     public IWorkflowGroupClient WorkflowGroup { get; }
     public IFeedClient Feeds { get; }
+    public IChangeClient Changes { get; }
 }
