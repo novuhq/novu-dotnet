@@ -31,6 +31,37 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
     }
 
     [Fact]
+    public async Task Should_Create_Subscriber_And_Trigger_Event()
+    {
+        var subscriber = await subscriberFactory.Make();
+
+        var trigger = await eventClient.Trigger(
+            new EventCreateData
+            {
+                EventName = await GetActiveEvent(),
+                To =
+                {
+                    SubscriberId = subscriber?.SubscriberId! + "-new",
+                    Email = subscriber?.Email + ".changed",
+                    FirstName = subscriber?.FirstName + " Changed",
+                    LastName = subscriber?.FirstName + " Changed",
+                    Phone = "+777" + subscriber?.Phone,
+                    Avatar = subscriber?.Avatar + "?changed=1",
+                    Locale = subscriber?.Locale + ",ro-RO",
+                    Data = new
+                    {
+                        EMAIL_PREFERENCE = "NONE",
+                        ADDITIONAL_PROPERTIES = new { IS_TEST_SUBSCRIBER = true },
+                    },
+                },
+                Payload = new TestPayload(),
+            });
+        trigger.Data.Acknowledged.Should().BeTrue();
+
+        // TODO: how to detect success for a subscriber
+    }
+
+    [Fact]
     public async Task Should_Trigger_Bulk_Event()
     {
         var subscriber = await subscriberFactory.Make();
