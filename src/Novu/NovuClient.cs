@@ -36,6 +36,9 @@ public class NovuClient : INovuClient
         Changes = RestService.For<IChangeClient>(httpClient, refitSettings);
         Tenant = RestService.For<ITenantClient>(httpClient, refitSettings);
         MxRecord = RestService.For<IMxRecordClient>(httpClient, refitSettings);
+        Organization = RestService.For<IOrganizationClient>(httpClient, refitSettings);
+        OrganizationMember = RestService.For<IOrganizationMemberClient>(httpClient, refitSettings);
+        OrganizationBrand = RestService.For<IOrganizationBrandClient>(httpClient, refitSettings);
     }
 
     public IFeedClient Feeds { get; }
@@ -54,4 +57,7 @@ public class NovuClient : INovuClient
     public IWorkflowGroupClient WorkflowGroup { get; }
     public ITenantClient Tenant { get; }
     public IMxRecordClient MxRecord { get; }
+    public IOrganizationClient Organization { get; }
+    public IOrganizationMemberClient OrganizationMember { get; }
+    public IOrganizationBrandClient OrganizationBrand { get; }
 }
