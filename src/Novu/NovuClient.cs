@@ -32,6 +32,7 @@ public class NovuClient : INovuClient
         Notifications = RestService.For<INotificationsClient>(httpClient, refitSettings);
         Message = RestService.For<IMessageClient>(httpClient, refitSettings);
         ExecutionDetails = RestService.For<IExecutionDetailsClient>(httpClient, refitSettings);
+        Feeds = RestService.For<IFeedClient>(httpClient, refitSettings);
     }
 
 
@@ -45,4 +46,5 @@ public class NovuClient : INovuClient
     public IEventClient Event { get; }
     public ITopicClient Topic { get; }
     public IWorkflowGroupClient WorkflowGroup { get; }
+    public IFeedClient Feeds { get; }
 }
