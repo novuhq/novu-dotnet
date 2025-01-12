@@ -3,7 +3,6 @@
 set -e
 
 PREVIOUS="0.18.0"
-#VERSIONS=('0.19.0' '0.20.0' '0.21.0' '0.22.0' '0.23.0' '0.24.0')
 VERSIONS=('0.19.0' '0.24.0' '2.0.6')
 
 for version in "${VERSIONS[@]}"; do
