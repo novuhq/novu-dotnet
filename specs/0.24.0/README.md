@@ -202,9 +202,9 @@ This can be used to monitor activity and discover potential issues with a specif
 
 | HTTP Method | Endpoint           | Description | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|--------------------|-------------|--------|---------|---------|------------|---------------|-------|
-| POST        | /v1/feeds          | Create feed | 0.18.0 |         |         |            | None          |       |
-| GET         | /v1/feeds          | Get feeds   | 0.18.0 |         |         |            | None          |       |
-| DELETE      | /v1/feeds/{feedId} | Delete feed | 0.18.0 |         |         |            | None          |       |
+| POST        | /v1/feeds          | Create feed | 0.18.0 |         |         |            | Full          |       |
+| GET         | /v1/feeds          | Get feeds   | 0.18.0 |         |         |            | Full          |       |
+| DELETE      | /v1/feeds/{feedId} | Delete feed | 0.18.0 |         |         |            | Full          |       |
 
 ### Tenants
 
