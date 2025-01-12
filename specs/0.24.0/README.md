@@ -1,16 +1,16 @@
 ## API
 
 * **Since:** 0.18.0
-* **Latest:** 0.19.0
+* **Latest:** 0.24.0
 
-**Tracking Versions**: New, Changed, Deleted, Deprecated
+**Tracking Versions**: `New`, `Changed`, `Deleted`, `Deprecated`
 
 * **New**: tracked since version
 * **Changed**: has had changes on the endpoint attributes
 * **Deleted**: was removed (obsolete)
 * **Deprecated**: marked as being removed
 
-**Compatability**: Full, Incomplete, None, Upgrade
+**Compatability**: `Full`, `Incomplete`, `None`, `Upgrade`
 
 * **Full**: all attributes are supported on the model on the method/endpoint call
 * **None**: the method/endpoint is not implemented
@@ -24,7 +24,7 @@ notifications to subscribers based on their actions.
 
 | HTTP Method | Endpoint                           | Description            | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|------------------------------------|------------------------|--------|---------|---------|------------|---------------|-------|
-| POST        | /v1/events/trigger                 | Trigger event          | 0.18.0 |         |         |            | Upgrade       |       |
+| POST        | /v1/events/trigger                 | Trigger event          | 0.18.0 | 0.19.0  |         |            | Upgrade       |       |
 | POST        | /v1/events/trigger/bulk            | Bulk trigger event     | 0.18.0 |         |         |            | Full          |       |
 | POST        | /v1/events/trigger/broadcast       | Broadcast event to all | 0.18.0 |         |         |            | Full          |       |
 | DELETE      | /v1/events/trigger/{transactionId} | Cancel triggered event | 0.18.0 |         |         |            | Full          |       |
@@ -179,12 +179,12 @@ subscribers, and preferences created in one environment are never accessible to 
 
 | HTTP Method | Endpoint                             | Description             | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|--------------------------------------|-------------------------|--------|---------|---------|------------|---------------|-------|
-| GET         | /v1/environments/me                  | Get current environment | 0.18.0 |         |         |            | None          |       |
-| POST        | /v1/environments                     | Create environment      | 0.18.0 |         |         | ??         | None          |       |
-| GET         | /v1/environments                     | Get environments        | 0.18.0 |         |         |            | None          |       |
-| PUT         | /v1/environments{environmentId}      | Update env by id        | 0.18.0 |         |         | ??         | None          |       |
-| GET         | /v1/environments/api-keys            | Get api keys            | 0.18.0 |         |         |            | None          |       |
-| POST        | /v1/environments/api-keys/regenerate | Regenerate api keys     | 0.18.0 |         |         |            | None          |       |
+| GET         | /v1/environments/me                  | Get current environment | 0.18.0 |         |         |            | Full          |       |
+| POST        | /v1/environments                     | Create environment      | 0.18.0 |         | 0.24.0  | ??         | None          |       |
+| GET         | /v1/environments                     | Get environments        | 0.18.0 |         |         |            | Full          |       |
+| PUT         | /v1/environments{environmentId}      | Update env by id        | 0.18.0 |         | 0.24.0  | ??         | None          |       |
+| GET         | /v1/environments/api-keys            | Get api keys            | 0.18.0 |         |         |            | Full          |       |
+| POST        | /v1/environments/api-keys/regenerate | Regenerate api keys     | 0.18.0 |         |         |            | Full          |       |
 
 ### Inbound Parse
 
