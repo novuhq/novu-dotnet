@@ -165,12 +165,12 @@ Workflow groups are used to organize workflows into logical groups.
 Changes represent a change in state of an environment. They are analagous to a pending pull request in git, enabling you
 to test changes before they are applied to your environment and atomically apply them when you are ready.
 
-| HTTP Method | Endpoint                     | Description       | New    | Changed | Deleted | Deprecated | Compatability | Notes |
-|-------------|------------------------------|-------------------|--------|---------|---------|------------|---------------|-------|
-| GET         | /v1/changes                  | Get changes       | 0.18.0 |         |         |            | Full          |       |
-| GET         | /v1/changes/count            | Get changes count | 0.18.0 |         |         |            | Full          |       |
-| POST        | /v1/changes/bulk/apply       | Apply changes     | 0.18.0 |         |         |            | Full          |       |
-| POST        | /v1/changes/{changeId}/apply | Apply change      | 0.18.0 |         |         |            | Full          |       |
+| HTTP Method | Endpoint                     | Description       | New    | Changed | Deleted | Deprecated | Compatability | Notes                 |
+|-------------|------------------------------|-------------------|--------|---------|---------|------------|---------------|-----------------------|
+| GET         | /v1/changes                  | Get changes       | 0.18.0 |         |         |            | Full          |                       |
+| GET         | /v1/changes/count            | Get changes count | 0.18.0 |         |         |            | Full          |                       |
+| POST        | /v1/changes/bulk/apply       | Apply changes     | 0.18.0 |         |         |            | Full          | Unsure how this works |
+| POST        | /v1/changes/{changeId}/apply | Apply change      | 0.18.0 |         |         |            | Full          | Unsure how this works |
 
 ### Environments
 
@@ -193,7 +193,7 @@ contents of the email and POSTs the information to a specified URL in a multipar
 
 | HTTP Method | Endpoint                    | Description                                                      | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|-----------------------------|------------------------------------------------------------------|--------|---------|---------|------------|---------------|-------|
-| GET         | /v1/inbound-parse/mx/status | Validate the mx record setup for the inbound parse functionality | 0.18.0 |         |         |            | None          |       |
+| GET         | /v1/inbound-parse/mx/status | Validate the mx record setup for the inbound parse functionality | 0.18.0 |         |         |            | Full          |       |
 
 ### Feeds
 
@@ -214,11 +214,11 @@ or organizations.
 
 | HTTP Method | Endpoint                 | Description   | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|--------------------------|---------------|--------|---------|---------|------------|---------------|-------|
-| GET         | /v1/tenants              | Get tenants   | 0.19.0 |         |         |            | None          |       |
-| POST        | /v1/tenants              | Create tenant | 0.19.0 |         |         |            | None          |       |
-| GET         | /v1/tenants/{identifier} | Get tenant    | 0.19.0 |         |         |            | None          |       |
-| PATCH       | /v1/tenants/{identifier} | Update tenant | 0.19.0 |         |         |            | None          |       |
-| DELETE      | /v1/tenants/{identifier} | Delete tenant | 0.19.0 |         |         |            | None          |       |
+| GET         | /v1/tenants              | Get tenants   | 0.19.0 |         |         |            | Full          |       |
+| POST        | /v1/tenants              | Create tenant | 0.19.0 |         |         |            | Full          |       |
+| GET         | /v1/tenants/{identifier} | Get tenant    | 0.19.0 |         |         |            | Full          |       |
+| PATCH       | /v1/tenants/{identifier} | Update tenant | 0.19.0 |         |         |            | Full          |       |
+| DELETE      | /v1/tenants/{identifier} | Delete tenant | 0.19.0 |         |         |            | Full          |       |
 
 ### Messages
 

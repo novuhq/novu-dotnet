@@ -35,6 +35,7 @@ public class NovuClient : INovuClient
         Feeds = RestService.For<IFeedClient>(httpClient, refitSettings);
         Changes = RestService.For<IChangeClient>(httpClient, refitSettings);
         Tenant = RestService.For<ITenantClient>(httpClient, refitSettings);
+        MxRecord = RestService.For<IMxRecordClient>(httpClient, refitSettings);
     }
 
     public IFeedClient Feeds { get; }
@@ -52,4 +53,5 @@ public class NovuClient : INovuClient
     public ITopicClient Topic { get; }
     public IWorkflowGroupClient WorkflowGroup { get; }
     public ITenantClient Tenant { get; }
+    public IMxRecordClient MxRecord { get; }
 }
