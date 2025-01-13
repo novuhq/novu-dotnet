@@ -3,26 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.DTO;
-using Novu.DTO.Layouts;
-using Novu.DTO.Workflows;
+using Novu.Clients;
+using Novu.Domain.Models.Workflows;
+using Novu.Domain.Models.Workflows.Step;
 using Novu.Extensions;
-using Novu.Models.Workflows;
-using Novu.Models.Workflows.Step;
+using Novu.Tests.Factories;
 using ParkSquare.Testing.Generators;
 using Polly;
 using Xunit;
-using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace Novu.Tests.IntegrationTests;
 
-public class WorkflowTests : BaseIntegrationTest
+public class WorkflowTests(WorkflowFactory workflowFactory, IWorkflowClient workflowClient, ILayoutClient layoutClient)
 {
-    public WorkflowTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     public static IEnumerable<object[]> Data =>
         new List<object[]>
         {
@@ -66,7 +60,7 @@ public class WorkflowTests : BaseIntegrationTest
             Name = StringGenerator.SequenceOfAlphaNumerics(10),
             Description = StringGenerator.LoremIpsum(5),
             PreferenceSettings = new PreferenceChannels(),
-            Steps = steps ?? Array.Empty<Step>(),
+            Steps = steps ?? [],
             WorkflowGroupId = StringGenerator.SequenceOfAlphaNumerics(20),
         };
         if (!createData.IsValid(out var results))
@@ -79,7 +73,7 @@ public class WorkflowTests : BaseIntegrationTest
     [MemberData(nameof(Data))]
     public async Task Should_Create_Steps(string test, Step[] steps, int stepsCount)
     {
-        var workflow = await Make<Workflow>(steps: steps);
+        var workflow = await workflowFactory.Make(steps: steps);
         workflow.Should().NotBeNull();
         workflow.Steps.Should().HaveCount(stepsCount);
         workflow.Triggers.Should().HaveCount(1);
@@ -90,12 +84,12 @@ public class WorkflowTests : BaseIntegrationTest
     public async Task Should_Create_Step_With_LayoutSet()
     {
         // we know there is always a default layout
-        var layout = (await Layout.Get())
+        var layout = (await layoutClient.Get())
             .Data
             .Single(x => x.IsDefault);
 
         var steps = new[] { StepFactory.Email(layoutId: layout.Id) };
-        var workflow = await Make<Workflow>(steps: steps);
+        var workflow = await workflowFactory.Make(steps: steps);
         workflow.Should().NotBeNull();
         workflow.Triggers.Should().HaveCount(1);
         workflow.Steps.First().Template.LayoutId.Should().Be(layout.Id);
@@ -104,7 +98,7 @@ public class WorkflowTests : BaseIntegrationTest
     [Fact]
     public async Task Should_Get_Workflows()
     {
-        var workflows = await Workflow.Get();
+        var workflows = await workflowClient.Get();
         workflows.Should().NotBeNull();
         workflows.Page.Should().Be(0);
         workflows.Data.Should().NotBeEmpty();
@@ -113,8 +107,8 @@ public class WorkflowTests : BaseIntegrationTest
     [Fact]
     public async Task Should_Get_Workflow()
     {
-        var workflow = await Make<Workflow>();
-        var result = await Workflow.Get(workflow.Id);
+        var workflow = await workflowFactory.Make();
+        var result = await workflowClient.Get(workflow.Id);
         result.Data.Should().NotBeNull();
         result.Data.Id.Should().Be(workflow.Id);
     }
@@ -122,9 +116,9 @@ public class WorkflowTests : BaseIntegrationTest
     [Fact]
     public async Task Should_Delete_Workflow()
     {
-        var workflow = await Make<Workflow>();
-        await Workflow.Delete(workflow.Id);
-        var result = await Workflow.Get(workflow.Id);
+        var workflow = await workflowFactory.Make();
+        await workflowClient.Delete(workflow.Id);
+        var result = await workflowClient.Get(workflow.Id);
         result.Data.Should().BeNull();
     }
 
@@ -134,7 +128,7 @@ public class WorkflowTests : BaseIntegrationTest
     [Fact]
     public async Task Should_SetStatus()
     {
-        var workflows = await Workflow.Get();
+        var workflows = await workflowClient.Get();
         var workflow = workflows.Data.First();
 
         // WAIT for system to catch up given it is async
@@ -145,7 +139,7 @@ public class WorkflowTests : BaseIntegrationTest
 
         await retryPolicy.ExecuteAsync(async () =>
         {
-            var result = await Workflow.UpdateStatus(
+            var result = await workflowClient.UpdateStatus(
                 workflow.Id,
                 new WorkflowStatusEditData
                 {

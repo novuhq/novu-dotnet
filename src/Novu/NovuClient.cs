@@ -1,56 +1,56 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
-using Novu.Interfaces;
+﻿using Novu.Clients;
+using Novu.Domain;
 using Refit;
 
 namespace Novu;
 
 public class NovuClient : INovuClient
 {
-    public static readonly JsonSerializerSettings DefaultSerializerSettings = new()
-    {
-        MissingMemberHandling = MissingMemberHandling.Ignore,
-        NullValueHandling = NullValueHandling.Ignore,
-        ContractResolver = new DefaultContractResolver
-        {
-            NamingStrategy = new CamelCaseNamingStrategy(),
-        },
-        // General enum conversions are required to the in-place strings
-        Converters = new List<JsonConverter>
-        {
-            new StringEnumConverter(),
-        },
-    };
+    private const string AuthorizationHeaderName = "Authorization";
 
     public NovuClient(
         INovuClientConfiguration configuration,
-        HttpClient? client = default,
-        RefitSettings? refitSettings = default)
+        HttpClient? client = null,
+        RefitSettings? refitSettings = null)
     {
         var httpClient = client ?? new HttpClient();
         httpClient.BaseAddress = new Uri(configuration.Url);
-        httpClient.DefaultRequestHeaders.Add("Authorization", $"ApiKey {configuration.ApiKey}");
+        httpClient.DefaultRequestHeaders.Add(AuthorizationHeaderName, $"ApiKey {configuration.ApiKey}");
 
         refitSettings ??= new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(DefaultSerializerSettings),
+            ContentSerializer = new NewtonsoftJsonContentSerializer(NovuJsonSettings.DefaultSerializerSettings),
         };
 
         Subscriber = RestService.For<ISubscriberClient>(httpClient, refitSettings);
         Event = RestService.For<IEventClient>(httpClient, refitSettings);
         Topic = RestService.For<ITopicClient>(httpClient, refitSettings);
-        WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, refitSettings);
         Workflow = RestService.For<IWorkflowClient>(httpClient, refitSettings);
+        WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, refitSettings);
+        WorkflowOverride = RestService.For<IWorkflowOverrideClient>(httpClient, refitSettings);
         Layout = RestService.For<ILayoutClient>(httpClient, refitSettings);
         Integration = RestService.For<IIntegrationClient>(httpClient, refitSettings);
         Notifications = RestService.For<INotificationsClient>(httpClient, refitSettings);
         Message = RestService.For<IMessageClient>(httpClient, refitSettings);
         ExecutionDetails = RestService.For<IExecutionDetailsClient>(httpClient, refitSettings);
+        Feeds = RestService.For<IFeedClient>(httpClient, refitSettings);
+        Changes = RestService.For<IChangeClient>(httpClient, refitSettings);
+        Tenant = RestService.For<ITenantClient>(httpClient, refitSettings);
+        MxRecord = RestService.For<IMxRecordClient>(httpClient, refitSettings);
+        Organization = RestService.For<IOrganizationClient>(httpClient, refitSettings);
+        OrganizationMember = RestService.For<IOrganizationMemberClient>(httpClient, refitSettings);
+        OrganizationBrand = RestService.For<IOrganizationBrandClient>(httpClient, refitSettings);
+        Environment = RestService.For<IEnvironmentClient>(httpClient, refitSettings);
+        Blueprint = RestService.For<IBlueprintClient>(httpClient, refitSettings);
     }
+
+    public IFeedClient Feeds { get; }
+    public IChangeClient Changes { get; }
 
 
     public IWorkflowClient Workflow { get; }
+    public IWorkflowGroupClient WorkflowGroup { get; }
+    public IWorkflowOverrideClient WorkflowOverride { get; }
     public ILayoutClient Layout { get; }
     public IIntegrationClient Integration { get; }
     public INotificationsClient Notifications { get; }
@@ -59,5 +59,11 @@ public class NovuClient : INovuClient
     public ISubscriberClient Subscriber { get; }
     public IEventClient Event { get; }
     public ITopicClient Topic { get; }
-    public IWorkflowGroupClient WorkflowGroup { get; }
+    public ITenantClient Tenant { get; }
+    public IMxRecordClient MxRecord { get; }
+    public IOrganizationClient Organization { get; }
+    public IOrganizationMemberClient OrganizationMember { get; }
+    public IOrganizationBrandClient OrganizationBrand { get; }
+    public IEnvironmentClient Environment { get; }
+    public IBlueprintClient Blueprint { get; }
 }

@@ -19,12 +19,16 @@ You can open a new issue with this [issue form](https://github.com/novuhq/novu-d
 
 ### Requirements
 
-- .NET 7
+- .NET 8
 - Novu API Key - Can be located at https://web.novu.co/settings
 
 ### Setup the project
 
-Clone the repository and run `dotnet restore` against `Novu.sln` 
+* Clone the repository and run `dotnet restore` against `Novu.sln`
+* docker files for local development in docker folder
+* difference between versions in specs folder
+* autogen contract files for versions in refitter folder
+* Start the local docker version of Novu against the version you are reporting/building against
 
 ## Missing a Feature?
 

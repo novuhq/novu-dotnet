@@ -1,0 +1,228 @@
+= NOVU API (v 1.0)
+:reproducible:
+:sectlinks:
+:toc:
+
+== What's Changed
+=== GET   /v1/layouts/{layoutId}
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== PATCH /v1/layouts/{layoutId}
+* Request:
+** Changed application/json
+** Schema:
+Broken compatibility
+
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/layouts
+* Request:
+** Changed application/json
+** Schema:
+Broken compatibility
+
+=== GET   /v1/layouts
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/integrations
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/integrations
+* Return Type:
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/integrations/active
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== PUT   /v1/integrations/{integrationId}
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== DELETE/v1/integrations/{integrationId}
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/integrations/{integrationId}/set-primary
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/events/trigger
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+=== POST  /v1/events/trigger/broadcast
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+=== POST  /v1/events/trigger/bulk
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+=== GET   /v1/notification-templates
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/notification-templates
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+* Return Type:
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/notification-templates/{templateId}
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== PUT   /v1/notification-templates/{templateId}
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== PUT   /v1/notification-templates/{templateId}/status
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/workflows
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/workflows
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+* Return Type:
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/workflows/{workflowId}
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== PUT   /v1/workflows/{workflowId}
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== PUT   /v1/workflows/{workflowId}/status
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/subscribers/{subscriberId}/notifications/feed
+* Return Type:
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/subscribers/{subscriberId}/messages/markAs
+* Return Type:
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/subscribers/{subscriberId}/messages/{messageId}/actions/{type}
+* Return Type:
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+
+WARNING: API changes broke backward compatibility

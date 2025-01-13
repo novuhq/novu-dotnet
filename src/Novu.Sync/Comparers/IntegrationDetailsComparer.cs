@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
-using Novu.DTO.Integrations;
+using Novu.Domain;
+using Novu.Domain.Models.Integrations;
 
 namespace Novu.Sync.Comparers;
 
@@ -19,8 +20,8 @@ public class IntegrationDetailsComparer : IEqualityComparer<Integration>
                x.Active == y.Active &&
                // inefficient but needing to check if the payloads are different
                // TODO: may want to inject serialisation setting to be consistent
-               JsonConvert.SerializeObject(x.Credentials, NovuClient.DefaultSerializerSettings)
-                   .Equals(JsonConvert.SerializeObject(y.Credentials, NovuClient.DefaultSerializerSettings));
+               JsonConvert.SerializeObject(x.Credentials, NovuJsonSettings.DefaultSerializerSettings)
+                   .Equals(JsonConvert.SerializeObject(y.Credentials, NovuJsonSettings.DefaultSerializerSettings));
     }
 
     public int GetHashCode(Integration obj)

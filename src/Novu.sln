@@ -16,7 +16,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionF
 		..\CONTRIBUTING.md = ..\CONTRIBUTING.md
 		..\CODE_OF_CONDUCT.md = ..\CODE_OF_CONDUCT.md
 		..\README.md = ..\README.md
+		docker-compose.yml = docker-compose.yml
+		env.example = env.example
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Novu.Domain", "Novu.Domain\Novu.Domain.csproj", "{C9E1DF40-7412-4044-9E80-EB1DE4450499}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,5 +44,9 @@ Global
 		{03F3C972-3416-49E3-8C24-1F926C3C04D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03F3C972-3416-49E3-8C24-1F926C3C04D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03F3C972-3416-49E3-8C24-1F926C3C04D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9E1DF40-7412-4044-9E80-EB1DE4450499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9E1DF40-7412-4044-9E80-EB1DE4450499}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9E1DF40-7412-4044-9E80-EB1DE4450499}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9E1DF40-7412-4044-9E80-EB1DE4450499}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,870 @@
+= NOVU API (v 1.0)
+:reproducible:
+:sectlinks:
+:toc:
+
+== What's Changed
+=== GET   /v1/integrations/webhook/provider/{providerOrIntegrationId}/status
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== DELETE/v1/subscribers/{subscriberId}/credentials/{providerId}
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== GET   /v1/subscribers/{subscriberId}/notifications/feed
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (object -> object)
+
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== GET   /v1/subscribers/{subscriberId}/credentials/{providerId}/oauth/callback
+* Parameter:
+** Changed providerId in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== GET   /v1/subscribers/{subscriberId}/credentials/{providerId}/oauth
+* Parameter:
+** Changed providerId in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== DELETE/v1/messages/transaction/{transactionId}
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== DELETE/v1/events/trigger/{transactionId}
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== POST  /v1/subscribers/bulk
+* Request:
+** Changed application/json
+** Schema:
+Broken compatibility
+*** Changed property type: subscribers[n] (object -> string)
+
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== GET   /v1/subscribers/{subscriberId}/preferences/{level}
+* Parameter:
+** Add includeInactiveChannels in query
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== GET   /v1/subscribers/{subscriberId}/notifications/unseen
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== POST  /v1/subscribers/{subscriberId}/messages/mark-all
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 201 Created
+** Media types:
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== POST  /v1/topics/{topicKey}/subscribers
+* Parameter:
+** Changed topicKey in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Deleted 204 No Content
+** Changed 200 OK
+** Media types:
+*** Added application/json
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== GET   /v1/topics/{topicKey}/subscribers/{externalSubscriberId}
+* Parameter:
+** Changed topicKey in path
+** Changed externalSubscriberId in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/topics/{topicKey}/subscribers/removal
+* Parameter:
+** Changed topicKey in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== DELETE/v1/topics/{topicKey}
+* Parameter:
+** Changed topicKey in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 422 Unprocessable Entity
+** Changed 404 Not Found
+** Media types:
+*** Added application/json
+
+=== GET   /v1/topics/{topicKey}
+* Parameter:
+** Changed topicKey in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== PATCH /v1/topics/{topicKey}
+* Parameter:
+** Changed topicKey in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== GET   /v1/notifications/stats
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== GET   /v1/notifications/graph/stats
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== DELETE/v1/messages/{messageId}
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== POST  /v1/events/trigger
+* Request:
+** Changed application/json
+** Schema:
+Broken compatibility
+*** Changed property type: to (array -> object)
+
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== POST  /v1/events/trigger/broadcast
+* Request:
+** Changed application/json
+** Schema:
+Broken compatibility
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/subscribers
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+
+=== POST  /v1/subscribers
+* Request:
+** Changed application/json
+** Schema:
+Broken compatibility
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+
+=== DELETE/v1/subscribers/{subscriberId}
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== GET   /v1/subscribers/{subscriberId}
+* Parameter:
+** Add includeTopics in query
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+
+=== PUT   /v1/subscribers/{subscriberId}
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+
+=== PUT   /v1/subscribers/{subscriberId}/credentials
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+
+=== PATCH /v1/subscribers/{subscriberId}/credentials
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+
+=== PATCH /v1/subscribers/{subscriberId}/online-status
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+
+=== GET   /v1/subscribers/{subscriberId}/preferences
+* Parameter:
+** Add includeInactiveChannels in query
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== PATCH /v1/subscribers/{subscriberId}/preferences
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+
+=== POST  /v1/topics
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/topics
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+
+=== GET   /v1/notifications/{notificationId}
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: data.jobs[n] (object -> string)
+
+*** Changed property type: data.template.triggers[n] (object -> string)
+
+
+=== GET   /v1/integrations
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: [n].credentials (object -> object)
+
+
+=== POST  /v1/integrations
+* Request:
+** Changed application/json
+** Schema:
+Broken compatibility
+*** Changed property type: _environmentId (string -> string)
+
+*** Changed property type: credentials (object -> object)
+
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: data.credentials (object -> object)
+
+
+=== GET   /v1/integrations/active
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: [n].credentials (object -> object)
+
+
+=== PUT   /v1/integrations/{integrationId}
+* Request:
+** Changed application/json
+** Schema:
+Backward compatible
+
+* Return Type:
+** Add 400 Bad Request
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: data.credentials (object -> object)
+
+
+=== DELETE/v1/integrations/{integrationId}
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: data[n].credentials (object -> object)
+
+
+=== POST  /v1/integrations/{integrationId}/set-primary
+* Return Type:
+** Add 400 Bad Request
+** Add 422 Unprocessable Entity
+** Deleted 201 Created
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: data.credentials (object -> object)
+
+
+=== POST  /v1/events/trigger/bulk
+* Request:
+** Changed application/json
+** Schema:
+Broken compatibility
+*** Changed property type: events[n].to (array -> object)
+
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Backward compatible
+
+=== GET   /v1/notifications
+* Parameter:
+** Add after in query
+** Add before in query
+** Changed channels in query
+** Changed templates in query
+** Changed emails in query
+** Changed search in query
+** Changed subscriberIds in query
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: data[n].jobs[n] (object -> string)
+
+*** Changed property type: data[n].template.triggers[n] (object -> string)
+
+
+=== GET   /v1/messages
+* Parameter:
+** Changed channel in query
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 200 OK
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: data[n].jobs[n] (object -> string)
+
+*** Changed property type: data[n].template.triggers[n] (object -> string)
+
+
+=== POST  /v1/subscribers/{subscriberId}/messages/{messageId}/actions/{type}
+* Parameter:
+** Changed type in path
+
+* Return Type:
+** Add 400 Bad Request
+** Add 404 Not Found
+** Add 422 Unprocessable Entity
+** Changed 409 Conflict
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type:  (string -> object)
+
+** Changed 201 Created
+** Media types:
+*** Changed application/json
+*** Schema:
+Broken compatibility
+*** Changed property type: data._feedId (string -> object)
+
+
+
+WARNING: API changes broke backward compatibility

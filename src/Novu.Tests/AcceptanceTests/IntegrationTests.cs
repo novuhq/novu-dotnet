@@ -2,20 +2,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Novu.DTO.Integrations;
-using Novu.Models;
-using Novu.Tests.IntegrationTests;
+using Novu.Clients;
+using Novu.Domain.Models;
+using Novu.Tests.Factories;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Novu.Tests.AcceptanceTests;
 
-public class IntegrationTests : BaseIntegrationTest
+public class IntegrationTests(IIntegrationClient integrationClient, IntegrationFactory integrationFactory)
 {
-    public IntegrationTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     /// <summary>
     ///     TODO: add more integrations to this list
     ///     TODO: have integrations as an enumeration
@@ -37,7 +32,7 @@ public class IntegrationTests : BaseIntegrationTest
     public async Task AcceptanceTest(
         string provider)
     {
-        var integrations = await Integration.Get();
+        var integrations = await integrationClient.Get();
 
         // the understanding is that providers are always unique by provider id
         var existingIntegration = integrations.Data.SingleOrDefault(x => x.ProviderId == provider);
@@ -45,25 +40,25 @@ public class IntegrationTests : BaseIntegrationTest
         if (existingIntegration is not null)
         {
             // delete and not find
-            await Integration.Delete(existingIntegration.Id);
-            var deletedIntegration = await Integration.Get(existingIntegration.Id);
+            await integrationClient.Delete(existingIntegration.Id);
+            var deletedIntegration = await integrationClient.Get(existingIntegration.Id);
             deletedIntegration.Data.Should().BeNull();
 
             // now remake
-            var newIntegration = await Make<Integration>(providerId: provider);
+            var newIntegration = await integrationFactory.Make(providerId: provider);
             newIntegration.Active.Should().BeTrue();
 
             // reinstate the integration given this might be a working test system
-            await Integration.Update(newIntegration.Id, existingIntegration.ToEditData());
+            await integrationClient.Update(newIntegration.Id, existingIntegration.ToEditData());
         }
         else
         {
             // create 
-            var integration = await Make<Integration>(providerId: provider);
+            var integration = await integrationFactory.Make(providerId: provider);
             integration.Active.Should().BeTrue();
 
             // teardown here rather than in base
-            await Integration.Delete(integration.Id);
+            await integrationClient.Delete(integration.Id);
         }
     }
 }

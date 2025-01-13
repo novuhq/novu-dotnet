@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Novu.DTO.Integrations;
-using Novu.Interfaces;
-using Novu.Models;
+using Novu.Clients;
+using Novu.Domain.Models;
+using Novu.Domain.Models.Integrations;
+using Novu.Domain.Utils;
 using Novu.Sync.Comparers;
 using Novu.Sync.Models;
 using Novu.Sync.Utils;
-using Novu.Utils;
 
 namespace Novu.Sync.Services;
 

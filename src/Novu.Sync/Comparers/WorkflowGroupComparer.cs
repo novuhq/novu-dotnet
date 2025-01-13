@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Novu.DTO.WorkflowGroups;
+using Novu.Domain.Models.WorkflowGroups;
 
 namespace Novu.Sync.Comparers;
 

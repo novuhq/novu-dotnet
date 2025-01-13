@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Novu.JsonConverters;
-using Novu.Models.Workflows.Step;
+using Novu.Domain.JsonConverters;
+using Novu.Domain.Models.Workflows.Step;
 using Xunit;
 
 namespace Novu.Tests.MicroTests.JsonConverters;

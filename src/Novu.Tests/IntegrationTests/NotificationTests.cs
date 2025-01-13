@@ -1,20 +1,16 @@
 using System.Threading.Tasks;
 using FluentAssertions;
+using Novu.Clients;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Novu.Tests.IntegrationTests;
 
-public class NotificationTests : BaseIntegrationTest
+public class NotificationTests(INotificationsClient notificationsClient)
 {
-    public NotificationTests(ITestOutputHelper output) : base(output)
-    {
-    }
-
     [Fact]
     public async Task Should_Get_Notifications()
     {
-        var integrations = await Notifications.Get();
+        var integrations = await notificationsClient.Get();
         integrations.Should().NotBeNull();
         integrations.Data.Should().NotBeEmpty();
     }
@@ -22,14 +18,14 @@ public class NotificationTests : BaseIntegrationTest
     [Fact]
     public async Task Should_Get_NotificationsStats()
     {
-        var integrations = await Notifications.GetStats();
+        var integrations = await notificationsClient.GetStats();
         integrations.Should().NotBeNull();
     }
 
     [Fact]
     public async Task Should_Get_NotificationsGraphStats()
     {
-        var integrations = await Notifications.GetGraphStats();
+        var integrations = await notificationsClient.GetGraphStats();
         integrations.Should().NotBeNull();
     }
 }

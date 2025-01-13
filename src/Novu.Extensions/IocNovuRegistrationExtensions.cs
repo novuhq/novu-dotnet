@@ -2,7 +2,8 @@ using System;
 using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Novu.Interfaces;
+using Novu.Clients;
+using Novu.Domain;
 using Refit;
 
 namespace Novu.Extensions;
@@ -36,13 +37,23 @@ public static class IocNovuRegistrationExtensions
         services.AddRefitClient<ISubscriberClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IEventClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<ITopicClient>(settings).ConfigureHttpClient(configureClient);
-        services.AddRefitClient<IWorkflowGroupClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IWorkflowClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IWorkflowGroupClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IWorkflowOverrideClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<ILayoutClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IIntegrationClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<INotificationsClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IMessageClient>(settings).ConfigureHttpClient(configureClient);
         services.AddRefitClient<IExecutionDetailsClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IFeedClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IChangeClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<ITenantClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IMxRecordClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IOrganizationClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IOrganizationBrandClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IOrganizationMemberClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IEnvironmentClient>(settings).ConfigureHttpClient(configureClient);
+        services.AddRefitClient<IBlueprintClient>(settings).ConfigureHttpClient(configureClient);
 
         return services
             .AddTransient<INovuClientConfiguration>(_ => novuConfiguration);
@@ -64,7 +75,7 @@ public static class IocNovuRegistrationExtensions
     {
         return refitSettings ?? new RefitSettings
         {
-            ContentSerializer = new NewtonsoftJsonContentSerializer(NovuClient.DefaultSerializerSettings),
+            ContentSerializer = new NewtonsoftJsonContentSerializer(NovuJsonSettings.DefaultSerializerSettings),
         };
     }
 }
