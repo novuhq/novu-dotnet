@@ -8,9 +8,20 @@ namespace Novu.Domain.JsonConverters;
 /// <summary>
 ///     Converts the incoming JSON stream into <see cref="IMessageTemplate" /> polymorphic type
 /// </summary>
+/// <example>
+///     <code>
+///        [JsonProperty("template")]
+///        [JsonConverter(typeof(MessageTemplateConverter))]
+///        public IMessageTemplate Template { get; set; }
+///     </code>
+/// </example>
 /// <see cref="EmailMessageTemplate" />
 /// <see cref="SmsMessageTemplate" />
-/// <see cref="InAppMessageTemplate" />
+/// <see cref="ChatMessageTemplate" />
+/// <see cref="PushMessageTemplate" />
+/// <see cref="DigestMessageTemplate" />
+/// <see cref="TriggerMessageTemplate" />
+/// <see cref="DelayMessageTemplate" />
 public class MessageTemplateConverter : JsonCreationConverter<IMessageTemplate>
 {
     protected override IMessageTemplate Create(Type objectType, JObject jObject)
@@ -30,13 +41,14 @@ public class MessageTemplateConverter : JsonCreationConverter<IMessageTemplate>
                 return typeEnum switch
                 {
                     StepTypeEnum.InApp => new InAppMessageTemplate(),
-                    StepTypeEnum.Email => new InAppMessageTemplate(),
+                    StepTypeEnum.Email => new EmailMessageTemplate(),
                     StepTypeEnum.Sms => new SmsMessageTemplate(),
                     StepTypeEnum.Chat => new ChatMessageTemplate(),
                     StepTypeEnum.Push => new PushMessageTemplate(),
                     StepTypeEnum.Digest => new DigestMessageTemplate(),
                     StepTypeEnum.Trigger => new TriggerMessageTemplate(),
                     StepTypeEnum.Delay => new DelayMessageTemplate(),
+                    // important to throw to alert for new types
                     _ => throw new InvalidOperationException($"Unknown type {typeEnum}"),
                 };
             }

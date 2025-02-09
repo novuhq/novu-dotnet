@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Novu.Domain.JsonConverters;
@@ -10,6 +11,7 @@ public class InAppMessageTemplate : BaseMessageTemplate, IMessageTemplate
 
     [JsonConverter(typeof(StringEnumConverter))]
     [JsonProperty("type")]
+    [Required]
     public StepTypeEnum Type { get; set; } = StepTypeEnum.InApp;
 
     /// <summary>
