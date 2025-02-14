@@ -36,6 +36,10 @@ jobs:
         ## dotnet pack Novu/Novu.csproj --no-restore --no-build --configuration Release -p:PackageVersion=0.0.0.0 -p:Version=0.0.0.0 --output .
         run: dotnet pack ${{ env.WORKING_DIRECTORY }}/Novu/Novu.csproj --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:Version=${{ steps.version.outputs.version-without-v }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
 
+      - name: Novu.Domain — create Nuget package
+        ## dotnet pack Novu/Novu.csproj --no-restore --no-build --configuration Release -p:PackageVersion=0.0.0.0 -p:Version=0.0.0.0 --output .
+        run: dotnet pack ${{ env.WORKING_DIRECTORY }}/Novu.Domain/Novu.Domain.csproj --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:Version=${{ steps.version.outputs.version-without-v }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+
       - name: Novu.Extensions — create Nuget package
         ## dotnet pack Novu.Extensions/Novu.Extensions.csproj --no-restore --no-build --configuration Release -p:PackageVersion=0.0.0.0 -p:Version=0.0.0.0 --output .
         run: dotnet pack ${{ env.WORKING_DIRECTORY }}/Novu.Extensions/Novu.Extensions.csproj --no-restore --no-build --configuration Release -p:PackageVersion=${{ steps.version.outputs.version-without-v }} -p:Version=${{ steps.version.outputs.version-without-v }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
@@ -47,6 +51,9 @@ jobs:
       # Step Four: publish all
       - name: Novu — push Nuget package
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY}}/Novu.${{ steps.version.outputs.version-without-v }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL}}
+
+      - name: Novu.Domain — push Nuget package
+        run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY}}/Novu.Domain.${{ steps.version.outputs.version-without-v }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL}}
 
       - name: Novu.Extensions — push Nuget package
         run: dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY}}/Novu.Extensions.${{ steps.version.outputs.version-without-v }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} -s ${{ env.NUGET_SOURCE_URL}}
