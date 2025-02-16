@@ -1,4 +1,5 @@
-﻿using Novu.Clients;
+﻿using System.Reflection;
+using Novu.Clients;
 using Novu.Domain;
 using Refit;
 
@@ -16,6 +17,7 @@ public class NovuClient : INovuClient
         var httpClient = client ?? new HttpClient();
         httpClient.BaseAddress = new Uri(configuration.Url);
         httpClient.DefaultRequestHeaders.Add(AuthorizationHeaderName, $"ApiKey {configuration.ApiKey}");
+        httpClient.DefaultRequestHeaders.Add("User-Agent", NovuConstants.UserAgent());
 
         refitSettings ??= new RefitSettings
         {
