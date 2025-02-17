@@ -26,9 +26,9 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="7.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-        <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
+        <PackageReference Include="Refit.HttpClientFactory" Version="7.2.22" />
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
     </ItemGroup>
 
