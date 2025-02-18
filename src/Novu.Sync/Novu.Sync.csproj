@@ -25,7 +25,7 @@
     <ItemGroup>
         <!-- provides the hascode -->
         <PackageReference Include="Microsoft.Bcl.HashCode" Version="6.0.0" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     </ItemGroup>
 
     <!-- Nuget Assets -->

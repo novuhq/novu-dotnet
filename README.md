@@ -39,6 +39,8 @@ novu-dotnet targets .NET Standard 2.0 and is compatible with .NET Core 2.0+ and 
 | 0.3.2       | \>= 0.18                                                                     | [BREAKING} Obsolete Notification Templates has been removed. Service registration separation of single client and each client. Novu.Extension and Novu.Sync released as packages.                                                       |
 | 0.3.2       | \>= 0.18                                                                     |                                                                                                                                                                                                                                         |
 | 0.4.0       | \>= 0.24                                                                     |                                                                                                                                                                                                                                         |
+| 0.5.0       | \>= 0.24                                                                     | Refit 7.2.2 / Microsoft.Extension>=7.x                                                                                                                                                                                                  |
+| 0.6.0       | \>= 0.24                                                                     | Refit 8.0 / Microsoft.Extension>=8.x                                                                                                                                                                                                    |
 
 ## Installation
 
@@ -51,8 +53,7 @@ dotnet add package Novu
 ### Direct instantiation
 
 ```csharp
-using Novu.DTO;
-using Novu.Models;
+using Novu.Domain.Models;
 using Novu;
 
  var novuConfiguration = new NovuClientConfiguration
