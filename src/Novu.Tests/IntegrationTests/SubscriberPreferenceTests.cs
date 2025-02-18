@@ -86,7 +86,7 @@ public class SubscriberPreferencesTests(
         var messagesCount = await subscriberClient.GetInAppUnseen(subscriber.SubscriberId!);
 
         // fire forget test, that it returns something
-        messagesCount.Data.Count.Should().BeGreaterOrEqualTo(0);
+        messagesCount.Data.Count.Should().BeGreaterThanOrEqualTo(0);
     }
 
     [Fact]
@@ -97,6 +97,6 @@ public class SubscriberPreferencesTests(
         var messages = await subscriberClient.GetInApp(subscriber.SubscriberId!);
 
         // fire forget test, that it returns something
-        messages.Data.Should().HaveCountGreaterOrEqualTo(0);
+        messages.Data.Should().HaveCountGreaterThanOrEqualTo(0);
     }
 }
