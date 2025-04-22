@@ -1,10 +1,10 @@
-name: novu-dotnet
+name: novu-dotnet-v2
 services:
   # s3 minio is used for local development (rather than tests)
   # because it stores files across docker restart unlike localstack free version (requires pro)
   s3:
     image: 'minio/minio:latest'
-    container_name: dotnet-novu-s3-minio
+    container_name: dotnet-novu-v2-s3-minio
     ports:
       - ${FORWARD_MINIO_PORT:-9000}:9000
       - ${FORWARD_MINIO_CONSOLE_PORT:-9090}:9090
@@ -24,7 +24,7 @@ services:
   #
   redis:
     image: 'redis:alpine'
-    container_name: dotnet-novu-redis
+    container_name: dotnet-novu-v2-redis
     restart: unless-stopped
     ports:
       - ${REDIS_PORT:-6379}:6379
@@ -39,21 +39,9 @@ services:
         max-file: '5'
     networks:
       - novu
-  #  redis-slave:
-  #    image: 'redis:alpine'
-  #    container_name: redis-slave
-  #    restart: unless-stopped
-  #    command: redis-server --slaveof redis-master 6379
-  #    logging:
-  #      driver: 'json-file'
-  #      options:
-  #        max-size: '50m'
-  #        max-file: '5'
-  #    networks:
-  #      - novu
   mongodb:
     image: mongo
-    container_name: dotnet-novu-mongodb
+    container_name: dotnet-novu-v2-mongodb
     restart: unless-stopped
     logging:
       driver: 'json-file'
@@ -74,7 +62,7 @@ services:
     depends_on:
       - mongodb
       - redis
-    container_name: dotnet-novu-api
+    container_name: dotnet-novu-v2-api
     restart: unless-stopped
     logging:
       driver: 'json-file'
@@ -120,7 +108,7 @@ services:
     depends_on:
       - mongodb
       - redis
-    container_name: dotnet-novu-worker
+    container_name: dotnet-novu-v2-worker
     restart: unless-stopped
     logging:
       driver: 'json-file'
@@ -158,7 +146,7 @@ services:
     depends_on:
       - mongodb
       - redis
-    container_name: dotnet-novu-ws
+    container_name: dotnet-novu-v2-ws
     restart: unless-stopped
     logging:
       driver: 'json-file'
@@ -185,7 +173,7 @@ services:
     depends_on:
       - novu-api
       - novu-worker
-    container_name: dotnet-novu-web
+    container_name: dotnet-novu-v2-web
     restart: unless-stopped
     logging:
       driver: 'json-file'
@@ -206,47 +194,6 @@ services:
       IS_MULTI_TENANCY_ENABLED: "false"
     ports:
       - ${APP_PORT:-4200}:4200
-    networks:
-      - novu
-  novu-widget:
-    image: 'ghcr.io/novuhq/novu/widget:${IMAGE_VERSION}'
-    depends_on:
-      - novu-api
-      - novu-worker
-      - novu-web
-    container_name: dotnet-novu-widget
-    restart: no
-    logging:
-      driver: 'json-file'
-      options:
-        max-size: '50m'
-        max-file: '5'
-    environment:
-      REACT_APP_API_URL: http://localhost:${API_PORT}
-      REACT_APP_WS_URL: http://localhost:${WS_PORT}
-      REACT_APP_ENVIRONMENT: ${NODE_ENV}
-      WIDGET_CONTEXT_PATH: ${WIDGET_CONTEXT_PATH}
-      LOGGING_LEVEL: "warn"
-    ports:
-      - ${WIDGET_PORT:-4500}:4500
-    networks:
-      - novu
-  novu-embed:
-    depends_on:
-      - novu-widget
-    image: 'ghcr.io/novuhq/novu/embed:${IMAGE_VERSION}'
-    container_name: dotnet-novu-embed
-    restart: no
-    logging:
-      driver: 'json-file'
-      options:
-        max-size: '50m'
-        max-file: '5'
-    environment:
-      WIDGET_URL: http://localhost:${WIDGET_PORT}
-      LOGGING_LEVEL: "warn"
-    ports:
-      - ${WIDGET_EMBED_PORT:-4701}:4701
     networks:
       - novu
 volumes:
