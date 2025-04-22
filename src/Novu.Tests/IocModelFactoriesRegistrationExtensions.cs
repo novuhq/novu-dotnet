@@ -45,6 +45,7 @@ public static class IocModelFactoriesRegistrationExtensions
     {
         var refitSettings = RefitSettingsWithExceptionHandler();
         return services
+            .RegisterNovuClient(ConfigurationExtensions.GetConfiguration("Integration"), refitSettings)
             .RegisterNovuClients(ConfigurationExtensions.GetConfiguration("Integration"), refitSettings);
     }
 

@@ -18,5 +18,5 @@ public class SubscriberCreateData
 
     [JsonProperty("locale")] public string? Locale { get; set; }
 
-    [JsonProperty("data")] public List<AdditionalData>? Data { get; set; }
+    [JsonProperty("data")] public List<AdditionalData> Data { get; set; }
 }

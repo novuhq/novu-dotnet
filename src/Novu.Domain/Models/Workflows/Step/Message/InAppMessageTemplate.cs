@@ -18,7 +18,7 @@ public class InAppMessageTemplate : BaseMessageTemplate, IMessageTemplate
     ///     Polymorphic between string (code) and typed EmailBlock[]
     /// </summary>
     [JsonProperty("content")]
-    [JsonConverter(typeof(TypeOrStringConverter<EmailBlock>))]
+    [JsonConverter(typeof(ArrayObjectOrStringConverter<EmailBlock>))]
     public object Content { get; set; }
 
     [JsonProperty("contentType")]

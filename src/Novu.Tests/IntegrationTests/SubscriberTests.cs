@@ -1,23 +1,63 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Novu.Clients;
 using Novu.Domain.Models.Subscribers;
 using Novu.Extensions;
 using Novu.Tests.Factories;
+using ParkSquare.Testing.Generators;
 using Refit;
 using Xunit;
 using Xunit.DependencyInjection;
 
 namespace Novu.Tests.IntegrationTests;
 
-public class SubscriberTests(SubscriberFactory subscriberFactory, ISubscriberClient subscriberClient)
+public class SubscriberTests(
+    SubscriberFactory subscriberFactory,
+    ISubscriberClient subscriberClient,
+    INovuClient novuClient,
+    ILogger<SubscriberTests> log)
 {
     [Fact]
     public async Task Should_Create_Subscriber()
     {
         var subscriber = await subscriberFactory.Make();
+        Assert.NotNull(subscriber);
+        log.LogInformation("{0} {1}", subscriber.FirstName + " " + subscriber.LastName, subscriber!.Email);
+    }
+
+    [Fact]
+    public async Task Should_Create_Subscriber_NovuClient()
+    {
+        var createData = new SubscriberCreateData
+        {
+            SubscriberId = Guid.NewGuid().ToString(),
+            FirstName = NameGenerator.AnyForename(),
+            LastName = NameGenerator.AnySurname(),
+            Avatar = "https://avatars.githubusercontent.com/u/77433905?s=200&v=4",
+            Email = EmailAddressGenerator.AnyEmailAddress(),
+            Locale = "en-US",
+            Phone = TelephoneNumberGenerator.AnyTelephoneNumber(),
+            Data =
+            [
+                new()
+                {
+                    Key = "FRAMEWORK",
+                    Value = ".NET",
+                },
+
+                new()
+                {
+                    Key = "SMS_PREFERENCE",
+                    Value = "EMERGENT-ONLY",
+                },
+            ],
+        };
+
+        var subscriber = await novuClient.Subscriber.Create(createData);
         Assert.NotNull(subscriber);
     }
 

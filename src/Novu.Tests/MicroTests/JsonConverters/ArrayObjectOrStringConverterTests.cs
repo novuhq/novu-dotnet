@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Novu.Tests.MicroTests.JsonConverters;
 
-public class TypeOrStringConverterTests
+public class ArrayObjectOrStringConverterTests
 {
     public static IEnumerable<object[]> Data =>
         new List<object[]>
@@ -34,6 +34,25 @@ public class TypeOrStringConverterTests
                 typeof(EmailBlock[]),
                 false,
             },
+            new object[]
+            {
+                nameof(EmailBlock) + "[]",
+                @"
+                [
+                  {
+                    ""type"": ""text"",
+                    ""content"": ""Here is a email string {{mail.subject}}"",
+                    ""styles"": [
+                      {
+                        ""textAlign"": ""center""
+                      }
+                    ]
+                  }
+                ]
+            ",
+                typeof(EmailBlock[]),
+                false,
+            },
         };
 
     [Theory]
@@ -52,12 +71,40 @@ public class TypeOrStringConverterTests
         if (throws)
         {
             Assert.ThrowsAny<Exception>(() =>
-                new TypeOrStringConverter<EmailBlock>()
+                new ArrayObjectOrStringConverter<EmailBlock>()
                     .ReadJson(reader, t, null, JsonSerializer.CreateDefault()));
         }
         else
         {
-            new TypeOrStringConverter<EmailBlock>()
+            new ArrayObjectOrStringConverter<EmailBlock>()
+                .ReadJson(reader, t, null, JsonSerializer.CreateDefault())
+                ?.GetType()
+                .Should()
+                .Be(t);
+        }
+    }
+    [Theory]
+    [MemberData(nameof(Data))]
+    public void MetaDataTypeArray(string test, string json, Type t, bool throws)
+    {
+        JsonReader reader = new JsonTextReader(new StringReader(json));
+        while (reader.TokenType == JsonToken.None)
+        {
+            if (!reader.Read())
+            {
+                break;
+            }
+        }
+
+        if (throws)
+        {
+            Assert.ThrowsAny<Exception>(() =>
+                new ArrayObjectOrStringConverter<EmailBlock>()
+                    .ReadJson(reader, t, null, JsonSerializer.CreateDefault()));
+        }
+        else
+        {
+            new ArrayObjectOrStringConverter<EmailBlock>()
                 .ReadJson(reader, t, null, JsonSerializer.CreateDefault())
                 ?.GetType()
                 .Should()

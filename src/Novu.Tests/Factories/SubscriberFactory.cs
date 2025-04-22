@@ -21,13 +21,13 @@ public class SubscriberFactory(Tracker tracker, ISubscriberClient client)
             Phone = TelephoneNumberGenerator.AnyTelephoneNumber(),
             Data =
             [
-                new()
+                new AdditionalData
                 {
                     Key = "FRAMEWORK",
                     Value = ".NET",
                 },
 
-                new()
+                new AdditionalData
                 {
                     Key = "SMS_PREFERENCE",
                     Value = "EMERGENT-ONLY",
