@@ -1,3 +1,4 @@
+name: novu-dotnet
 services:
   # s3 minio is used for local development (rather than tests)
   # because it stores files across docker restart unlike localstack free version (requires pro)

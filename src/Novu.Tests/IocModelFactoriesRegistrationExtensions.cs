@@ -43,12 +43,12 @@ public static class IocModelFactoriesRegistrationExtensions
 
     public static IServiceCollection RegisterNovuClientsWithExceptionHandler(this IServiceCollection services)
     {
-        var refitSettings = RefitSettingsWithExceptionHandler();
+        var refitSettings = RefitSettingsWithExceptionHandler(services);
         return services
             .RegisterNovuClients(ConfigurationExtensions.GetConfiguration("Integration"), refitSettings);
     }
 
-    public static RefitSettings RefitSettingsWithExceptionHandler()
+    public static RefitSettings RefitSettingsWithExceptionHandler(IServiceCollection services)
     {
         var defaultSerializerSettings = NovuJsonSettings.DefaultSerializerSettings;
 
@@ -78,12 +78,20 @@ public static class IocModelFactoriesRegistrationExtensions
 
                 var content = await message.Content.ReadAsStringAsync();
                 // don't catch any errors because we need to see errors in tests
+
+                var request = message.RequestMessage;
+                var requestContent = request?.Content != null
+                    ? await request.Content.ReadAsStringAsync()
+                    : "(no request body)";
+
+
                 try
                 {
                     var error = JsonConvert.DeserializeObject<NovuErrorData>(content);
                     if (error is not null)
                     {
-                        Assert.Fail($"[{error.Code}: '{error.Status}'] '{string.Join("; ", error.Message)}'");
+                        Assert.Fail(
+                            $"[{error.Code}: '{error.Status}'] '{string.Join("; ", error.Message)}' \n\n Request: {request?.Method} {request?.RequestUri} \n\n {requestContent} \n\n");
                     }
                 }
                 catch (JsonReaderException e)

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Novu.Domain.JsonConverters;
 
 namespace Novu.Domain.Models.Subscribers;
 
@@ -18,5 +19,7 @@ public class SubscriberCreateData
 
     [JsonProperty("locale")] public string? Locale { get; set; }
 
-    [JsonProperty("data")] public List<AdditionalData>? Data { get; set; }
+    [JsonProperty("data")]
+    [JsonConverter(typeof(DataToObjectConverter))]
+    public List<AdditionalData> Data { get; set; } = new();
 }

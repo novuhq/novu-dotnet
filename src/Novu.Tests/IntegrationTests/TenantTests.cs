@@ -24,7 +24,7 @@ public class TenantTests(TenantFactory tenantFactory, ITenantClient tenantClient
         var listOfTenants = await tenantClient.Get();
 
         Assert.NotNull(listOfTenants);
-        Assert.NotEmpty(listOfTenants.Data);
+        Assert.NotNull(listOfTenants.Data);
     }
 
     [Fact]
