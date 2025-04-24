@@ -29,27 +29,31 @@ public class IntegrationTests(IIntegrationClient integrationClient, IntegrationF
     /// </summary>
     [Theory]
     [MemberData(nameof(Data))]
-    public async Task AcceptanceTest(
-        string provider)
+    public async Task AcceptanceTest(string provider)
     {
         var integrations = await integrationClient.Get();
 
-        // the understanding is that providers are always unique by provider id
-        var existingIntegration = integrations.Data.SingleOrDefault(x => x.ProviderId == provider);
+        // providers aren't unique because they move across environments
+        var existingIntegrations = integrations.Data
+            .Where(x => x.ProviderId == provider)
+            .ToList();
 
-        if (existingIntegration is not null)
+        if (existingIntegrations.Count > 0)
         {
-            // delete and not find
-            await integrationClient.Delete(existingIntegration.Id);
-            var deletedIntegration = await integrationClient.Get(existingIntegration.Id);
-            deletedIntegration.Data.Should().BeNull();
+            foreach (var existingIntegration in existingIntegrations)
+            {
+                // delete and not find
+                await integrationClient.Delete(existingIntegration.Id);
+                var deletedIntegration = await integrationClient.Get(existingIntegration.Id);
+                deletedIntegration.Data.Should().BeNull();
 
-            // now remake
-            var newIntegration = await integrationFactory.Make(providerId: provider);
-            newIntegration.Active.Should().BeTrue();
+                // now remake
+                var newIntegration = await integrationFactory.Make(providerId: provider);
+                newIntegration.Active.Should().BeTrue();
 
-            // reinstate the integration given this might be a working test system
-            await integrationClient.Update(newIntegration.Id, existingIntegration.ToEditData());
+                // reinstate the integration given this might be a working test system
+                await integrationClient.Update(newIntegration.Id, existingIntegration.ToEditData());
+            }
         }
         else
         {
