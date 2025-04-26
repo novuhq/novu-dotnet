@@ -6,15 +6,60 @@
 > Mark a subscriber messages as seen, read, unseen or unread
 
 
-##### `POST` /v1/support/user-organizations
+##### `GET` /v2/subscribers
+
+> Search for subscribers
 
 
-##### `POST` /v1/support/create-thread
+##### `POST` /v2/subscribers
+
+> Create subscriber
 
 
-##### `PATCH` /v1/subscribers/{subscriberId}/preferences/{parameter}
+##### `GET` /v2/subscribers/{subscriberId}
 
-> Update subscriber preference
+> Get subscriber
+
+
+##### `DELETE` /v2/subscribers/{subscriberId}
+
+> Delete subscriber
+
+
+##### `PATCH` /v2/subscribers/{subscriberId}
+
+> Patch subscriber
+
+
+##### `GET` /v2/subscribers/{subscriberId}/preferences
+
+> Get subscriber preferences
+
+
+##### `PATCH` /v2/subscribers/{subscriberId}/preferences
+
+> Update subscriber global or workflow specific preferences
+
+
+##### `GET` /v2/workflows
+
+
+##### `POST` /v2/workflows
+
+
+##### `PUT` /v2/workflows/{workflowId}/sync
+
+
+##### `GET` /v2/workflows/{workflowId}
+
+
+##### `PUT` /v2/workflows/{workflowId}
+
+
+##### `DELETE` /v2/workflows/{workflowId}
+
+
+##### `PATCH` /v2/workflows/{workflowId}
 
 
 #### What's Deleted
@@ -225,6 +270,21 @@
 > Update workflow status
 
 
+##### `GET` /v1/subscribers/{subscriberId}/preferences
+
+> Get subscriber preferences
+
+
+##### `PATCH` /v1/subscribers/{subscriberId}/preferences
+
+> Update subscriber global preferences
+
+
+##### `GET` /v1/subscribers/{subscriberId}/preferences/{level}
+
+> Get subscriber preferences by level
+
+
 ##### `PATCH` /v1/subscribers/{subscriberId}/preferences/{templateId}
 
 > Update subscriber preference
@@ -232,7 +292,7 @@
 
 ##### `POST` /v1/subscribers/{subscriberId}/messages/markAs
 
-> Mark a subscriber feed message as seen
+> Mark a subscriber feed message as seen/unseen/read/unread
 
 
 ##### `GET` /v1/tenants
@@ -316,6 +376,21 @@
 > Update workflow override
 
 
+##### `POST` /v1/subscribers
+
+> Create subscriber
+
+
+##### `GET` /v1/subscribers/{subscriberId}
+
+> Get subscriber
+
+
+##### `DELETE` /v1/subscribers/{subscriberId}
+
+> Delete subscriber
+
+
 #### What's Changed
 ---
 
@@ -327,11 +402,83 @@
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **409 Conflict**
+> Conflict
+
+Deleted header : `Retry-After`
+
+
+Deleted header : `Link`
+
+
+
+* Changed content type : `application/json`
+
+##### `DELETE` /v1/events/trigger/{transactionId}
+
+
+###### Return Type:
+
+New response : **400 Bad Request**
+> Bad Request
+
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **404 Not Found**
+> Not Found
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
+New response : **422 Unprocessable Entity**
+> Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **200 OK**
+
+* Changed content type : `application/json`
 
 Changed response : **409 Conflict**
 > Conflict
@@ -353,11 +500,32 @@ Deleted header : `Link`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -379,11 +547,32 @@ Deleted header : `Link`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **200 OK**
 > OK
@@ -410,16 +599,85 @@ Deleted header : `Link`
 
 Changed: `providerId` in `path`
 
+Changed: `code` in `query`
+> Optional authorization code returned from the OAuth provider
+
+
+Changed: `hmacHash` in `query`
+> HMAC hash for the request
+
+
+Changed: `environmentId` in `query`
+> The ID of the environment, must be a valid MongoDB ID
+
+
+Changed: `integrationIdentifier` in `query`
+> Optional integration identifier
+
+
 ###### Return Type:
+
+New response : **302 Moved Temporarily**
+> Redirects to the specified URL.
 
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **200 OK**
+> Returns plain text response.
+
+New header : `Content-Type`
+
+
+New header : `RateLimit-Limit`
+
+
+New header : `RateLimit-Remaining`
+
+
+New header : `RateLimit-Reset`
+
+
+New header : `RateLimit-Policy`
+
+
+New header : `Idempotency-Key`
+
+
+New header : `Idempotency-Replay`
+
+
+
+* New content type : `text/html`
+
+* Deleted content type : `application/json`
 
 Changed response : **409 Conflict**
 > Conflict
@@ -440,16 +698,49 @@ Deleted header : `Link`
 
 Changed: `providerId` in `path`
 
+Changed: `hmacHash` in `query`
+> HMAC hash for the request
+
+
+Changed: `environmentId` in `query`
+> The ID of the environment, must be a valid MongoDB ID
+
+
+Changed: `integrationIdentifier` in `query`
+> Optional integration identifier
+
+
 ###### Return Type:
 
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -471,11 +762,32 @@ Deleted header : `Link`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -488,117 +800,51 @@ Deleted header : `Link`
 
 
 * Changed content type : `application/json`
-
-##### `DELETE` /v1/events/trigger/{transactionId}
-
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-##### `POST` /v1/subscribers/bulk
-
-
-###### Request:
-
-Changed content type : `application/json`
-
-* Changed property `subscribers` (array)
-    > An array of subscribers to be created in bulk.
-
-
-    Changed items (object -> string):
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-##### `GET` /v1/subscribers/{subscriberId}/preferences/{level}
-
-
-###### Parameters:
-
-Added: `includeInactiveChannels` in `query`
-> A flag which specifies if the inactive workflow channels should be included in the retrieved preferences. Default is true
-
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
 
 ##### `GET` /v1/subscribers/{subscriberId}/notifications/unseen
 
 
+###### Parameters:
+
+Changed: `seen` in `query`
+> Indicates whether to count seen notifications.
+
+
+Changed: `limit` in `query`
+> The maximum number of notifications to return.
+
+
 ###### Return Type:
 
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -623,11 +869,32 @@ Changed response : **200 OK**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **201 Created**
 New header : `Content-Type`
@@ -677,11 +944,32 @@ Changed: `topicKey` in `path`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Deleted response : **204 No Content**
 Changed response : **200 OK**
@@ -739,11 +1027,32 @@ Changed: `externalSubscriberId` in `path`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -820,11 +1129,32 @@ Changed: `topicKey` in `path`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -852,14 +1182,41 @@ Changed: `topicKey` in `path`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **404 Not Found**
 > Not Found
 
 
 * New content type : `application/json`
+
+Changed response : **409 Conflict**
+> Conflict
+
+
+* Changed content type : `application/json`
 
 ##### `GET` /v1/topics/{topicKey}
 
@@ -875,11 +1232,32 @@ Changed: `topicKey` in `path`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -910,11 +1288,32 @@ Changed: `topicKey` in `path`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -939,11 +1338,32 @@ Changed response : **200 OK**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -968,11 +1388,32 @@ Changed response : **200 OK**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -997,11 +1438,32 @@ Changed response : **200 OK**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -1024,18 +1486,6 @@ Changed response : **200 OK**
 ###### Request:
 
 Changed content type : `application/json`
-
-* Added property `bridgeUrl` (string)
-    > A URL to bridge for additional processing.
-
-
-* Added property `controls` (object)
-    > Additional control configurations.
-
-
-    * Property `steps` (object)
-        > A mapping of step IDs to their corresponding data.
-
 
 * Changed property `payload` (object)
     > The payload object is used to pass additional custom information that could be 
@@ -1108,6 +1558,10 @@ Changed content type : `application/json`
 
                 Items (string):
 
+    * Added property `timezone` (string)
+        > The timezone of the subscriber.
+
+
     * Changed property `email` (string)
         > The email address of the subscriber.
 
@@ -1146,11 +1600,32 @@ Changed content type : `application/json`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -1180,6 +1655,9 @@ Changed response : **201 Created**
             > Status of the trigger
 
 
+            Added enum value:
+
+            * `invalid_recipients`
             Removed enum value:
 
             * `subscriber_id_missing`
@@ -1212,6 +1690,10 @@ Changed content type : `application/json`
     Updated `SubscriberPayloadDto` :
     * Added property `channels` (array)
         > An optional array of subscriber channels.
+
+
+    * Added property `timezone` (string)
+        > The timezone of the subscriber.
 
 
     * Changed property `email` (string)
@@ -1247,11 +1729,32 @@ Changed content type : `application/json`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -1281,6 +1784,9 @@ Changed response : **200 OK**
             > Status of the trigger
 
 
+            Added enum value:
+
+            * `invalid_recipients`
             Removed enum value:
 
             * `subscriber_id_missing`
@@ -1327,6 +1833,9 @@ New header : `Idempotency-Replay`
         > Status of the trigger
 
 
+        Added enum value:
+
+        * `invalid_recipients`
         Removed enum value:
 
         * `subscriber_id_missing`
@@ -1346,11 +1855,32 @@ New header : `Idempotency-Replay`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -1378,6 +1908,14 @@ Changed response : **200 OK**
 
             Items (string):
 
+        * Added property `data` (object)
+            > Additional custom data for the subscriber
+
+
+        * Added property `timezone` (string)
+            > Timezone of the subscriber
+
+
         * Changed property `_id` (string)
             > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
 
@@ -1455,11 +1993,52 @@ Changed response : **200 OK**
                 Added enum value:
 
                 * `whatsapp-business`
+            * Changed property `credentials` (object)
+                > Credentials payload for the specified provider
+
+
+                New optional properties:
+                - `webhookUrl`
+
+                * Changed property `webhookUrl` (string)
+                    > Webhook URL used by chat app integrations. The webhook should be obtained from the chat app provider.
+
+
+                * Changed property `channel` (string)
+                    > Channel specification for Mattermost chat notifications.
+
+
+                * Changed property `deviceTokens` (array)
+                    > Contains an array of the subscriber device tokens for a given provider. Used on Push integrations.
+
+
+                * Changed property `alertUid` (string)
+                    > Alert UID for Grafana on-call webhook payload.
+
+
+                * Changed property `title` (string)
+                    > Title to be used with Grafana on-call webhook.
+
+
+                * Changed property `imageUrl` (string)
+                    > Image URL property for Grafana on-call webhook.
+
+
+                * Changed property `state` (string)
+                    > State property for Grafana on-call webhook.
+
+
+                * Changed property `externalUrl` (string)
+                    > Link to upstream details property for Grafana on-call webhook.
+
+
             * Changed property `_integrationId` (string)
                 > The unique identifier of the integration associated with this channel.
 
 
-##### `POST` /v1/subscribers
+##### `PUT` /v1/subscribers/{subscriberId}
+
+> Upsert subscriber
 
 
 ###### Request:
@@ -1467,8 +2046,10 @@ Changed response : **200 OK**
 Changed content type : `application/json`
 
 * Added property `channels` (array)
-    > An optional array of subscriber channels.
+    > An array of communication channels for the subscriber.
 
+
+    Items (object):
 
 * Changed property `email` (string)
     > The email address of the subscriber.
@@ -1487,15 +2068,15 @@ Changed content type : `application/json`
 
 
 * Changed property `avatar` (string)
-    > An HTTP URL to the profile image of your subscriber.
+    > The avatar URL of the subscriber.
 
 
 * Changed property `locale` (string)
-    > The locale of the subscriber.
+    > The locale of the subscriber, for example "en-US".
 
 
 * Changed property `data` (object)
-    > An optional payload object that can contain any properties.
+    > Custom data associated with the subscriber. Can contain any additional properties.
 
 
 ###### Return Type:
@@ -1503,11 +2084,1004 @@ Changed content type : `application/json`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **409 Conflict**
+> Conflict
+
+Deleted header : `Retry-After`
+
+
+Deleted header : `Link`
+
+
+
+* Changed content type : `application/json`
+
+Changed response : **200 OK**
+> OK
+
+
+* Changed content type : `application/json`
+
+    * Changed property `data` (object)
+
+        * Added property `topics` (array)
+            > An array of topics that the subscriber is subscribed to.
+
+
+        * Added property `data` (object)
+            > Additional custom data for the subscriber
+
+
+        * Added property `timezone` (string)
+            > Timezone of the subscriber
+
+
+        * Changed property `_id` (string)
+            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
+
+
+        * Changed property `firstName` (string)
+            > The first name of the subscriber.
+
+
+        * Changed property `lastName` (string)
+            > The last name of the subscriber.
+
+
+        * Changed property `email` (string)
+            > The email address of the subscriber.
+
+
+        * Changed property `phone` (string)
+            > The phone number of the subscriber.
+
+
+        * Changed property `avatar` (string)
+            > The URL of the subscriber's avatar image.
+
+
+        * Changed property `locale` (string)
+            > The locale setting of the subscriber, indicating their preferred language or region.
+
+
+        * Changed property `subscriberId` (string)
+            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
+
+
+        * Changed property `isOnline` (boolean)
+            > Indicates whether the subscriber is currently online.
+
+
+        * Changed property `lastOnlineAt` (string)
+            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
+
+
+        * Changed property `_organizationId` (string)
+            > The unique identifier of the organization to which the subscriber belongs.
+
+
+        * Changed property `_environmentId` (string)
+            > The unique identifier of the environment associated with this subscriber.
+
+
+        * Changed property `deleted` (boolean)
+            > Indicates whether the subscriber has been deleted.
+
+
+        * Changed property `createdAt` (string)
+            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
+
+
+        * Changed property `updatedAt` (string)
+            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
+
+
+        * Changed property `__v` (number)
+            > The version of the subscriber document.
+
+
+        * Changed property `channels` (array)
+            > An array of channel settings associated with the subscriber.
+
+
+            Changed items (object):
+
+            * Changed property `providerId` (string)
+                > The provider identifier for the credentials
+
+
+                Added enum value:
+
+                * `whatsapp-business`
+            * Changed property `credentials` (object)
+                > Credentials payload for the specified provider
+
+
+                New optional properties:
+                - `webhookUrl`
+
+                * Changed property `webhookUrl` (string)
+                    > Webhook URL used by chat app integrations. The webhook should be obtained from the chat app provider.
+
+
+                * Changed property `channel` (string)
+                    > Channel specification for Mattermost chat notifications.
+
+
+                * Changed property `deviceTokens` (array)
+                    > Contains an array of the subscriber device tokens for a given provider. Used on Push integrations.
+
+
+                * Changed property `alertUid` (string)
+                    > Alert UID for Grafana on-call webhook payload.
+
+
+                * Changed property `title` (string)
+                    > Title to be used with Grafana on-call webhook.
+
+
+                * Changed property `imageUrl` (string)
+                    > Image URL property for Grafana on-call webhook.
+
+
+                * Changed property `state` (string)
+                    > State property for Grafana on-call webhook.
+
+
+                * Changed property `externalUrl` (string)
+                    > Link to upstream details property for Grafana on-call webhook.
+
+
+            * Changed property `_integrationId` (string)
+                > The unique identifier of the integration associated with this channel.
+
+
+##### `POST` /v1/subscribers/bulk
+
+
+###### Request:
+
+Changed content type : `application/json`
+
+* Changed property `subscribers` (array)
+    > An array of subscribers to be created in bulk.
+
+
+    Changed items (object):
+
+    * Added property `timezone` (string)
+        > Timezone of the subscriber
+
+
+    * Changed property `subscriberId` (string)
+        > Unique identifier of the subscriber
+
+
+    * Changed property `email` (string)
+        > Email address of the subscriber
+
+
+    * Changed property `firstName` (string)
+        > First name of the subscriber
+
+
+    * Changed property `lastName` (string)
+        > Last name of the subscriber
+
+
+    * Changed property `phone` (string)
+        > Phone number of the subscriber
+
+
+    * Changed property `avatar` (string)
+        > Avatar URL or identifier
+
+
+    * Changed property `locale` (string)
+        > Locale of the subscriber
+
+
+    * Changed property `data` (object)
+        > Additional custom data for the subscriber
+
+
+###### Return Type:
+
+New response : **400 Bad Request**
+> Bad Request
+
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **404 Not Found**
+> Not Found
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
+New response : **422 Unprocessable Entity**
+> Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **201 Created**
+> Created
+
+New header : `Content-Type`
+
+
+New header : `RateLimit-Limit`
+
+
+New header : `RateLimit-Remaining`
+
+
+New header : `RateLimit-Reset`
+
+
+New header : `RateLimit-Policy`
+
+
+New header : `Idempotency-Key`
+
+
+New header : `Idempotency-Replay`
+
+
+
+* New content type : `application/json`
+
+Changed response : **409 Conflict**
+> Conflict
+
+Deleted header : `Retry-After`
+
+
+Deleted header : `Link`
+
+
+
+* Changed content type : `application/json`
+
+##### `PUT` /v1/subscribers/{subscriberId}/credentials
+
+
+###### Request:
+
+Changed content type : `application/json`
+
+* Changed property `providerId` (string)
+    > The provider identifier for the credentials
+
+
+    Added enum value:
+
+    * `whatsapp-business`
+* Changed property `credentials` (object)
+    > Credentials payload for the specified provider
+
+
+    New optional properties:
+    - `webhookUrl`
+
+    * Changed property `webhookUrl` (string)
+        > Webhook URL used by chat app integrations. The webhook should be obtained from the chat app provider.
+
+
+    * Changed property `channel` (string)
+        > Channel specification for Mattermost chat notifications.
+
+
+    * Changed property `deviceTokens` (array)
+        > Contains an array of the subscriber device tokens for a given provider. Used on Push integrations.
+
+
+    * Changed property `alertUid` (string)
+        > Alert UID for Grafana on-call webhook payload.
+
+
+    * Changed property `title` (string)
+        > Title to be used with Grafana on-call webhook.
+
+
+    * Changed property `imageUrl` (string)
+        > Image URL property for Grafana on-call webhook.
+
+
+    * Changed property `state` (string)
+        > State property for Grafana on-call webhook.
+
+
+    * Changed property `externalUrl` (string)
+        > Link to upstream details property for Grafana on-call webhook.
+
+
+###### Return Type:
+
+New response : **400 Bad Request**
+> Bad Request
+
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **404 Not Found**
+> Not Found
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
+New response : **422 Unprocessable Entity**
+> Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **409 Conflict**
+> Conflict
+
+Deleted header : `Retry-After`
+
+
+Deleted header : `Link`
+
+
+
+* Changed content type : `application/json`
+
+Changed response : **200 OK**
+> OK
+
+
+* Changed content type : `application/json`
+
+    * Changed property `data` (object)
+
+        * Added property `topics` (array)
+            > An array of topics that the subscriber is subscribed to.
+
+
+        * Added property `data` (object)
+            > Additional custom data for the subscriber
+
+
+        * Added property `timezone` (string)
+            > Timezone of the subscriber
+
+
+        * Changed property `_id` (string)
+            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
+
+
+        * Changed property `firstName` (string)
+            > The first name of the subscriber.
+
+
+        * Changed property `lastName` (string)
+            > The last name of the subscriber.
+
+
+        * Changed property `email` (string)
+            > The email address of the subscriber.
+
+
+        * Changed property `phone` (string)
+            > The phone number of the subscriber.
+
+
+        * Changed property `avatar` (string)
+            > The URL of the subscriber's avatar image.
+
+
+        * Changed property `locale` (string)
+            > The locale setting of the subscriber, indicating their preferred language or region.
+
+
+        * Changed property `subscriberId` (string)
+            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
+
+
+        * Changed property `isOnline` (boolean)
+            > Indicates whether the subscriber is currently online.
+
+
+        * Changed property `lastOnlineAt` (string)
+            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
+
+
+        * Changed property `_organizationId` (string)
+            > The unique identifier of the organization to which the subscriber belongs.
+
+
+        * Changed property `_environmentId` (string)
+            > The unique identifier of the environment associated with this subscriber.
+
+
+        * Changed property `deleted` (boolean)
+            > Indicates whether the subscriber has been deleted.
+
+
+        * Changed property `createdAt` (string)
+            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
+
+
+        * Changed property `updatedAt` (string)
+            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
+
+
+        * Changed property `__v` (number)
+            > The version of the subscriber document.
+
+
+        * Changed property `channels` (array)
+            > An array of channel settings associated with the subscriber.
+
+
+            Changed items (object):
+
+            * Changed property `providerId` (string)
+                > The provider identifier for the credentials
+
+
+                Added enum value:
+
+                * `whatsapp-business`
+            * Changed property `credentials` (object)
+                > Credentials payload for the specified provider
+
+
+                New optional properties:
+                - `webhookUrl`
+
+                * Changed property `webhookUrl` (string)
+                    > Webhook URL used by chat app integrations. The webhook should be obtained from the chat app provider.
+
+
+                * Changed property `channel` (string)
+                    > Channel specification for Mattermost chat notifications.
+
+
+                * Changed property `deviceTokens` (array)
+                    > Contains an array of the subscriber device tokens for a given provider. Used on Push integrations.
+
+
+                * Changed property `alertUid` (string)
+                    > Alert UID for Grafana on-call webhook payload.
+
+
+                * Changed property `title` (string)
+                    > Title to be used with Grafana on-call webhook.
+
+
+                * Changed property `imageUrl` (string)
+                    > Image URL property for Grafana on-call webhook.
+
+
+                * Changed property `state` (string)
+                    > State property for Grafana on-call webhook.
+
+
+                * Changed property `externalUrl` (string)
+                    > Link to upstream details property for Grafana on-call webhook.
+
+
+            * Changed property `_integrationId` (string)
+                > The unique identifier of the integration associated with this channel.
+
+
+##### `PATCH` /v1/subscribers/{subscriberId}/credentials
+
+
+###### Request:
+
+Changed content type : `application/json`
+
+* Changed property `providerId` (string)
+    > The provider identifier for the credentials
+
+
+    Added enum value:
+
+    * `whatsapp-business`
+* Changed property `credentials` (object)
+    > Credentials payload for the specified provider
+
+
+    New optional properties:
+    - `webhookUrl`
+
+    * Changed property `webhookUrl` (string)
+        > Webhook URL used by chat app integrations. The webhook should be obtained from the chat app provider.
+
+
+    * Changed property `channel` (string)
+        > Channel specification for Mattermost chat notifications.
+
+
+    * Changed property `deviceTokens` (array)
+        > Contains an array of the subscriber device tokens for a given provider. Used on Push integrations.
+
+
+    * Changed property `alertUid` (string)
+        > Alert UID for Grafana on-call webhook payload.
+
+
+    * Changed property `title` (string)
+        > Title to be used with Grafana on-call webhook.
+
+
+    * Changed property `imageUrl` (string)
+        > Image URL property for Grafana on-call webhook.
+
+
+    * Changed property `state` (string)
+        > State property for Grafana on-call webhook.
+
+
+    * Changed property `externalUrl` (string)
+        > Link to upstream details property for Grafana on-call webhook.
+
+
+###### Return Type:
+
+New response : **400 Bad Request**
+> Bad Request
+
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **404 Not Found**
+> Not Found
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
+New response : **422 Unprocessable Entity**
+> Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **409 Conflict**
+> Conflict
+
+Deleted header : `Retry-After`
+
+
+Deleted header : `Link`
+
+
+
+* Changed content type : `application/json`
+
+Changed response : **200 OK**
+> OK
+
+
+* Changed content type : `application/json`
+
+    * Changed property `data` (object)
+
+        * Added property `topics` (array)
+            > An array of topics that the subscriber is subscribed to.
+
+
+        * Added property `data` (object)
+            > Additional custom data for the subscriber
+
+
+        * Added property `timezone` (string)
+            > Timezone of the subscriber
+
+
+        * Changed property `_id` (string)
+            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
+
+
+        * Changed property `firstName` (string)
+            > The first name of the subscriber.
+
+
+        * Changed property `lastName` (string)
+            > The last name of the subscriber.
+
+
+        * Changed property `email` (string)
+            > The email address of the subscriber.
+
+
+        * Changed property `phone` (string)
+            > The phone number of the subscriber.
+
+
+        * Changed property `avatar` (string)
+            > The URL of the subscriber's avatar image.
+
+
+        * Changed property `locale` (string)
+            > The locale setting of the subscriber, indicating their preferred language or region.
+
+
+        * Changed property `subscriberId` (string)
+            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
+
+
+        * Changed property `isOnline` (boolean)
+            > Indicates whether the subscriber is currently online.
+
+
+        * Changed property `lastOnlineAt` (string)
+            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
+
+
+        * Changed property `_organizationId` (string)
+            > The unique identifier of the organization to which the subscriber belongs.
+
+
+        * Changed property `_environmentId` (string)
+            > The unique identifier of the environment associated with this subscriber.
+
+
+        * Changed property `deleted` (boolean)
+            > Indicates whether the subscriber has been deleted.
+
+
+        * Changed property `createdAt` (string)
+            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
+
+
+        * Changed property `updatedAt` (string)
+            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
+
+
+        * Changed property `__v` (number)
+            > The version of the subscriber document.
+
+
+        * Changed property `channels` (array)
+            > An array of channel settings associated with the subscriber.
+
+
+            Changed items (object):
+
+            * Changed property `providerId` (string)
+                > The provider identifier for the credentials
+
+
+                Added enum value:
+
+                * `whatsapp-business`
+            * Changed property `credentials` (object)
+                > Credentials payload for the specified provider
+
+
+                New optional properties:
+                - `webhookUrl`
+
+                * Changed property `webhookUrl` (string)
+                    > Webhook URL used by chat app integrations. The webhook should be obtained from the chat app provider.
+
+
+                * Changed property `channel` (string)
+                    > Channel specification for Mattermost chat notifications.
+
+
+                * Changed property `deviceTokens` (array)
+                    > Contains an array of the subscriber device tokens for a given provider. Used on Push integrations.
+
+
+                * Changed property `alertUid` (string)
+                    > Alert UID for Grafana on-call webhook payload.
+
+
+                * Changed property `title` (string)
+                    > Title to be used with Grafana on-call webhook.
+
+
+                * Changed property `imageUrl` (string)
+                    > Image URL property for Grafana on-call webhook.
+
+
+                * Changed property `state` (string)
+                    > State property for Grafana on-call webhook.
+
+
+                * Changed property `externalUrl` (string)
+                    > Link to upstream details property for Grafana on-call webhook.
+
+
+            * Changed property `_integrationId` (string)
+                > The unique identifier of the integration associated with this channel.
+
+
+##### `PATCH` /v1/subscribers/{subscriberId}/online-status
+
+
+###### Return Type:
+
+New response : **400 Bad Request**
+> Bad Request
+
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **404 Not Found**
+> Not Found
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
+New response : **422 Unprocessable Entity**
+> Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **409 Conflict**
+> Conflict
+
+Deleted header : `Retry-After`
+
+
+Deleted header : `Link`
+
+
+
+* Changed content type : `application/json`
+
+Changed response : **200 OK**
+> OK
+
+
+* Changed content type : `application/json`
+
+    * Changed property `data` (object)
+
+        * Added property `topics` (array)
+            > An array of topics that the subscriber is subscribed to.
+
+
+        * Added property `data` (object)
+            > Additional custom data for the subscriber
+
+
+        * Added property `timezone` (string)
+            > Timezone of the subscriber
+
+
+        * Changed property `_id` (string)
+            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
+
+
+        * Changed property `firstName` (string)
+            > The first name of the subscriber.
+
+
+        * Changed property `lastName` (string)
+            > The last name of the subscriber.
+
+
+        * Changed property `email` (string)
+            > The email address of the subscriber.
+
+
+        * Changed property `phone` (string)
+            > The phone number of the subscriber.
+
+
+        * Changed property `avatar` (string)
+            > The URL of the subscriber's avatar image.
+
+
+        * Changed property `locale` (string)
+            > The locale setting of the subscriber, indicating their preferred language or region.
+
+
+        * Changed property `subscriberId` (string)
+            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
+
+
+        * Changed property `isOnline` (boolean)
+            > Indicates whether the subscriber is currently online.
+
+
+        * Changed property `lastOnlineAt` (string)
+            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
+
+
+        * Changed property `_organizationId` (string)
+            > The unique identifier of the organization to which the subscriber belongs.
+
+
+        * Changed property `_environmentId` (string)
+            > The unique identifier of the environment associated with this subscriber.
+
+
+        * Changed property `deleted` (boolean)
+            > Indicates whether the subscriber has been deleted.
+
+
+        * Changed property `createdAt` (string)
+            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
+
+
+        * Changed property `updatedAt` (string)
+            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
+
+
+        * Changed property `__v` (number)
+            > The version of the subscriber document.
+
+
+        * Changed property `channels` (array)
+            > An array of channel settings associated with the subscriber.
+
+
+            Changed items (object):
+
+            * Changed property `providerId` (string)
+                > The provider identifier for the credentials
+
+
+                Added enum value:
+
+                * `whatsapp-business`
+            * Changed property `credentials` (object)
+                > Credentials payload for the specified provider
+
+
+                New optional properties:
+                - `webhookUrl`
+
+                * Changed property `webhookUrl` (string)
+                    > Webhook URL used by chat app integrations. The webhook should be obtained from the chat app provider.
+
+
+                * Changed property `channel` (string)
+                    > Channel specification for Mattermost chat notifications.
+
+
+                * Changed property `deviceTokens` (array)
+                    > Contains an array of the subscriber device tokens for a given provider. Used on Push integrations.
+
+
+                * Changed property `alertUid` (string)
+                    > Alert UID for Grafana on-call webhook payload.
+
+
+                * Changed property `title` (string)
+                    > Title to be used with Grafana on-call webhook.
+
+
+                * Changed property `imageUrl` (string)
+                    > Image URL property for Grafana on-call webhook.
+
+
+                * Changed property `state` (string)
+                    > State property for Grafana on-call webhook.
+
+
+                * Changed property `externalUrl` (string)
+                    > Link to upstream details property for Grafana on-call webhook.
+
+
+            * Changed property `_integrationId` (string)
+                > The unique identifier of the integration associated with this channel.
+
+
+##### `POST` /v1/subscribers/{subscriberId}/messages/{messageId}/actions/{type}
+
+
+###### Parameters:
+
+Changed: `type` in `path`
+
+###### Return Type:
+
+New response : **400 Bad Request**
+> Bad Request
+
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **404 Not Found**
+> Not Found
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
+New response : **422 Unprocessable Entity**
+> Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -1529,814 +3103,153 @@ Changed response : **201 Created**
 
     * Changed property `data` (object)
 
-        * Added property `topics` (array)
-            > An array of topics that the subscriber is subscribed to.
+        New required properties:
+        - `createdAt`
+        - `read`
+
+        New optional properties:
+        - `errorId`
+        - `errorText`
+        - `lastSeenDate`
+        - `overrides`
+        - `payload`
+
+        * Added property `lastReadDate` (string)
+            > Last read date of the message, if available
+
+
+        * Added property `read` (boolean)
+            > Indicates if the message has been read
 
 
         * Changed property `_id` (string)
-            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
+            > Unique identifier for the message
 
 
-        * Changed property `firstName` (string)
-            > The first name of the subscriber.
-
-
-        * Changed property `lastName` (string)
-            > The last name of the subscriber.
-
-
-        * Changed property `email` (string)
-            > The email address of the subscriber.
-
-
-        * Changed property `phone` (string)
-            > The phone number of the subscriber.
-
-
-        * Changed property `avatar` (string)
-            > The URL of the subscriber's avatar image.
-
-
-        * Changed property `locale` (string)
-            > The locale setting of the subscriber, indicating their preferred language or region.
-
-
-        * Changed property `subscriberId` (string)
-            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
-
-
-        * Changed property `isOnline` (boolean)
-            > Indicates whether the subscriber is currently online.
-
-
-        * Changed property `lastOnlineAt` (string)
-            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
-
-
-        * Changed property `_organizationId` (string)
-            > The unique identifier of the organization to which the subscriber belongs.
+        * Changed property `_templateId` (string)
+            > Template ID associated with the message
 
 
         * Changed property `_environmentId` (string)
-            > The unique identifier of the environment associated with this subscriber.
+            > Environment ID where the message is sent
 
 
-        * Changed property `deleted` (boolean)
-            > Indicates whether the subscriber has been deleted.
-
-
-        * Changed property `createdAt` (string)
-            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
-
-
-        * Changed property `updatedAt` (string)
-            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
-
-
-        * Changed property `__v` (number)
-            > The version of the subscriber document.
-
-
-        * Changed property `channels` (array)
-            > An array of channel settings associated with the subscriber.
-
-
-            Changed items (object):
-
-            * Changed property `providerId` (string)
-                > The provider identifier for the credentials
-
-
-                Added enum value:
-
-                * `whatsapp-business`
-            * Changed property `_integrationId` (string)
-                > The unique identifier of the integration associated with this channel.
-
-
-##### `DELETE` /v1/subscribers/{subscriberId}
-
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
-
-##### `GET` /v1/subscribers/{subscriberId}
-
-
-###### Parameters:
-
-Added: `includeTopics` in `query`
-> Includes the topics associated with the subscriber
-
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
-
-
-* Changed content type : `application/json`
-
-    * Changed property `data` (object)
-
-        * Added property `topics` (array)
-            > An array of topics that the subscriber is subscribed to.
-
-
-        * Changed property `_id` (string)
-            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
-
-
-        * Changed property `firstName` (string)
-            > The first name of the subscriber.
-
-
-        * Changed property `lastName` (string)
-            > The last name of the subscriber.
-
-
-        * Changed property `email` (string)
-            > The email address of the subscriber.
-
-
-        * Changed property `phone` (string)
-            > The phone number of the subscriber.
-
-
-        * Changed property `avatar` (string)
-            > The URL of the subscriber's avatar image.
-
-
-        * Changed property `locale` (string)
-            > The locale setting of the subscriber, indicating their preferred language or region.
-
-
-        * Changed property `subscriberId` (string)
-            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
-
-
-        * Changed property `isOnline` (boolean)
-            > Indicates whether the subscriber is currently online.
-
-
-        * Changed property `lastOnlineAt` (string)
-            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
+        * Changed property `_messageTemplateId` (string)
+            > Message template ID
 
 
         * Changed property `_organizationId` (string)
-            > The unique identifier of the organization to which the subscriber belongs.
+            > Organization ID associated with the message
 
 
-        * Changed property `_environmentId` (string)
-            > The unique identifier of the environment associated with this subscriber.
+        * Changed property `_notificationId` (string)
+            > Notification ID associated with the message
 
 
-        * Changed property `deleted` (boolean)
-            > Indicates whether the subscriber has been deleted.
+        * Changed property `_subscriberId` (string)
+            > Subscriber ID associated with the message
+
+
+        * Changed property `subscriber` (object -> object)
+            > Subscriber details, if available
+
+
+        * Changed property `template` (object -> object)
+            > Workflow template associated with the message
+
+
+        * Changed property `templateIdentifier` (string)
+            > Identifier for the message template
 
 
         * Changed property `createdAt` (string)
-            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
+            > Creation date of the message
 
 
-        * Changed property `updatedAt` (string)
-            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
+        * Changed property `transactionId` (string)
+            > Transaction ID associated with the message
 
 
-        * Changed property `__v` (number)
-            > The version of the subscriber document.
+        * Changed property `subject` (string)
+            > Subject of the message, if applicable
 
 
-        * Changed property `channels` (array)
-            > An array of channel settings associated with the subscriber.
+        * Changed property `channel` (string)
+            > Channel type through which the message is sent
 
 
-            Changed items (object):
-
-            * Changed property `providerId` (string)
-                > The provider identifier for the credentials
-
-
-                Added enum value:
-
-                * `whatsapp-business`
-            * Changed property `_integrationId` (string)
-                > The unique identifier of the integration associated with this channel.
-
-
-##### `PUT` /v1/subscribers/{subscriberId}
-
-
-###### Request:
-
-Changed content type : `application/json`
-
-* Added property `channels` (array)
-
-    Items (string):
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
-
-
-* Changed content type : `application/json`
-
-    * Changed property `data` (object)
-
-        * Added property `topics` (array)
-            > An array of topics that the subscriber is subscribed to.
-
-
-        * Changed property `_id` (string)
-            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
-
-
-        * Changed property `firstName` (string)
-            > The first name of the subscriber.
-
-
-        * Changed property `lastName` (string)
-            > The last name of the subscriber.
+        * Changed property `seen` (boolean)
+            > Indicates if the message has been seen
 
 
         * Changed property `email` (string)
-            > The email address of the subscriber.
+            > Email address associated with the message, if applicable
 
 
         * Changed property `phone` (string)
-            > The phone number of the subscriber.
+            > Phone number associated with the message, if applicable
 
 
-        * Changed property `avatar` (string)
-            > The URL of the subscriber's avatar image.
+        * Changed property `directWebhookUrl` (string)
+            > Direct webhook URL for the message, if applicable
 
 
-        * Changed property `locale` (string)
-            > The locale setting of the subscriber, indicating their preferred language or region.
+        * Changed property `providerId` (string)
+            > Provider ID associated with the message, if applicable
 
 
-        * Changed property `subscriberId` (string)
-            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
+        * Changed property `deviceTokens` (array)
+            > Device tokens associated with the message, if applicable
 
 
-        * Changed property `isOnline` (boolean)
-            > Indicates whether the subscriber is currently online.
+        * Changed property `title` (string)
+            > Title of the message, if applicable
 
 
-        * Changed property `lastOnlineAt` (string)
-            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
+        * Changed property `lastSeenDate` (string)
+            > Last seen date of the message, if available
 
 
-        * Changed property `_organizationId` (string)
-            > The unique identifier of the organization to which the subscriber belongs.
+        * Changed property `cta` (object -> object)
+            > Call to action associated with the message
 
 
-        * Changed property `_environmentId` (string)
-            > The unique identifier of the environment associated with this subscriber.
+        * Changed property `_feedId` (string)
+            > Feed ID associated with the message, if applicable
 
 
-        * Changed property `deleted` (boolean)
-            > Indicates whether the subscriber has been deleted.
+        * Changed property `status` (string)
+            > Status of the message
 
 
-        * Changed property `createdAt` (string)
-            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
+        * Changed property `errorId` (string)
+            > Error ID if the message has an error
 
 
-        * Changed property `updatedAt` (string)
-            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
+        * Changed property `errorText` (string)
+            > Error text if the message has an error
 
 
-        * Changed property `__v` (number)
-            > The version of the subscriber document.
+        * Changed property `content` (object)
+            > Content of the message, can be an email block or a string
 
 
-        * Changed property `channels` (array)
-            > An array of channel settings associated with the subscriber.
+            Updated `EmailBlock` :
+            * Changed property `type` (string)
+                > Type of the email block
 
 
-            Changed items (object):
+            * Changed property `content` (string)
+                > Content of the email block
 
-            * Changed property `providerId` (string)
-                > The provider identifier for the credentials
 
+            * Changed property `url` (string)
+                > URL associated with the email block, if any
 
-                Added enum value:
 
-                * `whatsapp-business`
-            * Changed property `_integrationId` (string)
-                > The unique identifier of the integration associated with this channel.
+            * Changed property `styles` (object -> object)
+                > Styles applied to the email block
 
-
-##### `PUT` /v1/subscribers/{subscriberId}/credentials
-
-
-###### Request:
-
-Changed content type : `application/json`
-
-* Changed property `providerId` (string)
-    > The provider identifier for the credentials
-
-
-    Added enum value:
-
-    * `whatsapp-business`
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
-
-
-* Changed content type : `application/json`
-
-    * Changed property `data` (object)
-
-        * Added property `topics` (array)
-            > An array of topics that the subscriber is subscribed to.
-
-
-        * Changed property `_id` (string)
-            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
-
-
-        * Changed property `firstName` (string)
-            > The first name of the subscriber.
-
-
-        * Changed property `lastName` (string)
-            > The last name of the subscriber.
-
-
-        * Changed property `email` (string)
-            > The email address of the subscriber.
-
-
-        * Changed property `phone` (string)
-            > The phone number of the subscriber.
-
-
-        * Changed property `avatar` (string)
-            > The URL of the subscriber's avatar image.
-
-
-        * Changed property `locale` (string)
-            > The locale setting of the subscriber, indicating their preferred language or region.
-
-
-        * Changed property `subscriberId` (string)
-            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
-
-
-        * Changed property `isOnline` (boolean)
-            > Indicates whether the subscriber is currently online.
-
-
-        * Changed property `lastOnlineAt` (string)
-            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
-
-
-        * Changed property `_organizationId` (string)
-            > The unique identifier of the organization to which the subscriber belongs.
-
-
-        * Changed property `_environmentId` (string)
-            > The unique identifier of the environment associated with this subscriber.
-
-
-        * Changed property `deleted` (boolean)
-            > Indicates whether the subscriber has been deleted.
-
-
-        * Changed property `createdAt` (string)
-            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
-
-
-        * Changed property `updatedAt` (string)
-            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
-
-
-        * Changed property `__v` (number)
-            > The version of the subscriber document.
-
-
-        * Changed property `channels` (array)
-            > An array of channel settings associated with the subscriber.
-
-
-            Changed items (object):
-
-            * Changed property `providerId` (string)
-                > The provider identifier for the credentials
-
-
-                Added enum value:
-
-                * `whatsapp-business`
-            * Changed property `_integrationId` (string)
-                > The unique identifier of the integration associated with this channel.
-
-
-##### `PATCH` /v1/subscribers/{subscriberId}/credentials
-
-
-###### Request:
-
-Changed content type : `application/json`
-
-* Changed property `providerId` (string)
-    > The provider identifier for the credentials
-
-
-    Added enum value:
-
-    * `whatsapp-business`
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
-
-
-* Changed content type : `application/json`
-
-    * Changed property `data` (object)
-
-        * Added property `topics` (array)
-            > An array of topics that the subscriber is subscribed to.
-
-
-        * Changed property `_id` (string)
-            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
-
-
-        * Changed property `firstName` (string)
-            > The first name of the subscriber.
-
-
-        * Changed property `lastName` (string)
-            > The last name of the subscriber.
-
-
-        * Changed property `email` (string)
-            > The email address of the subscriber.
-
-
-        * Changed property `phone` (string)
-            > The phone number of the subscriber.
-
-
-        * Changed property `avatar` (string)
-            > The URL of the subscriber's avatar image.
-
-
-        * Changed property `locale` (string)
-            > The locale setting of the subscriber, indicating their preferred language or region.
-
-
-        * Changed property `subscriberId` (string)
-            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
-
-
-        * Changed property `isOnline` (boolean)
-            > Indicates whether the subscriber is currently online.
-
-
-        * Changed property `lastOnlineAt` (string)
-            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
-
-
-        * Changed property `_organizationId` (string)
-            > The unique identifier of the organization to which the subscriber belongs.
-
-
-        * Changed property `_environmentId` (string)
-            > The unique identifier of the environment associated with this subscriber.
-
-
-        * Changed property `deleted` (boolean)
-            > Indicates whether the subscriber has been deleted.
-
-
-        * Changed property `createdAt` (string)
-            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
-
-
-        * Changed property `updatedAt` (string)
-            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
-
-
-        * Changed property `__v` (number)
-            > The version of the subscriber document.
-
-
-        * Changed property `channels` (array)
-            > An array of channel settings associated with the subscriber.
-
-
-            Changed items (object):
-
-            * Changed property `providerId` (string)
-                > The provider identifier for the credentials
-
-
-                Added enum value:
-
-                * `whatsapp-business`
-            * Changed property `_integrationId` (string)
-                > The unique identifier of the integration associated with this channel.
-
-
-##### `PATCH` /v1/subscribers/{subscriberId}/online-status
-
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
-
-
-* Changed content type : `application/json`
-
-    * Changed property `data` (object)
-
-        * Added property `topics` (array)
-            > An array of topics that the subscriber is subscribed to.
-
-
-        * Changed property `_id` (string)
-            > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
-
-
-        * Changed property `firstName` (string)
-            > The first name of the subscriber.
-
-
-        * Changed property `lastName` (string)
-            > The last name of the subscriber.
-
-
-        * Changed property `email` (string)
-            > The email address of the subscriber.
-
-
-        * Changed property `phone` (string)
-            > The phone number of the subscriber.
-
-
-        * Changed property `avatar` (string)
-            > The URL of the subscriber's avatar image.
-
-
-        * Changed property `locale` (string)
-            > The locale setting of the subscriber, indicating their preferred language or region.
-
-
-        * Changed property `subscriberId` (string)
-            > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
-
-
-        * Changed property `isOnline` (boolean)
-            > Indicates whether the subscriber is currently online.
-
-
-        * Changed property `lastOnlineAt` (string)
-            > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
-
-
-        * Changed property `_organizationId` (string)
-            > The unique identifier of the organization to which the subscriber belongs.
-
-
-        * Changed property `_environmentId` (string)
-            > The unique identifier of the environment associated with this subscriber.
-
-
-        * Changed property `deleted` (boolean)
-            > Indicates whether the subscriber has been deleted.
-
-
-        * Changed property `createdAt` (string)
-            > The timestamp indicating when the subscriber was created, in ISO 8601 format.
-
-
-        * Changed property `updatedAt` (string)
-            > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
-
-
-        * Changed property `__v` (number)
-            > The version of the subscriber document.
-
-
-        * Changed property `channels` (array)
-            > An array of channel settings associated with the subscriber.
-
-
-            Changed items (object):
-
-            * Changed property `providerId` (string)
-                > The provider identifier for the credentials
-
-
-                Added enum value:
-
-                * `whatsapp-business`
-            * Changed property `_integrationId` (string)
-                > The unique identifier of the integration associated with this channel.
-
-
-##### `GET` /v1/subscribers/{subscriberId}/preferences
-
-
-###### Parameters:
-
-Added: `includeInactiveChannels` in `query`
-> A flag which specifies if the inactive workflow channels should be included in the retrieved preferences. Default is true
-
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
-
-##### `PATCH` /v1/subscribers/{subscriberId}/preferences
-
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
-
-
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **200 OK**
-> OK
 
 ##### `POST` /v1/topics
 
@@ -2346,11 +3259,32 @@ Changed response : **200 OK**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -2385,31 +3319,21 @@ Changed response : **201 Created**
 
 ##### `GET` /v1/topics
 
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
+> Get topic list filtered
 
 
-Deleted header : `Link`
+###### Parameters:
+
+Changed: `page` in `query`
+> The page number to retrieve (starts from 0)
 
 
+Changed: `pageSize` in `query`
+> The number of items to return per page (default: 10)
 
-* Changed content type : `application/json`
 
-##### `GET` /v1/notifications/{notificationId}
+Changed: `key` in `query`
+> A filter key to apply to the results
 
 
 ###### Return Type:
@@ -2417,11 +3341,32 @@ Deleted header : `Link`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -2436,32 +3381,24 @@ Deleted header : `Link`
 * Changed content type : `application/json`
 
 Changed response : **200 OK**
-> OK
-
 
 * Changed content type : `application/json`
 
-    * Changed property `data` (object)
+    * Changed property `page` (number)
+        > The current page number
 
-        * Changed property `channels` (array)
 
-            Changed items (string):
+    * Changed property `pageSize` (number)
+        > The number of items per page
 
-            Added enum value:
 
-            * `custom`
-            Added enum value:
+    * Changed property `totalCount` (number)
+        > The total number of items
 
-            * `custom`
-        * Changed property `jobs` (array)
 
-            Changed items (object -> string):
+    * Changed property `data` (array)
+        > The list of topics
 
-        * Changed property `template` (object)
-
-            * Changed property `triggers` (array)
-
-                Changed items (object -> string):
 
 ##### `GET` /v1/integrations
 
@@ -2471,11 +3408,32 @@ Changed response : **200 OK**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -2605,11 +3563,32 @@ Changed content type : `application/json`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -2699,11 +3678,32 @@ Changed response : **201 Created**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -2809,8 +3809,29 @@ Changed content type : `application/json`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -2900,11 +3921,32 @@ Changed response : **200 OK**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -2996,8 +4038,29 @@ Changed response : **200 OK**
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Deleted response : **201 Created**
 Changed response : **409 Conflict**
@@ -3091,14 +4154,6 @@ Changed content type : `application/json`
 
     Changed items (object):
 
-    * Added property `bridgeUrl` (string)
-        > A URL to bridge for additional processing.
-
-
-    * Added property `controls` (object)
-        > Additional control configurations.
-
-
     * Changed property `payload` (object)
         > The payload object is used to pass additional custom information that could be 
         >     used to render the workflow, or perform routing rules based on it. 
@@ -3125,6 +4180,10 @@ Changed content type : `application/json`
         Updated `SubscriberPayloadDto` :
         * Added property `channels` (array)
             > An optional array of subscriber channels.
+
+
+        * Added property `timezone` (string)
+            > The timezone of the subscriber.
 
 
         * Changed property `email` (string)
@@ -3165,11 +4224,32 @@ Changed content type : `application/json`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -3201,6 +4281,9 @@ Changed response : **201 Created**
             > Status of the trigger
 
 
+            Added enum value:
+
+            * `invalid_recipients`
             Removed enum value:
 
             * `subscriber_id_missing`
@@ -3212,35 +4295,321 @@ Changed response : **201 Created**
             > The returned transaction ID of the trigger
 
 
-##### `GET` /v1/notifications
+##### `GET` /v1/notifications/{notificationId}
 
-
-###### Parameters:
-
-Added: `after` in `query`
-
-Added: `before` in `query`
-
-Changed: `channels` in `query`
-
-Changed: `templates` in `query`
-
-Changed: `emails` in `query`
-
-Changed: `search` in `query`
-
-Changed: `subscriberIds` in `query`
 
 ###### Return Type:
 
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
+
+Changed response : **409 Conflict**
+> Conflict
+
+Deleted header : `Retry-After`
+
+
+Deleted header : `Link`
+
+
+
+* Changed content type : `application/json`
+
+Changed response : **200 OK**
+> OK
+
+
+* Changed content type : `application/json`
+
+    * Changed property `data` (object)
+
+        New required properties:
+        - `_subscriberId`
+
+        * Added property `_subscriberId` (string)
+            > Subscriber ID of the notification
+
+
+        * Added property `_templateId` (string)
+            > Template ID of the notification
+
+
+        * Added property `_digestedNotificationId` (string)
+            > Digested Notification ID
+
+
+        * Added property `updatedAt` (string)
+            > Last updated time of the notification
+
+
+        * Added property `payload` (object)
+            > Payload of the notification
+
+
+        * Added property `tags` (array)
+            > Tags associated with the notification
+
+
+            Items (string):
+
+        * Added property `controls` (object)
+            > Controls associated with the notification
+
+
+        * Added property `to` (object)
+            > To field for subscriber definition
+
+
+        * Changed property `_id` (string)
+            > Unique identifier of the notification
+
+
+        * Changed property `_environmentId` (string)
+            > Environment ID of the notification
+
+
+        * Changed property `_organizationId` (string)
+            > Organization ID of the notification
+
+
+        * Changed property `transactionId` (string)
+            > Transaction ID of the notification
+
+
+        * Changed property `createdAt` (string)
+            > Creation time of the notification
+
+
+        * Changed property `channels` (array)
+
+            Changed items (string):
+                > Channels of the notification
+
+
+            Added enum value:
+
+            * `custom`
+            Removed enum values:
+
+            * `in_app`
+            * `email`
+            * `sms`
+            * `chat`
+            * `push`
+            * `digest`
+            * `trigger`
+            * `delay`
+        * Changed property `subscriber` (object -> object)
+            > Subscriber of the notification
+
+
+        * Changed property `template` (object -> object)
+            > Template of the notification
+
+
+        * Changed property `jobs` (array)
+            > Jobs of the notification
+
+
+            Changed items (object):
+
+            * Added property `overrides` (object)
+                > Optional context object for additional error details.
+
+
+            * Added property `updatedAt` (string)
+                > Updated time of the notification
+
+
+            * Changed property `_id` (string)
+                > Unique identifier of the job
+
+
+            * Changed property `type` (string)
+                > Type of the job
+
+
+                Added enum values:
+
+                * `in_app`
+                * `email`
+                * `sms`
+                * `chat`
+                * `push`
+                * `digest`
+                * `trigger`
+                * `delay`
+                * `custom`
+            * Changed property `digest` (object -> object)
+                > Optional digest for the job, including metadata and events
+
+
+            * Changed property `step` (object -> object)
+                > Step details of the job
+
+
+            * Changed property `payload` (object)
+                > Optional payload for the job
+
+
+            * Changed property `providerId` (object -> string)
+                > Provider ID of the job
+
+
+            * Changed property `status` (string)
+                > Status of the job
+
+
+            * Changed property `executionDetails` (array)
+                > Execution details of the job
+
+
+                Changed items (object):
+
+                New optional properties:
+                - `_jobId`
+
+                * Added property `createdAt` (string)
+                    > Creation time of the execution detail
+
+
+                * Deleted property `_jobId` (string)
+
+                * Changed property `_id` (string)
+                    > Unique identifier of the execution detail
+
+
+                * Changed property `status` (string)
+                    > Status of the execution detail
+
+
+                * Changed property `detail` (string)
+                    > Detailed information about the execution
+
+
+                * Changed property `isRetry` (boolean)
+                    > Whether the execution is a retry or not
+
+
+                * Changed property `isTest` (boolean)
+                    > Whether the execution is a test or not
+
+
+                * Changed property `providerId` (object -> string)
+                    > Provider ID of the job
+
+
+                * Changed property `raw` (string)
+                    > Raw data of the execution
+
+
+                * Changed property `source` (string)
+                    > Source of the execution detail
+
+
+##### `GET` /v1/notifications
+
+
+###### Parameters:
+
+Added: `limit` in `query`
+> Limit for pagination
+
+
+Added: `after` in `query`
+> Date filter for records after this timestamp. Defaults to earliest date allowed by subscription plan
+
+
+Added: `before` in `query`
+> Date filter for records before this timestamp. Defaults to current time of request (now)
+
+
+Changed: `channels` in `query`
+> Array of channel types
+
+
+Changed: `templates` in `query`
+> Array of template IDs or a single template ID
+
+
+Changed: `emails` in `query`
+> Array of email addresses or a single email address
+
+
+Changed: `search` in `query`
+> Search term (deprecated)
+
+
+Changed: `subscriberIds` in `query`
+> Array of subscriber IDs or a single subscriber ID
+
+
+Changed: `page` in `query`
+> Page number for pagination
+
+
+Changed: `transactionId` in `query`
+> Transaction ID for filtering
+
+
+###### Return Type:
+
+New response : **400 Bad Request**
+> Bad Request
+
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
+New response : **404 Not Found**
+> Not Found
+
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
+New response : **422 Unprocessable Entity**
+> Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -3258,31 +4627,205 @@ Changed response : **200 OK**
 
 * Changed content type : `application/json`
 
+    * Changed property `hasMore` (boolean)
+        > Indicates if there are more activities in the result set
+
+
+    * Changed property `pageSize` (number)
+        > Page size of the activities
+
+
+    * Changed property `page` (number)
+        > Current page of the activities
+
+
     * Changed property `data` (array)
-        > Array of Activity notifications
+        > Array of activity notifications
 
 
         Changed items (object):
 
+        New required properties:
+        - `_subscriberId`
+
+        * Added property `_subscriberId` (string)
+            > Subscriber ID of the notification
+
+
+        * Added property `_templateId` (string)
+            > Template ID of the notification
+
+
+        * Added property `_digestedNotificationId` (string)
+            > Digested Notification ID
+
+
+        * Added property `updatedAt` (string)
+            > Last updated time of the notification
+
+
+        * Added property `payload` (object)
+            > Payload of the notification
+
+
+        * Added property `tags` (array)
+            > Tags associated with the notification
+
+
+        * Added property `controls` (object)
+            > Controls associated with the notification
+
+
+        * Added property `to` (object)
+            > To field for subscriber definition
+
+
+        * Changed property `_id` (string)
+            > Unique identifier of the notification
+
+
+        * Changed property `_environmentId` (string)
+            > Environment ID of the notification
+
+
+        * Changed property `_organizationId` (string)
+            > Organization ID of the notification
+
+
+        * Changed property `transactionId` (string)
+            > Transaction ID of the notification
+
+
+        * Changed property `createdAt` (string)
+            > Creation time of the notification
+
+
         * Changed property `channels` (array)
 
             Changed items (string):
+                > Channels of the notification
+
 
             Added enum value:
 
             * `custom`
-            Added enum value:
+            Removed enum values:
 
-            * `custom`
+            * `in_app`
+            * `email`
+            * `sms`
+            * `chat`
+            * `push`
+            * `digest`
+            * `trigger`
+            * `delay`
+        * Changed property `subscriber` (object -> object)
+            > Subscriber of the notification
+
+
+        * Changed property `template` (object -> object)
+            > Template of the notification
+
+
         * Changed property `jobs` (array)
+            > Jobs of the notification
 
-            Changed items (object -> string):
 
-        * Changed property `template` (object)
+            Changed items (object):
 
-            * Changed property `triggers` (array)
+            * Added property `overrides` (object)
+                > Optional context object for additional error details.
 
-                Changed items (object -> string):
+
+            * Added property `updatedAt` (string)
+                > Updated time of the notification
+
+
+            * Changed property `_id` (string)
+                > Unique identifier of the job
+
+
+            * Changed property `type` (string)
+                > Type of the job
+
+
+                Added enum values:
+
+                * `in_app`
+                * `email`
+                * `sms`
+                * `chat`
+                * `push`
+                * `digest`
+                * `trigger`
+                * `delay`
+                * `custom`
+            * Changed property `digest` (object -> object)
+                > Optional digest for the job, including metadata and events
+
+
+            * Changed property `step` (object -> object)
+                > Step details of the job
+
+
+            * Changed property `payload` (object)
+                > Optional payload for the job
+
+
+            * Changed property `providerId` (object -> string)
+                > Provider ID of the job
+
+
+            * Changed property `status` (string)
+                > Status of the job
+
+
+            * Changed property `executionDetails` (array)
+                > Execution details of the job
+
+
+                Changed items (object):
+
+                New optional properties:
+                - `_jobId`
+
+                * Added property `createdAt` (string)
+                    > Creation time of the execution detail
+
+
+                * Deleted property `_jobId` (string)
+
+                * Changed property `_id` (string)
+                    > Unique identifier of the execution detail
+
+
+                * Changed property `status` (string)
+                    > Status of the execution detail
+
+
+                * Changed property `detail` (string)
+                    > Detailed information about the execution
+
+
+                * Changed property `isRetry` (boolean)
+                    > Whether the execution is a retry or not
+
+
+                * Changed property `isTest` (boolean)
+                    > Whether the execution is a test or not
+
+
+                * Changed property `providerId` (object -> string)
+                    > Provider ID of the job
+
+
+                * Changed property `raw` (string)
+                    > Raw data of the execution
+
+
+                * Changed property `source` (string)
+                    > Source of the execution detail
+
 
 ##### `GET` /v1/messages
 
@@ -3296,11 +4839,32 @@ Changed: `channel` in `query`
 New response : **400 Bad Request**
 > Bad Request
 
+New response : **401 Unauthorized**
+> Unauthorized
+
+New response : **403 Forbidden**
+> Forbidden
+
 New response : **404 Not Found**
 > Not Found
 
+New response : **405 Method Not Allowed**
+> Method Not Allowed
+
+New response : **413 Request Too Long**
+> Payload Too Large
+
+New response : **414 Request-URI Too Long**
+> URI Too Long
+
+New response : **415 Unsupported Media Type**
+> Unsupported Media Type
+
 New response : **422 Unprocessable Entity**
 > Unprocessable Entity
+
+New response : **500 Internal Server Error**
+> Internal Server Error
 
 Changed response : **409 Conflict**
 > Conflict
@@ -3318,195 +4882,203 @@ Changed response : **200 OK**
 
 * Changed content type : `application/json`
 
+    * Changed property `hasMore` (boolean)
+        > Indicates if there are more activities in the result set
+
+
+    * Changed property `pageSize` (number)
+        > Page size of the activities
+
+
+    * Changed property `page` (number)
+        > Current page of the activities
+
+
     * Changed property `data` (array)
-        > Array of Activity notifications
+        > Array of activity notifications
 
 
         Changed items (object):
 
+        New required properties:
+        - `_subscriberId`
+
+        * Added property `_subscriberId` (string)
+            > Subscriber ID of the notification
+
+
+        * Added property `_templateId` (string)
+            > Template ID of the notification
+
+
+        * Added property `_digestedNotificationId` (string)
+            > Digested Notification ID
+
+
+        * Added property `updatedAt` (string)
+            > Last updated time of the notification
+
+
+        * Added property `payload` (object)
+            > Payload of the notification
+
+
+        * Added property `tags` (array)
+            > Tags associated with the notification
+
+
+        * Added property `controls` (object)
+            > Controls associated with the notification
+
+
+        * Added property `to` (object)
+            > To field for subscriber definition
+
+
+        * Changed property `_id` (string)
+            > Unique identifier of the notification
+
+
+        * Changed property `_environmentId` (string)
+            > Environment ID of the notification
+
+
+        * Changed property `_organizationId` (string)
+            > Organization ID of the notification
+
+
+        * Changed property `transactionId` (string)
+            > Transaction ID of the notification
+
+
+        * Changed property `createdAt` (string)
+            > Creation time of the notification
+
+
         * Changed property `channels` (array)
 
             Changed items (string):
+                > Channels of the notification
+
 
             Added enum value:
 
             * `custom`
-            Added enum value:
+            Removed enum values:
 
-            * `custom`
+            * `in_app`
+            * `email`
+            * `sms`
+            * `chat`
+            * `push`
+            * `digest`
+            * `trigger`
+            * `delay`
+        * Changed property `subscriber` (object -> object)
+            > Subscriber of the notification
+
+
+        * Changed property `template` (object -> object)
+            > Template of the notification
+
+
         * Changed property `jobs` (array)
-
-            Changed items (object -> string):
-
-        * Changed property `template` (object)
-
-            * Changed property `triggers` (array)
-
-                Changed items (object -> string):
-
-##### `POST` /v1/subscribers/{subscriberId}/messages/{messageId}/actions/{type}
+            > Jobs of the notification
 
 
-###### Parameters:
+            Changed items (object):
 
-Changed: `type` in `path`
-
-###### Return Type:
-
-New response : **400 Bad Request**
-> Bad Request
-
-New response : **404 Not Found**
-> Not Found
-
-New response : **422 Unprocessable Entity**
-> Unprocessable Entity
-
-Changed response : **409 Conflict**
-> Conflict
-
-Deleted header : `Retry-After`
+            * Added property `overrides` (object)
+                > Optional context object for additional error details.
 
 
-Deleted header : `Link`
-
-
-
-* Changed content type : `application/json`
-
-Changed response : **201 Created**
-> Created
-
-
-* Changed content type : `application/json`
-
-    * Changed property `data` (object)
-
-        New required properties:
-        - `createdAt`
-        - `read`
-
-        New optional properties:
-        - `lastSeenDate`
-
-        * Added property `lastReadDate` (string)
-
-        * Added property `read` (boolean)
-
-        * Changed property `_feedId` (string -> object)
-
-        * Changed property `subscriber` (object)
-
-            * Added property `topics` (array)
-                > An array of topics that the subscriber is subscribed to.
+            * Added property `updatedAt` (string)
+                > Updated time of the notification
 
 
             * Changed property `_id` (string)
-                > The internal ID generated by Novu for your subscriber. This ID does not match the `subscriberId` used in your queries. Refer to `subscriberId` for that identifier.
+                > Unique identifier of the job
 
 
-            * Changed property `firstName` (string)
-                > The first name of the subscriber.
+            * Changed property `type` (string)
+                > Type of the job
 
 
-            * Changed property `lastName` (string)
-                > The last name of the subscriber.
+                Added enum values:
+
+                * `in_app`
+                * `email`
+                * `sms`
+                * `chat`
+                * `push`
+                * `digest`
+                * `trigger`
+                * `delay`
+                * `custom`
+            * Changed property `digest` (object -> object)
+                > Optional digest for the job, including metadata and events
 
 
-            * Changed property `email` (string)
-                > The email address of the subscriber.
+            * Changed property `step` (object -> object)
+                > Step details of the job
 
 
-            * Changed property `phone` (string)
-                > The phone number of the subscriber.
+            * Changed property `payload` (object)
+                > Optional payload for the job
 
 
-            * Changed property `avatar` (string)
-                > The URL of the subscriber's avatar image.
+            * Changed property `providerId` (object -> string)
+                > Provider ID of the job
 
 
-            * Changed property `locale` (string)
-                > The locale setting of the subscriber, indicating their preferred language or region.
+            * Changed property `status` (string)
+                > Status of the job
 
 
-            * Changed property `subscriberId` (string)
-                > The identifier used to create this subscriber, which typically corresponds to the user ID in your system.
-
-
-            * Changed property `isOnline` (boolean)
-                > Indicates whether the subscriber is currently online.
-
-
-            * Changed property `lastOnlineAt` (string)
-                > The timestamp indicating when the subscriber was last online, in ISO 8601 format.
-
-
-            * Changed property `_organizationId` (string)
-                > The unique identifier of the organization to which the subscriber belongs.
-
-
-            * Changed property `_environmentId` (string)
-                > The unique identifier of the environment associated with this subscriber.
-
-
-            * Changed property `deleted` (boolean)
-                > Indicates whether the subscriber has been deleted.
-
-
-            * Changed property `createdAt` (string)
-                > The timestamp indicating when the subscriber was created, in ISO 8601 format.
-
-
-            * Changed property `updatedAt` (string)
-                > The timestamp indicating when the subscriber was last updated, in ISO 8601 format.
-
-
-            * Changed property `__v` (number)
-                > The version of the subscriber document.
-
-
-            * Changed property `channels` (array)
-                > An array of channel settings associated with the subscriber.
+            * Changed property `executionDetails` (array)
+                > Execution details of the job
 
 
                 Changed items (object):
 
-                * Changed property `providerId` (string)
-                    > The provider identifier for the credentials
+                New optional properties:
+                - `_jobId`
+
+                * Added property `createdAt` (string)
+                    > Creation time of the execution detail
 
 
-                    Added enum value:
+                * Deleted property `_jobId` (string)
 
-                    * `whatsapp-business`
-                * Changed property `_integrationId` (string)
-                    > The unique identifier of the integration associated with this channel.
+                * Changed property `_id` (string)
+                    > Unique identifier of the execution detail
 
 
-        * Changed property `content` (object)
+                * Changed property `status` (string)
+                    > Status of the execution detail
 
-            Updated `EmailBlock` :
-            * Changed property `styles` (object)
 
-                New required properties:
-                - `textAlign`
+                * Changed property `detail` (string)
+                    > Detailed information about the execution
 
-        * Changed property `cta` (object)
 
-            * Changed property `action` (object)
+                * Changed property `isRetry` (boolean)
+                    > Whether the execution is a retry or not
 
-                * Changed property `buttons` (array)
 
-                    Changed items (object):
+                * Changed property `isTest` (boolean)
+                    > Whether the execution is a test or not
 
-                    * Changed property `type` (string)
 
-                        Removed enum value:
+                * Changed property `providerId` (object -> string)
+                    > Provider ID of the job
 
-                        * `clicked`
-                * Changed property `result` (object)
 
-                    * Changed property `type` (string)
+                * Changed property `raw` (string)
+                    > Raw data of the execution
 
-                        Removed enum value:
 
-                        * `clicked`
+                * Changed property `source` (string)
+                    > Source of the execution detail
+
+

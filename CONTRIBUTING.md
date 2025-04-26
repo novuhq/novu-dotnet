@@ -22,7 +22,7 @@ You can open a new issue with this [issue form](https://github.com/novuhq/novu-d
 - .NET 8
 - Novu API Key - Can be located at https://web.novu.co/settings
 
-### Setup the project
+### Set up the project
 
 * Clone the repository and run `dotnet restore` against `Novu.sln`
 * docker files for local development in docker folder
@@ -53,4 +53,4 @@ Questions, suggestions, and thoughts are most welcome. Feel free to open a [GitH
 - Help create tutorials and blog posts
 - Request a feature by submitting a proposal
 - Report a bug
-- **Improve documentation** - fix incomplete or missing [docs](https://docs.novu.co/), bad wording, examples or explanations.
+- **Improve documentation**—fix incomplete or missing [docs](https://docs.novu.co/), bad wording, examples or explanations.

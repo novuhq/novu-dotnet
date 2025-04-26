@@ -12,35 +12,40 @@
 [![NuGet](https://img.shields.io/nuget/dt/Novu.svg)](https://www.nuget.org/packages/Novu/)
 [![Deploy to Nuget](https://github.com/novuhq/novu-dotnet/actions/workflows/dotnet-deploy.yaml/badge.svg)](https://github.com/novuhq/novu-dotnet/actions/workflows/dotnet-deploy.yaml)
 
-.NET SDK for Novu - The open-source notification infrastructure for engineers. 🚀
+.NET SDK for Novu—The open-source notification infrastructure for engineers. 🚀
 
-novu-dotnet targets .NET Standard 2.0 and is compatible with .NET Core 2.0+ and .NET Framework 4.6.1+.
+`novu-dotnet` targets .NET Standard 2.0 and is compatible with .NET Core 2.0+ and .NET Framework 4.6.1+.
 
-**Current:** Novu api 0.24.0
+**Current Novu:**
+
+* Self-Hosted: 0.24.7
+* Cloud: 2.1.1
 
 ## Features
 
 - Bindings against all [API endpoints](https://docs.novu.co/api/overview/)
     - Events, subscribers, notifications, integrations, layouts, topics, workflows, workflow groups, messages, execution
       details
-- Bootstrap each services as part of services provider or directly as a singleton class (setting injectable)
-- A Sync service that will mirror an environment based a set of templates (layouts, integrations, workflow groups,
+- Bootstrap each service as part of services provider or directly as a singleton class (setting injectable)
+- A Sync service that will mirror an environment based on a set of templates (layouts, integrations, workflow groups,
   workflows)
 
 **WARNING**: 0.3.0 has breaking changes and the tests should be relied on for understanding the client libraries
 
 ## Dependencies
 
-| dotnet novu | novu api [package](https://github.com/novuhq/novu/pkgs/container/novu%2Fapi) | Notes                                                                                                                                                                                                                                   |
-|-------------|------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0.2.2       | <= 0.17                                                                      | Singleton client with Refit's use of RestService                                                                                                                                                                                        |
-| 0.3.0       | \>= 0.18                                                                     | 0.3.0 is not compatible with 0.2.2 and requires upgrade to code. Also 0.18 introduced a breaking change only found in 0.3.0. All 0.2.2 must be upgraded if used against the production system. HttpClient can now be used and injected. |
-| 0.3.1       | \>= 0.18                                                                     | Failed release. You will not find this release on Nuget.                                                                                                                                                                                |
-| 0.3.2       | \>= 0.18                                                                     | [BREAKING} Obsolete Notification Templates has been removed. Service registration separation of single client and each client. Novu.Extension and Novu.Sync released as packages.                                                       |
-| 0.3.2       | \>= 0.18                                                                     |                                                                                                                                                                                                                                         |
-| 0.4.0       | \>= 0.24                                                                     |                                                                                                                                                                                                                                         |
-| 0.5.0       | \>= 0.24                                                                     | Refit 7.2.2 / Microsoft.Extension>=7.x                                                                                                                                                                                                  |
-| 0.6.0       | \>= 0.24                                                                     | Refit 8.0 / Microsoft.Extension>=8.x                                                                                                                                                                                                    |
+| dotnet novu | novu api [package](https://github.com/novuhq/novu/pkgs/container/novu/api) | Notes                                                                                                                                                                                                                                   |
+|-------------|----------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 0.2.2       | <= 0.17                                                                    | Singleton client with Refit's use of RestService                                                                                                                                                                                        |
+| 0.3.0       | \>= 0.18                                                                   | 0.3.0 is not compatible with 0.2.2 and requires upgrade to code. Also 0.18 introduced a breaking change only found in 0.3.0. All 0.2.2 must be upgraded if used against the production system. HttpClient can now be used and injected. |
+| 0.3.1       | \>= 0.18                                                                   | Failed release. You will not find this release on Nuget.                                                                                                                                                                                |
+| 0.3.2       | \>= 0.18                                                                   | [BREAKING} Obsolete Notification Templates has been removed. Service registration separation of single client and each client. Novu.Extension and Novu.Sync released as packages.                                                       |
+| 0.3.2       | \>= 0.18                                                                   |                                                                                                                                                                                                                                         |
+| 0.4.0       | \>= 0.24                                                                   |                                                                                                                                                                                                                                         |
+| 0.5.0       | \>= 0.24                                                                   | Refit 7.2.2 / Microsoft.Extension>=7.x                                                                                                                                                                                                  |
+| 0.6.0       | \>= 0.24                                                                   | Refit 8.0 / Microsoft.Extension>=8.x                                                                                                                                                                                                    |
+| 0.6.1       | \>= 0.24 (Self-Hosted) & \>=2.1.1 (Cloud)                                  | Bug fix on serialisation                                                                                                                                                                                                                |
+| 0.7.0       | \>= 0.24 (Self-Hosted) & \>=2.1.1 (Cloud)                                  | [Breaking changes] EventClient consolidates methods and field changes: `Actor` (upgraded from string to type) and `Tenant` (added)                                                                                                      |
 
 ## Installation
 
@@ -143,9 +148,9 @@ Usage of the library is best understood by looking at the tests.
 
 [Novu](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu) is the main SDK
 with [Novu.Tests](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Tests) housing all unit
-tests. [Novu.Extensions](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Extensions) is required for DI
+tests. [Novu.Extensions](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Extensions) are required for DI
 and [Novu.Sync](https://github.com/novuhq/novu-dotnet/tree/main/src/Novu.Sync)
-if your are looking for mirroring environments.
+if you are looking for mirroring environments.
 
 ### novu-dotnet
 
@@ -160,11 +165,11 @@ The key folders to look into:
 
 ## API
 
-Note: all old release information is in `specs/[version]/README` (which includes diffs)
+Note: all old release information is in `specs/[version]/README` (which includes diffs). See [versioning instructions](./VERSIONING.md). 
 
 **Tracking Versions**: `New`, `Changed`, `Deleted`, `Deprecated`
 
-* **New**: tracked since version
+* **New**: tracked since a version
 * **Changed**: has had changes on the endpoint attributes
 * **Deleted**: was removed (obsolete)
 * **Deprecated**: marked as being removed
@@ -173,20 +178,20 @@ Note: all old release information is in `specs/[version]/README` (which includes
 
 * **Full**: all attributes are supported on the model on the method/endpoint call
 * **None**: the method/endpoint is not implemented
-* **Upgrade**: known changes to the attributes are required that are flagged (practically same as incomplete but
+* **Upgrade**: known changes to the attributes are required that are flagged (practically the same as incomplete but
   effectively a NEW placeholder)
 
 ### Events
 
-Events represent a change in state of a subscriber. They are used to trigger workflows, and enable you to send
+Events represent a change in the state of a subscriber. They are used to trigger workflows, and enable you to send
 notifications to subscribers based on their actions.
 
-| HTTP Method | Endpoint                           | Description            | New    | Changed | Deleted | Deprecated | Compatability | Notes |
-|-------------|------------------------------------|------------------------|--------|---------|---------|------------|---------------|-------|
-| POST        | /v1/events/trigger                 | Trigger event          | 0.18.0 | 0.19.0  |         |            | Upgrade       |       |
-| POST        | /v1/events/trigger/bulk            | Bulk trigger event     | 0.18.0 |         |         |            | Full          |       |
-| POST        | /v1/events/trigger/broadcast       | Broadcast event to all | 0.18.0 |         |         |            | Full          |       |
-| DELETE      | /v1/events/trigger/{transactionId} | Cancel triggered event | 0.18.0 |         |         |            | Full          |       |
+| HTTP Method | Endpoint                           | Description            | New    | Changed | Deleted | Deprecated | Compatability | Notes        |
+|-------------|------------------------------------|------------------------|--------|---------|---------|------------|---------------|--------------|
+| POST        | /v1/events/trigger                 | Trigger event          | 0.18.0 | 0.19.0  |         |            | Full          | Tenant added |
+| POST        | /v1/events/trigger/bulk            | Bulk trigger event     | 0.18.0 |         |         |            | Full          |              |
+| POST        | /v1/events/trigger/broadcast       | Broadcast event to all | 0.18.0 |         |         |            | Full          |              |
+| DELETE      | /v1/events/trigger/{transactionId} | Cancel triggered event | 0.18.0 |         |         |            | Full          |              |
 
 ### Subscribers
 
@@ -249,8 +254,8 @@ Notifications can be individual or bundled as digest for user-friendliness.
 
 ### Integrations
 
-With the help of the Integration Store, you can easily integrate your favorite delivery provider. During the runtime of
-the API, the Integrations Store is responsible for storing the configurations of all the providers.
+With the help of the Integration Store, you can integrate your favorite delivery provider. During the runtime of
+the API, the Integration Store is responsible for storing the configurations of all the providers.
 
 | HTTP Method | Endpoint                                              | Description                             | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|-------------------------------------------------------|-----------------------------------------|--------|---------|---------|------------|---------------|-------|
@@ -266,7 +271,7 @@ the API, the Integrations Store is responsible for storing the configurations of
 
 ### Layouts
 
-Novu allows the creation of layouts - a specific HTML design or structure to wrap content of email notifications.
+Novu allows the creation of layouts—a specific HTML design or structure to wrap content of email notifications.
 Layouts can be manipulated and assigned to new or existing workflows within the Novu platform, allowing users to create,
 manage, and assign these layouts to workflows, so they can be reused to structure the appearance of notifications sent
 through the platform.
@@ -321,7 +326,7 @@ Workflow groups are used to organize workflows into logical groups.
 
 ### Changes
 
-Changes represent a change in state of an environment. They are analagous to a pending pull request in git, enabling you
+Changes represent a change in the state of the environment. They are analogous to a pending pull request in git, enabling you
 to test changes before they are applied to your environment and atomically apply them when you are ready.
 
 | HTTP Method | Endpoint                     | Description       | New    | Changed | Deleted | Deprecated | Compatability | Notes                 |
@@ -334,7 +339,7 @@ to test changes before they are applied to your environment and atomically apply
 ### Environments
 
 Novu uses the concept of environments to ensure logical separation of your data and configuration. This means that
-subscribers, and preferences created in one environment are never accessible to another.
+subscribers and preferences created in one environment are never accessible to another.
 
 | HTTP Method | Endpoint                             | Description             | New    | Changed | Deleted | Deprecated | Compatability | Notes |
 |-------------|--------------------------------------|-------------------------|--------|---------|---------|------------|---------------|-------|
@@ -368,7 +373,7 @@ This can be used to monitor activity and discover potential issues with a specif
 ### Tenants
 
 A tenant represents a group of users. As a developer, when your apps have organizations, they are referred to as
-tenants. Tenants in Novu provides the ability to tailor specific notification experiences to users of different groups
+tenants. Tenants in Novu provide the ability to tailor specific notification experiences to users of different groups
 or organizations.
 
 | HTTP Method | Endpoint                 | Description   | New    | Changed | Deleted | Deprecated | Compatability | Notes |
