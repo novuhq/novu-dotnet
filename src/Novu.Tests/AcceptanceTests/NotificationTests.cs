@@ -40,7 +40,7 @@ public class NotificationTests(
         var (workflow, eventName) = await MakeInAppWorkflow();
         var subscriber = await MakeSubscriberOnWorkflow(workflow);
 
-        var trigger = await eventClient.Trigger(
+        var trigger = await eventClient.Create(
             new EventCreateData
             {
                 EventName = eventName,

@@ -18,7 +18,7 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
     {
         var subscriber = await subscriberFactory.Make();
 
-        var trigger = await eventClient.Trigger(
+        var trigger = await eventClient.Create(
             new EventCreateData
             {
                 EventName = await GetActiveEvent(),
@@ -35,7 +35,7 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
     {
         var subscriber = await subscriberFactory.Make();
 
-        var trigger = await eventClient.Trigger(
+        var trigger = await eventClient.Create(
             new EventCreateData
             {
                 EventName = await GetActiveEvent(),
@@ -77,7 +77,7 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
                 })
                 .ToList());
 
-        var trigger = await eventClient.CreateBulk(dto);
+        var trigger = await eventClient.Create(dto);
 
         trigger.Data.Should().HaveCount(2);
         trigger.Data.Should().AllSatisfy(triggerPayload => Assert.True(triggerPayload.Acknowledged));
@@ -90,11 +90,11 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
     {
         var dto = new BroadcastEventCreateData
         {
-            Name = await GetActiveEvent(),
+            EventName = await GetActiveEvent(),
             Payload = new TestPayload(),
         };
 
-        var trigger = await eventClient.CreateBroadcast(dto);
+        var trigger = await eventClient.Create(dto);
         trigger.Data.Acknowledged.Should().BeTrue();
 
         // TODO: how to detect success for a subscriber
@@ -116,11 +116,11 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
 
         var dto = new BroadcastEventCreateData
         {
-            Name = eventName!,
+            EventName = eventName!,
             Payload = new TestPayload(),
         };
 
-        await Assert.ThrowsAsync<ApiException>(async () => { await eventClient.CreateBroadcast(dto); });
+        await Assert.ThrowsAsync<ApiException>(async () => { await eventClient.Create(dto); });
     }
 
 
@@ -148,10 +148,10 @@ public class EventTests(SubscriberFactory subscriberFactory, WorkflowFactory wor
     {
         var dto = new BroadcastEventCreateData
         {
-            Name = await GetActiveEvent(),
+            EventName = await GetActiveEvent(),
             Payload = new TestPayload(),
         };
-        var trigger = await eventClient.CreateBroadcast(dto);
+        var trigger = await eventClient.Create(dto);
 
         trigger.Data.Acknowledged.Should().BeTrue();
 
