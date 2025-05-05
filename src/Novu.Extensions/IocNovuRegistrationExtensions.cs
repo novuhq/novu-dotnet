@@ -97,7 +97,7 @@ public static class IocNovuRegistrationExtensions
                 refitSettings: RefitSettings(refitSettings)));
     }
 
-    private static RefitSettings RefitSettings(RefitSettings refitSettings)
+    public static RefitSettings RefitSettings(RefitSettings refitSettings)
     {
         return refitSettings ?? new RefitSettings
         {
