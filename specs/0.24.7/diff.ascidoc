@@ -1,0 +1,9 @@
+= NOVU API (v 1.0)
+:reproducible:
+:sectlinks:
+:toc:
+
+== What's Changed
+=== POST  /v1/subscribers/{subscriberId}/messages/markAs
+
+NOTE: API changes are backward compatible

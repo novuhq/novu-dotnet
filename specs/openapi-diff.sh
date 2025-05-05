@@ -3,12 +3,12 @@
 set -e
 
 PREVIOUS="0.18.0"
-VERSIONS=('0.19.0' '0.24.0' '2.0.6')
+VERSIONS=('0.19.0' '0.24.0' '0.24.7' '2.1.1')
 
 for version in "${VERSIONS[@]}"; do
     echo "Processing version $version"
     
-    mkdir -p $version
+    mkdir -p "$version"
     
     # see https://github.com/OpenAPITools/openapi-diff
     docker run --rm -t \

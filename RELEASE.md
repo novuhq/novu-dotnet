@@ -7,7 +7,7 @@ Main Conventions:
 - product releases are versioned via X.X.X (eg 0.1.0)
 - tags have prefix 'v' (eg v0.1.0)
 
-NOTE: The `v` prefix is required. The GitHub Action will not trigger withouth it.
+NOTE: The `v` prefix is required. The GitHub Action will not trigger without it.
 
 ## Step One: making changes and merging
 
@@ -38,13 +38,19 @@ All deployments should take place from the `main` branch. To release a new featu
 
 ## Step Three: releasing
 
-From here, GitHub Actions will trigger and publish the new release to Nuget. It generally takes around 5-10 minutes for the release to run and be available
-on Nuget.
+From here, GitHub Actions will trigger and publish the new release to Nuget. 
 
 - open your draft in [releases](https://github.com/novuhq/novu-dotnet/releases)
 - Publish release
 
 ## Step Four: post-release checks
 
-- Check that it exists on nuget
-- Ideally update a project that uses the version
+It generally takes around 5–10 minutes for the release to run and be available
+on Nuget.
+
+- Check that it exists on [nuget](https://www.nuget.org/packages?q=novu)
+  - [Novu](https://www.nuget.org/packages?q=novu)
+  - [Novu.Domain](https://www.nuget.org/packages?q=novu.domain)
+  - [Novu.Extensions](https://www.nuget.org/packages?q=novu.extensions)
+  - [Novu.Sync](https://www.nuget.org/packages?q=novu.sync)
+- Ideally, update a project that uses the version and run it
