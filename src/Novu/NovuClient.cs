@@ -7,6 +7,11 @@ namespace Novu;
 
 public class NovuClient : INovuClient
 {
+    // exposed for requested #108
+    public readonly HttpClient HttpClient;
+
+    // exposed for requested #108
+    public readonly RefitSettings RefitSettings;
     private const string AuthorizationHeaderName = "Authorization";
 
     public NovuClient(
@@ -14,36 +19,37 @@ public class NovuClient : INovuClient
         HttpClient? client = null,
         RefitSettings? refitSettings = null)
     {
-        var httpClient = client ?? new HttpClient();
-        httpClient.BaseAddress = new Uri(configuration.Url);
-        httpClient.DefaultRequestHeaders.Add(AuthorizationHeaderName, $"ApiKey {configuration.ApiKey}");
-        httpClient.DefaultRequestHeaders.Add("User-Agent", NovuConstants.UserAgent());
+        HttpClient = client ?? new HttpClient();
+        HttpClient.BaseAddress = new Uri(configuration.Url);
+        HttpClient.DefaultRequestHeaders.Add(AuthorizationHeaderName, $"ApiKey {configuration.ApiKey}");
+        HttpClient.DefaultRequestHeaders.Add("User-Agent", NovuConstants.UserAgent());
 
         refitSettings ??= new RefitSettings
         {
             ContentSerializer = new NewtonsoftJsonContentSerializer(NovuJsonSettings.DefaultSerializerSettings),
         };
+        RefitSettings = refitSettings;
 
-        Subscriber = RestService.For<ISubscriberClient>(httpClient, refitSettings);
-        Event = RestService.For<IEventClient>(httpClient, refitSettings);
-        Topic = RestService.For<ITopicClient>(httpClient, refitSettings);
-        Workflow = RestService.For<IWorkflowClient>(httpClient, refitSettings);
-        WorkflowGroup = RestService.For<IWorkflowGroupClient>(httpClient, refitSettings);
-        WorkflowOverride = RestService.For<IWorkflowOverrideClient>(httpClient, refitSettings);
-        Layout = RestService.For<ILayoutClient>(httpClient, refitSettings);
-        Integration = RestService.For<IIntegrationClient>(httpClient, refitSettings);
-        Notifications = RestService.For<INotificationsClient>(httpClient, refitSettings);
-        Message = RestService.For<IMessageClient>(httpClient, refitSettings);
-        ExecutionDetails = RestService.For<IExecutionDetailsClient>(httpClient, refitSettings);
-        Feeds = RestService.For<IFeedClient>(httpClient, refitSettings);
-        Changes = RestService.For<IChangeClient>(httpClient, refitSettings);
-        Tenant = RestService.For<ITenantClient>(httpClient, refitSettings);
-        MxRecord = RestService.For<IMxRecordClient>(httpClient, refitSettings);
-        Organization = RestService.For<IOrganizationClient>(httpClient, refitSettings);
-        OrganizationMember = RestService.For<IOrganizationMemberClient>(httpClient, refitSettings);
-        OrganizationBrand = RestService.For<IOrganizationBrandClient>(httpClient, refitSettings);
-        Environment = RestService.For<IEnvironmentClient>(httpClient, refitSettings);
-        Blueprint = RestService.For<IBlueprintClient>(httpClient, refitSettings);
+        Subscriber = RestService.For<ISubscriberClient>(HttpClient, refitSettings);
+        Event = RestService.For<IEventClient>(HttpClient, refitSettings);
+        Topic = RestService.For<ITopicClient>(HttpClient, refitSettings);
+        Workflow = RestService.For<IWorkflowClient>(HttpClient, refitSettings);
+        WorkflowGroup = RestService.For<IWorkflowGroupClient>(HttpClient, refitSettings);
+        WorkflowOverride = RestService.For<IWorkflowOverrideClient>(HttpClient, refitSettings);
+        Layout = RestService.For<ILayoutClient>(HttpClient, refitSettings);
+        Integration = RestService.For<IIntegrationClient>(HttpClient, refitSettings);
+        Notifications = RestService.For<INotificationsClient>(HttpClient, refitSettings);
+        Message = RestService.For<IMessageClient>(HttpClient, refitSettings);
+        ExecutionDetails = RestService.For<IExecutionDetailsClient>(HttpClient, refitSettings);
+        Feeds = RestService.For<IFeedClient>(HttpClient, refitSettings);
+        Changes = RestService.For<IChangeClient>(HttpClient, refitSettings);
+        Tenant = RestService.For<ITenantClient>(HttpClient, refitSettings);
+        MxRecord = RestService.For<IMxRecordClient>(HttpClient, refitSettings);
+        Organization = RestService.For<IOrganizationClient>(HttpClient, refitSettings);
+        OrganizationMember = RestService.For<IOrganizationMemberClient>(HttpClient, refitSettings);
+        OrganizationBrand = RestService.For<IOrganizationBrandClient>(HttpClient, refitSettings);
+        Environment = RestService.For<IEnvironmentClient>(HttpClient, refitSettings);
+        Blueprint = RestService.For<IBlueprintClient>(HttpClient, refitSettings);
     }
 
     public IFeedClient Feeds { get; }
