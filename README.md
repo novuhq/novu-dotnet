@@ -15,6 +15,10 @@
 [![NuGet](https://img.shields.io/nuget/dt/Novu.svg)](https://www.nuget.org/packages/Novu/)
 [![Deploy to Nuget](https://github.com/novuhq/novu-dotnet/actions/workflows/dotnet-deploy.yaml/badge.svg)](https://github.com/novuhq/novu-dotnet/actions/workflows/dotnet-deploy.yaml)
 
+
+> [!NOTE]
+> We have recently published an official and updated [.NET SDK](https://github.com/novuhq/novu-csharp) which is compatible with the latest version of Novu Cloud, and will be regularly updated with latest API changes. If you are just starting out, please refer to it. Migration notes can be found [here](https://novuhq.notion.site/Migrating-to-Novu-NET-SDK-v1-0-6-1b7d03ad838f80cd82a5f6826fd43e6b?pvs=4). And latest code samples available on our [API Reference](https://docs.novu.co/api-reference/overview)
+
 .NET SDK for Novu - The open-source notification infrastructure for engineers. 🚀
 
 novu-dotnet targets .NET Standard 2.0 and is compatible with .NET Core 2.0+ and .NET Framework 4.6.1+.
