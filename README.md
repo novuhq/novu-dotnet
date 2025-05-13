@@ -6,6 +6,9 @@
     </a> 
 </div>
 
+> [!NOTE]
+> For latest official SDK that supported the 2.x version of the SDK please use https://github.com/novuhq/novu-csharp
+
 # novu-dotnet
 
 [![NuGet](https://img.shields.io/nuget/v/Novu.svg)](https://www.nuget.org/packages/Novu/)
